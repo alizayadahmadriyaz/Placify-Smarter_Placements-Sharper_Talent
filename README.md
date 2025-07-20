@@ -1,5 +1,5 @@
 
-# Placify by Innovision - GSSoC 2025
+# Placify by Innovision Technologies Pvt Ltd - GSSoC 2025
 
 ![GSSoC 2025](https://img.shields.io/badge/GSSoC-2025-blue.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
