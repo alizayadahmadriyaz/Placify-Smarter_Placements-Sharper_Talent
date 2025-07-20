@@ -1,10 +1,4 @@
-Of course! Understood. The project name is Placify.
 
-Here is the complete, updated README.md for your GitHub repository with the name "Placify" integrated throughout the document. All other details from your pitch deck have been preserved.
-
-You can copy and paste the entire block of code below into your README.md file.
-
-Generated markdown
 # Placify by Innovision - GSSoC 2025
 
 ![GSSoC 2025](https://img.shields.io/badge/GSSoC-2025-blue.svg)
