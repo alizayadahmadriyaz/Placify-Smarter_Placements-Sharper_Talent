@@ -148,7 +148,7 @@ Check out these handy resources:
 - Or ask in our Discussions/Discord group! 💬
 
 You can also contact Project Owner:
-**Abhisek Panda** – [monishr608@gmail.com](mailto:monishr608@gmail.com)
+**Monish Raman** – [monishr608@gmail.com](mailto:monishr608@gmail.com)
 
 ---
 
