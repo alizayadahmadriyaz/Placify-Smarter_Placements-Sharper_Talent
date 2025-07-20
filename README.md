@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Status: Active](https://img.shields.io/badge/status-active-success.svg)
 
-Welcome to the official repository for **Placify**, a project by **Innovision** participating in the GirlScript Summer of Code (GSSoC) 2025! We are thrilled to have you here.
+Welcome to the official repository for **Placify**, a project by **Innovision Technologies Pvt Ltd** participating in the GirlScript Summer of Code (GSSoC) 2025! We are thrilled to have you here.
 
 **Tagline:** _Unboxing New Ideas_
 
