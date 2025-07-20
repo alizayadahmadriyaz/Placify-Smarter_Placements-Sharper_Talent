@@ -116,11 +116,11 @@ To get a local copy up and running, please follow these simple steps.
 1.  **Fork the repository.**
 2.  **Clone the repository:**
     ```sh
-    git clone https://github.com/your-username/placify.git
+    https://github.com/MonishRaman/Placify-Smarter-Placements.-Sharper-Talent.-.git
     ```
 3.  **Navigate to the project directory:**
     ```sh
-    cd placify
+    cd Placify-Smarter-Placements.-Sharper-Talent.-
     ```
 4.  **Install dependencies:**
     ```sh
@@ -168,6 +168,7 @@ This project is distributed under the MIT License. See `LICENSE.txt` for more in
 ## 📞 Contact
 
 *   **Monish R:** [monishr608@gmail.com](mailto:monishr608@gmail.com)
+*   **Prashanth A N:** [prashanth3792@gmail.com](mailto:prashanth3792@gmail.com)
 *   **Website:** [MonishRaman Portfolio](http://www.monishraman.netlify.app)
 *   **Phone:** +91 82968 63444
 
