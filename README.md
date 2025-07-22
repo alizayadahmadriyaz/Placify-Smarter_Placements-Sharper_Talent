@@ -1,11 +1,11 @@
 
-# Placify by Innovision - GSSoC 2025
+# Placify by Innovision Technologies Pvt Ltd - GSSoC 2025
 
 ![GSSoC 2025](https://img.shields.io/badge/GSSoC-2025-blue.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Status: Active](https://img.shields.io/badge/status-active-success.svg)
 
-Welcome to the official repository for **Placify**, a project by **Innovision** participating in the Google Summer of Code (GSSoC) 2025! We are thrilled to have you here.
+Welcome to the official repository for **Placify**, a project by **Innovision Technologies Pvt Ltd** participating in the GirlScript Summer of Code (GSSoC) 2025! We are thrilled to have you here.
 
 **Tagline:** _Unboxing New Ideas_
 

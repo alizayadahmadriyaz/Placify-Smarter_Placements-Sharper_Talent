@@ -75,7 +75,7 @@ This also includes interactions when a person represents the community in public
 
 If you experience or witness unacceptable behavior, please report it immediately to:
 
-📧 **Abhisek Panda**
+📧 **Monish Raman**
 📬 Email: **[monishr608@gmail.com](mailto:monishr608@gmail.com)**
 All complaints will be handled with **confidentiality**, **sincerity**, and **swift resolution**.
 
