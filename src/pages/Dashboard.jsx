@@ -50,7 +50,10 @@ const Dashboard = () => {
               <Brain className="w-8 h-8 text-purple-600 dark:text-purple-400" />
               <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">Placify</span>
             </div>
+            <div>
+
             <ThemeToggle />
+            </div>
             <button
               onClick={() => navigate('/')}
               className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white 
