@@ -56,9 +56,9 @@ const InterviewInterface = () => {
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen dark:bg-gray-900 dark:text-white bg-gray-100 text-gray-900 transition-colors">
       {/* Header */}
-      <div className="bg-black/50 p-4">
+      <div className=" dark:bg-black/50 bg-white/70 p-4 transition-colors">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
@@ -74,7 +74,7 @@ const InterviewInterface = () => {
               </div>
             </div>
           </div>
-          <div className="text-white">
+          <div className=" dark:text-white text-gray-900">
             <span className="text-sm">Question {currentQuestionIndex + 1} of {questions.length}</span>
           </div>
         </div>
@@ -83,12 +83,12 @@ const InterviewInterface = () => {
       <div className="flex h-screen">
         {/* Left Panel - Video Feed */}
         <div className="flex-1 p-6">
-          <div className="bg-black rounded-2xl h-full flex items-center justify-center relative overflow-hidden">
+          <div className=" rounded-2xl h-full flex items-center justify-center relative overflow-hidden dark:bg-black bg-white transition-colors">
             {cameraPermission === 'pending' && (
               <div className="text-center">
                 <AlertCircle className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-2">Camera Permission Required</h3>
-                <p className="text-gray-400 mb-4">Please allow camera access to continue with the interview</p>
+                <p className=" dark:text-gray-400 text-gray-600 mb-4">Please allow camera access to continue with the interview</p>
                 <button
                   onClick={requestCameraAccess}
                   className="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium transition-colors"
@@ -102,7 +102,7 @@ const InterviewInterface = () => {
               <div className="text-center">
                 <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-2">Camera Access Denied</h3>
-                <p className="text-gray-400 mb-4">Please enable camera access in your browser settings</p>
+                <p className=" dark:text-gray-400 text-gray-600 mb-4">Please enable camera access in your browser settings</p>
                 <button
                   onClick={requestCameraAccess}
                   className="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium transition-colors"
@@ -132,16 +132,16 @@ const InterviewInterface = () => {
 
         {/* Right Panel - Questions */}
         <div className="w-1/2 p-6">
-          <div className="bg-gray-800 rounded-2xl h-full p-8 flex flex-col">
+          <div className=" dark:bg-gray-800 bg-white rounded-2xl h-full p-8 flex flex-col transition-colors">
             {/* Progress Bar */}
             <div className="mb-8">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-gray-400">Progress</span>
-                <span className="text-sm text-gray-400">
+                <span className="text-sm dark:text-gray-400 text-gray-600">Progress</span>
+                <span className="text-sm  dark:text-gray-400 text-gray-600">
                   {Math.round(((currentQuestionIndex + 1) / questions.length) * 100)}%
                 </span>
               </div>
-              <div className="w-full bg-gray-700 rounded-full h-2">
+              <div className="w-full dark:bg-gray-700 bg-gray-200 rounded-full h-2">
                 <div
                   className="bg-purple-600 h-2 rounded-full transition-all duration-300"
                   style={{
@@ -157,8 +157,8 @@ const InterviewInterface = () => {
                 <h2 className="text-3xl font-bold mb-6 leading-tight">
                   {questions[currentQuestionIndex]}
                 </h2>
-                <div className="bg-purple-600/20 border border-purple-500/30 rounded-xl p-4">
-                  <p className="text-purple-200 text-sm">
+                <div className="border rounded-xl p-4 dark:bg-purple-600/20 dark:border-purple-500/30 bg-purple-100/40 border-purple-300/30">
+                  <p className=" dark:text-purple-200 text-purple-800 text-sm">
                     💡 <strong>Tip:</strong> Take your time to think before answering. 
                     Speak clearly and maintain eye contact with the camera.
                   </p>
@@ -194,7 +194,7 @@ const InterviewInterface = () => {
               
               <button
                 onClick={() => navigate('/dashboard')}
-                className="w-full text-gray-400 hover:text-white py-2 transition-colors"
+                className="w-full text-gray-400 dark:text-gray-400 hover:text-white dark:hover:text-white py-2 transition-colors"
               >
                 Exit Interview
               </button>
