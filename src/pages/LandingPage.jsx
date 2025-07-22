@@ -1,6 +1,6 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Brain, Users, Target, CheckCircle } from 'lucide-react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight, Brain, Users, Target, CheckCircle } from "lucide-react";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -9,25 +9,28 @@ const LandingPage = () => {
     {
       icon: <Brain className="w-6 h-6" />,
       title: "AI-Powered Analysis",
-      description: "Advanced algorithms analyze your communication skills, confidence, and technical knowledge"
+      description:
+        "Advanced algorithms analyze your communication skills, confidence, and technical knowledge",
     },
     {
       icon: <Users className="w-6 h-6" />,
       title: "Real Interview Experience",
-      description: "Practice with realistic interview scenarios tailored to your target companies"
+      description:
+        "Practice with realistic interview scenarios tailored to your target companies",
     },
     {
       icon: <Target className="w-6 h-6" />,
       title: "Personalized Feedback",
-      description: "Get detailed insights and actionable recommendations to improve your performance"
-    }
+      description:
+        "Get detailed insights and actionable recommendations to improve your performance",
+    },
   ];
 
   const benefits = [
     "Boost your interview confidence",
-    "Get hired by top companies", 
+    "Get hired by top companies",
     "Receive expert-level feedback",
-    "Practice anytime, anywhere"
+    "Practice anytime, anywhere",
   ];
 
   return (
@@ -41,7 +44,7 @@ const LandingPage = () => {
               <span className="text-2xl font-bold text-gray-900">Placify</span>
             </div>
             <button
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate("/auth")}
               className="px-4 py-2 text-purple-600 hover:text-purple-700 font-medium transition-colors"
             >
               Sign In
@@ -60,15 +63,17 @@ const LandingPage = () => {
               <span className="text-purple-200">Sharper Talent.</span>
             </h1>
             <p className="text-xl md:text-2xl text-purple-100 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Campus hiring is broken. Traditional interviews fail to identify the best talent, 
-              leaving both students and companies frustrated with mismatched placements.
+              Campus hiring is broken. Traditional interviews fail to identify
+              the best talent, leaving both students and companies frustrated
+              with mismatched placements.
             </p>
             <p className="text-lg md:text-xl text-purple-200 mb-12 max-w-2xl mx-auto">
-              Transform your interview skills with AI-powered practice sessions. Get real-time feedback, 
-              build confidence, and land your dream job with personalized coaching.
+              Transform your interview skills with AI-powered practice sessions.
+              Get real-time feedback, build confidence, and land your dream job
+              with personalized coaching.
             </p>
             <button
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate("/auth")}
               className="bg-white text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg 
                          hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 
                          shadow-xl hover:shadow-2xl inline-flex items-center space-x-2"
@@ -88,7 +93,8 @@ const LandingPage = () => {
               Why Choose Placify?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Experience the future of interview preparation with cutting-edge AI technology
+              Experience the future of interview preparation with cutting-edge
+              AI technology
             </p>
           </div>
 
@@ -101,8 +107,12 @@ const LandingPage = () => {
                            transform hover:-translate-y-1"
               >
                 <div className="text-purple-600 mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -118,8 +128,8 @@ const LandingPage = () => {
                 Unlock Your Full Potential
               </h2>
               <p className="text-lg text-gray-600 mb-8">
-                Join thousands of students who have successfully landed their dream jobs 
-                with Placify's AI-powered interview coaching.
+                Join thousands of students who have successfully landed their
+                dream jobs with Placify's AI-powered interview coaching.
               </p>
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -132,11 +142,17 @@ const LandingPage = () => {
             </div>
             <div className="bg-white p-8 rounded-2xl shadow-xl">
               <div className="text-center">
-                <div className="text-5xl font-bold text-purple-600 mb-2">85%</div>
+                <div className="text-5xl font-bold text-purple-600 mb-2">
+                  85%
+                </div>
                 <div className="text-gray-600 mb-6">Success Rate</div>
-                <div className="text-3xl font-bold text-indigo-600 mb-2">10K+</div>
+                <div className="text-3xl font-bold text-indigo-600 mb-2">
+                  10K+
+                </div>
                 <div className="text-gray-600 mb-6">Students Placed</div>
-                <div className="text-3xl font-bold text-emerald-500 mb-2">500+</div>
+                <div className="text-3xl font-bold text-emerald-500 mb-2">
+                  500+
+                </div>
                 <div className="text-gray-600">Partner Companies</div>
               </div>
             </div>
@@ -151,10 +167,11 @@ const LandingPage = () => {
             Ready to Ace Your Next Interview?
           </h2>
           <p className="text-xl text-gray-300 mb-8">
-            Start your journey today and join the ranks of successful professionals
+            Start your journey today and join the ranks of successful
+            professionals
           </p>
           <button
-            onClick={() => navigate('/auth')}
+            onClick={() => navigate("/auth")}
             className="bg-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg 
                        hover:bg-purple-700 transform hover:scale-105 transition-all duration-200 
                        shadow-xl hover:shadow-2xl inline-flex items-center space-x-2"
@@ -164,17 +181,6 @@ const LandingPage = () => {
           </button>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-black text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Brain className="w-6 h-6 text-purple-400" />
-            <span className="text-xl font-bold">Placify</span>
-          </div>
-          <p className="text-gray-400">© 2025 Placify. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 };
