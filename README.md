@@ -4,12 +4,21 @@
 ![GSSoC 2025](https://img.shields.io/badge/GSSoC-2025-blue.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Status: Active](https://img.shields.io/badge/status-active-success.svg)
+[![GitHub issues](https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent)](https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent/issues)
+[![GitHub forks](https://img.shields.io/github/forks/MonishRaman/Placify-Smarter_Placements-Sharper_Talent)](https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent/network)
+[![GitHub stars](https://img.shields.io/github/stars/MonishRaman/Placify-Smarter_Placements-Sharper_Talent)](https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent/stargazers)
 
 Welcome to the official repository for **Placify**, a project by **Innovision Technologies Pvt Ltd** participating in the GirlScript Summer of Code (GSSoC) 2025! We are thrilled to have you here.
 
 **Tagline:** _Unboxing New Ideas_
 
 **Vision:** _"Reinventing campus placement through AI-powered intelligent interviewing."_
+
+---
+
+## ✨ Live Demo
+
+**https://placifyapp.netlify.app/**
 
 ---
 
@@ -74,16 +83,170 @@ Our platform is packed with features designed to empower students, recruiters, a
 
 ---
 
+## 📁 Project Structure
+
+Here is the proposed file structure for the Placify project.
+
+<pre>
+Placify-Smarter-Placements.-Sharper-Talent.-/
+├── node_modules/
+├── src/
+│   ├── pages/
+│   │   ├── AuthPage.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── InterviewInterface.jsx
+│   │   ├── LandingPage.jsx
+│   │   └── ResultsPage.jsx
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── .gitignore
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── eslint.config.js
+├── index.html
+├── LICENSE
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── README.md
+├── tailwind.config.js
+└── vite.config.js
+</pre>
+
+---
+
+
 ## 🛠️ Technology Stack (Proposed)
 
-This is a proposed stack for the project. Contributors are welcome to suggest improvements!
+*   **Frontend:** React.js / Next.js / Vue.js
+*   **Backend:** Node.js (Express.js) / Python (Django / FastAPI)
+*   **Database:** MongoDB / PostgreSQL
+*   **AI/ML:** Python, TensorFlow, PyTorch, OpenCV, NLP libraries
+*   **Cloud & DevOps:** Vercel, Render, AWS, Google Cloud, Azure
 
-*   **Frontend:** (e.g., React.js, Next.js, Vue.js)
-*   **Backend:** (e.g., Node.js with Express.js, Python with Django/FastAPI)
-*   **Database:** (e.g., MongoDB, PostgreSQL)
-*   **AI/ML:** (e.g., Python, TensorFlow, PyTorch, OpenCV for video/audio processing, NLP libraries for speech analysis)
-*   **Cloud & DevOps:** (e.g., AWS/Google Cloud/Azure for hosting, AI services, and CI/CD pipelines)
 
+---
+
+## 🏁 Getting Started
+
+To get a local copy up and running, please follow these simple steps.
+
+1.  **Fork the repository.**
+2.  **Clone the forked repository:**
+    ```sh
+    git clone https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent.git
+    ```
+3.  **Navigate to the project directory:**
+    ```sh
+    cd Placify-Smarter_Placements-Sharper_Talent
+    ```
+4.  **Install dependencies (for both client and server):**
+    ```sh
+    # Example command, update as per project setup
+    npm install
+    ```
+5.  **Run the application:**
+    ```sh
+    # Example command
+    npm run dev
+    ```
+
+---
+
+## 🏁 Getting Started
+
+To get a local copy up and running, please follow these simple steps.
+
+1.  **Fork the repository.**
+2.  **Clone the repository:**
+    ```sh
+    https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent.git
+    ```
+3.  **Navigate to the project directory:**
+    ```sh
+    cd Placify-Smarter_Placements-Sharper_Talent
+    ```
+4.  **Install dependencies:**
+    ```sh
+    # This is an example command, update it based on the package manager
+    npm install
+    ```
+5.  **Run the application:**
+    ```sh
+    # This is an example command
+    npm run dev
+    ```
+
+---
+
+## 🤝 Contribution Guidelines
+
+We are excited to see your contributions! Please read our **[CONTRIBUTING.md](CONTRIBUTING.md)** and **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** files.
+
+If you are adding content or creating new pages, please:
+-   Ensure new UI components are responsive and reusable.
+-   Use PNG or JPG files for minimal size and **always compress images** before adding them.
+-   Ensure that your forked repository is up to date before submitting a pull request.
+
+### Steps for Contributing
+
+#### 1. Fork the Repository
+Click on the "Fork" button at the top right of the repository page.
+
+#### 2. Clone the Forked Repository
+```bash
+git clone https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent.git
+```
+
+#### 3. Create a New Branch
+```bash
+git checkout -b your-awesome-feature-name
+```
+
+#### 4. Make Your Changes
+Work your magic! Ensure you follow the project's coding style.
+  
+#### 5. Commit Your Changes
+```bash
+git add .
+git commit -m "feat: Describe your awesome changes here"
+```
+
+#### 6. Push to Your Branch
+```bash
+git push origin your-awesome-feature-name
+```
+
+#### 7. Create a Pull Request:
+Go to the original repository and click on "New Pull Request." Provide a clear description of your work and link the relevant issue.
+
+## Keeping Your Fork Updated
+
+Before creating a pull request, ensure your fork is up-to-date with the main project.
+
+#### Add Remote Upstream Repository:
+```bash
+git remote add upstream https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent.git
+```
+
+#### Fetch Upstream Changes:
+```bash
+git fetch upstream
+```
+
+#### Merge Upstream Changes:
+```bash
+git checkout main
+git merge upstream/main
+```
+
+#### Push Changes to Your Fork:
+```bash
+git push origin main
+```
+
+Now, your main branch is synced. You can create new feature branches from it.
 ---
 
 ## 🗺️ Project Roadmap
@@ -106,45 +269,6 @@ We have a clear vision for the future of Placify. Our roadmap is structured into
 
 We are proud to have been recognized for our innovative approach.
 *   **Best Startup Pitch:** Awarded to our founder, Monish R, at the **Founders Networking Summit 2025**, hosted by iLearnings and DSATM, Bangalore.
-
----
-
-## 🏁 Getting Started
-
-To get a local copy up and running, please follow these simple steps.
-
-1.  **Fork the repository.**
-2.  **Clone the repository:**
-    ```sh
-    https://github.com/MonishRaman/Placify-Smarter-Placements.-Sharper-Talent.-.git
-    ```
-3.  **Navigate to the project directory:**
-    ```sh
-    cd Placify-Smarter-Placements.-Sharper-Talent.-
-    ```
-4.  **Install dependencies:**
-    ```sh
-    # This is an example command, update it based on the package manager
-    npm install
-    ```
-5.  **Run the application:**
-    ```sh
-    # This is an example command
-    npm run dev
-    ```
-
----
-
-## 🤝 How to Contribute
-
-Contributions are the lifeblood of an open-source project, and we welcome them with open arms! This project is actively participating in **GSSoC 2025**.
-
-If you'd like to contribute, please:
-1.  Read our **[CONTRIBUTING.md](CONTRIBUTING.md)** file for our contribution workflow and guidelines.
-2.  Review our **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)**.
-3.  Check out the **Issues** tab to find a task that interests you.
-
-We are excited to see your pull requests!
 
 ---
 
