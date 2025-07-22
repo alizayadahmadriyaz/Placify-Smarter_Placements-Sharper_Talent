@@ -50,18 +50,18 @@ const Dashboard = () => {
               <Brain className="w-8 h-8 text-purple-600 dark:text-purple-400" />
               <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">Placify</span>
             </div>
-            <div>
+            <div className='flex items-center space-x-2'>
 
             <ThemeToggle />
-            </div>
             <button
               onClick={() => navigate('/')}
               className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white 
-                         px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            >
+              px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
               <LogOut className="w-5 h-5" />
               <span>Sign Out</span>
             </button>
+              </div>
           </div>
         </div>
       </header>
