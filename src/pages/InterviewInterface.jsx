@@ -43,15 +43,30 @@ const InterviewInterface = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
+  const interviewId = Date.now().toString(); // simple ID
 
-  const handleFinishInterview = () => {
-    // Stop camera stream
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject;
-      stream.getTracks().forEach(track => track.stop());
-    }
-    navigate('/results');
+ const handleFinishInterview = () => {
+  // Stop camera stream
+  if (videoRef.current && videoRef.current.srcObject) {
+    const stream = videoRef.current.srcObject;
+    stream.getTracks().forEach(track => track.stop());
+  }
+
+  // Prepare result
+  const resultData = {
+    id: interviewId,
+    name: "Candidate Name", // Replace this with dynamic user info if available
+    score: 7,
+    total: questions.length,
+    feedback: "Good communication and clarity."
   };
+
+  // Save to localStorage
+  localStorage.setItem(interviewId, JSON.stringify(resultData));
+
+  // Navigate to results page
+  navigate(`/results/${interviewId}`);
+};
 
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
