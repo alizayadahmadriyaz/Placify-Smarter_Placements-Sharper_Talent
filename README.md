@@ -130,7 +130,7 @@ To get a local copy up and running, please follow these simple steps.
 5.  **Run the application:**
     ```sh
     # This is an example command
-    npm start
+    npm run dev
     ```
 
 ---
