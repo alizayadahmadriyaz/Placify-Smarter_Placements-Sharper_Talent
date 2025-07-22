@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Brain, Play, Calendar, Clock, TrendingUp, Award, LogOut } from 'lucide-react';
-
+import { motion } from 'framer-motion';
 const Dashboard = () => {
   const navigate = useNavigate();
 
@@ -40,7 +40,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <motion.div
+      className="min-h-screen bg-gray-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6, ease: "easeInOut" }}
+    >
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -63,17 +69,29 @@ const Dashboard = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
+        <motion.div
+          className="mb-8"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+        >
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Welcome back, Student! 👋
           </h1>
           <p className="text-xl text-gray-600">
             Ready to practice and improve your interview skills?
           </p>
-        </div>
+        </motion.div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-purple-100 rounded-lg">
@@ -109,11 +127,17 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Start New Interview Section */}
-          <div className="lg:col-span-1">
+          <motion.div
+            className="lg:col-span-1"
+            initial={{ opacity: 0.9, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+          >
             <div className="bg-gradient-to-br from-purple-600 to-indigo-700 p-8 rounded-2xl text-white">
               <div className="text-center">
                 <div className="mb-6">
@@ -133,10 +157,16 @@ const Dashboard = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Past Interviews Section */}
-          <div className="lg:col-span-2">
+          <motion.div
+            className="lg:col-span-2"
+            initial={{ opacity: 0.9, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+          >
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Past Interviews</h2>
@@ -144,11 +174,15 @@ const Dashboard = () => {
               </div>
 
               <div className="space-y-4">
-                {pastInterviews.map((interview) => (
-                  <div
+                {pastInterviews.map((interview, idx) => (
+                  <motion.div
                     key={interview.id}
                     className="flex items-center justify-between p-4 bg-gray-50 rounded-xl
                                hover:bg-gray-100 transition-colors cursor-pointer"
+                    initial={{ opacity: 0, x: 40 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.5, delay: 0.1 * idx }}
                   >
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-900 mb-1">
@@ -170,7 +204,7 @@ const Dashboard = () => {
                         {interview.score}
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
@@ -180,10 +214,10 @@ const Dashboard = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

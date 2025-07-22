@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, TrendingUp, Eye, Mic, Brain, Award, Target, CheckCircle, AlertTriangle } from 'lucide-react';
-
+import { motion } from 'framer-motion';
 const ResultsPage = () => {
   const navigate = useNavigate();
 
@@ -61,7 +61,13 @@ const ResultsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <motion.div
+      className="min-h-screen bg-gray-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -78,7 +84,13 @@ const ResultsPage = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
-        <div className="text-center mb-12">
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.6 }}
+        >
           <div className="flex items-center justify-center mb-4">
             <Award className="w-12 h-12 text-purple-600" />
           </div>
@@ -88,16 +100,22 @@ const ResultsPage = () => {
           <p className="text-xl text-gray-600">
             Here's your detailed performance analysis
           </p>
-        </div>
+        </motion.div>
 
         {/* Overall Score Card */}
-        <div className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-2xl p-8 text-white mb-8">
+        <motion.div
+          className="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-2xl p-8 text-white mb-8"
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="text-center">
             <div className="mb-6">
               <div className="text-6xl font-bold mb-2">{overallScore}</div>
               <div className="text-2xl text-purple-200">Overall Score</div>
-            </div>
-            <div className="bg-white/20 rounded-xl p-4">
+            <div/>
+            <div className="bg-white/20 rounded-xl mt-4 p-4">
               <p className="text-lg font-medium mb-2">🎉 Great Performance!</p>
               <p className="text-purple-100">
                 You demonstrated strong communication skills and professional presence. 
@@ -105,11 +123,18 @@ const ResultsPage = () => {
               </p>
             </div>
           </div>
-        </div>
+          </div>
+        </motion.div>
 
         {/* Detailed Analysis */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+          <motion.div
+            className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.5 }}
+          >
             <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center space-x-2">
               <Target className="w-6 h-6 text-purple-600" />
               <span>Performance Metrics</span>
@@ -117,7 +142,14 @@ const ResultsPage = () => {
 
             <div className="space-y-6">
               {metrics.map((metric, index) => (
-                <div key={index} className="space-y-3">
+                <motion.div
+                  key={index}
+                  className="space-y-3"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div className={`p-2 rounded-lg bg-${metric.color}-100 text-${metric.color}-600`}>
@@ -143,14 +175,20 @@ const ResultsPage = () => {
                   <p className="text-sm text-gray-600 leading-relaxed">
                     {metric.feedback}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           <div className="space-y-6">
             {/* Behavioral Analysis */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+            <motion.div
+              className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5 }}
+            >
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Behavioral Indicators
               </h3>
@@ -168,10 +206,16 @@ const ResultsPage = () => {
                   <span className="text-gray-700">Professional Demeanor: Strong</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Personalized Feedback */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+            <motion.div
+              className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Personalized Feedback
               </h3>
@@ -201,10 +245,16 @@ const ResultsPage = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Next Steps */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-6">
+            <motion.div
+              className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-6"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Recommended Next Steps
               </h3>
@@ -222,12 +272,18 @@ const ResultsPage = () => {
                   <span>Schedule another practice session to track improvement</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <motion.div
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.5 }}
+        >
           <button
             onClick={() => navigate('/interview')}
             className="px-8 py-3 bg-purple-600 text-white rounded-xl font-semibold
@@ -242,9 +298,9 @@ const ResultsPage = () => {
           >
             Back to Dashboard
           </button>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
