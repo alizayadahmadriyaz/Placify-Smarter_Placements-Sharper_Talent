@@ -1,25 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Camera, Mic, SkipForward, Square, AlertCircle, CheckCircle } from 'lucide-react';
-
+import Loader from '../components/Loader';
 const InterviewInterface = () => {
+  // loading simulation
+    const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 8000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const navigate = useNavigate();
   const videoRef = useRef(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [cameraPermission, setCameraPermission] = useState('pending');
-  const [isRecording, setIsRecording] = useState(false);
 
+  
   const questions = [
     "Tell me about yourself and what makes you a great candidate for this position.",
     "What are your greatest strengths and how do they apply to this role?",
     "Describe a challenging project you worked on and how you overcame obstacles.",
     "Where do you see yourself in 5 years and how does this position fit into your goals?"
   ];
-
+  
   useEffect(() => {
     requestCameraAccess();
   }, []);
-
+  
   const requestCameraAccess = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -37,39 +45,40 @@ const InterviewInterface = () => {
       setCameraPermission('denied');
     }
   };
-
+  
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
   const interviewId = Date.now().toString(); // simple ID
-
- const handleFinishInterview = () => {
-  // Stop camera stream
-  if (videoRef.current && videoRef.current.srcObject) {
-    const stream = videoRef.current.srcObject;
-    stream.getTracks().forEach(track => track.stop());
-  }
-
-  // Prepare result
-  const resultData = {
-    id: interviewId,
-    name: "Candidate Name", // Replace this with dynamic user info if available
-    score: 7,
-    total: questions.length,
-    feedback: "Good communication and clarity."
+  
+  const handleFinishInterview = () => {
+    // Stop camera stream
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject;
+      stream.getTracks().forEach(track => track.stop());
+    }
+    
+    // Prepare result
+    const resultData = {
+      id: interviewId,
+      name: "Candidate Name", // Replace this with dynamic user info if available
+      score: 7,
+      total: questions.length,
+      feedback: "Good communication and clarity."
+    };
+    
+    // Save to localStorage
+    localStorage.setItem(interviewId, JSON.stringify(resultData));
+    
+    // Navigate to results page
+    navigate(`/results/${interviewId}`);
   };
-
-  // Save to localStorage
-  localStorage.setItem(interviewId, JSON.stringify(resultData));
-
-  // Navigate to results page
-  navigate(`/results/${interviewId}`);
-};
-
+  
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
-
+  
+  if (isLoading) return <Loader type="interviewPage"/>;
   return (
     <div className="min-h-screen dark:bg-gray-900 dark:text-white bg-gray-100 text-gray-900 transition-colors">
       {/* Header */}
