@@ -1,11 +1,17 @@
-import React from 'react';
+import React  from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Brain, Play, Calendar, Clock, TrendingUp, Award, LogOut } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
-
+import { useEffect, useState } from 'react';
+import Loader from '../components/Loader'; 
 const Dashboard = () => {
   const navigate = useNavigate();
-
+  // loader simulation
+  const [isLoading, setIsLoading] = useState(true)
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
   const pastInterviews = [
     {
       id: '1',
@@ -52,16 +58,16 @@ const Dashboard = () => {
             </div>
             <div className='flex items-center space-x-2'>
 
-            <ThemeToggle />
-            <button
-              onClick={() => navigate('/')}
-              className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white 
+              <ThemeToggle />
+              <button
+                onClick={() => navigate('/')}
+                className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white 
               px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
-              <LogOut className="w-5 h-5" />
-              <span>Sign Out</span>
-            </button>
-              </div>
+                <LogOut className="w-5 h-5" />
+                <span>Sign Out</span>
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -79,14 +85,18 @@ const Dashboard = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
-            <div className="flex items-center space-x-3">
+          <div className="bg-white min-h-[16vh] dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow ">
+            <div className="flex items-center space-x-3 min-h-[8vh]">
               <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
                 <Award className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Total Interviews</p>
+                <p className="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Interviews</p>
+                                {isLoading ? (
+                  <Loader />
+                ) : (
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">12</p>
+                  )}
               </div>
             </div>
           </div>
@@ -97,8 +107,12 @@ const Dashboard = () => {
                 <TrendingUp className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Average Score</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300 font-semibold">Average Score</p>
+                                {isLoading ? (
+                  <Loader />
+                ) : (
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">85.7</p>
+                  )}
               </div>
             </div>
           </div>
@@ -109,8 +123,12 @@ const Dashboard = () => {
                 <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Practice Hours</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300 font-semibold">Practice Hours</p>
+                {isLoading ? (
+                  <Loader />
+                ) : (
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">24.5</p>
+                  )}
               </div>
             </div>
           </div>
@@ -147,40 +165,46 @@ const Dashboard = () => {
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Past Interviews</h2>
                 <Calendar className="w-6 h-6 text-gray-400 dark:text-gray-300" />
               </div>
+              {isLoading ? (
+                <Loader type="asyncLoad" />
+              ) : (
 
-              <div className="space-y-4">
-                {pastInterviews.map((interview) => (
-                  <div
-                    key={interview.id}
+                <div className="space-y-4">
 
-                    onClick={() => navigate(`/results/${interview.id}`)}
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-xl
-                               hover:bg-gray-100 transition-colors cursor-pointer"
+                  {pastInterviews.map((interview) => (
+                    <div
+                      key={interview.id}
 
-                  >
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
-                        {interview.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{interview.company}</p>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
-                        <span className="flex items-center space-x-1">
-                          <Calendar className="w-4 h-4" />
-                          <span>{interview.date}</span>
-                        </span>
-                        <span className="px-2 py-1 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-medium">
-                          {interview.status}
-                        </span>
+                      onClick={() => navigate(`/results/${interview.id}`)}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-xl
+                               hover:bg-gray-100 dark:bg-slate-600 hover:dark:bg-slate-700 transition-colors cursor-pointer"
+
+                    >
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                          {interview.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{interview.company}</p>
+                        <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+                          <span className="flex items-center space-x-1">
+                            <Calendar className="w-4 h-4" />
+                            <span>{interview.date}</span>
+                          </span>
+                          <span className="px-2 py-1 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-400 rounded-full text-xs font-medium">
+                            {interview.status}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="ml-4">
+                        <div className={`px-4 py-2 rounded-xl font-bold text-lg ${getScoreColor(interview.score)}`}>
+                          {interview.score}
+                        </div>
                       </div>
                     </div>
-                    <div className="ml-4">
-                      <div className={`px-4 py-2 rounded-xl font-bold text-lg ${getScoreColor(interview.score)}`}>
-                        {interview.score}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )
+              }
 
               <div className="mt-6 text-center">
                 <button className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
