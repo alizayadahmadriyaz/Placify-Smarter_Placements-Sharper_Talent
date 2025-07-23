@@ -8,7 +8,7 @@ const Dashboard = () => {
 
   const pastInterviews = [
     {
-      id: 1,
+      id: '1',
       title: 'Software Engineer Interview',
       company: 'Tech Corp',
       date: 'December 15, 2024',
@@ -16,7 +16,7 @@ const Dashboard = () => {
       status: 'Completed'
     },
     {
-      id: 2,
+      id: '2',
       title: 'Frontend Developer Interview',
       company: 'StartupXYZ',
       date: 'December 10, 2024',
@@ -24,7 +24,7 @@ const Dashboard = () => {
       status: 'Completed'
     },
     {
-      id: 3,
+      id: '3',
       title: 'Full Stack Developer Interview',
       company: 'Innovation Labs',
       date: 'December 5, 2024',
@@ -152,8 +152,11 @@ const Dashboard = () => {
                 {pastInterviews.map((interview) => (
                   <div
                     key={interview.id}
-                    className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-xl
-                               hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+
+                    onClick={() => navigate(`/results/${interview.id}`)}
+                    className="flex items-center justify-between p-4 bg-gray-50 rounded-xl
+                               hover:bg-gray-100 transition-colors cursor-pointer"
+
                   >
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">

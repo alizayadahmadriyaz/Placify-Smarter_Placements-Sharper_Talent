@@ -1,37 +1,91 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, TrendingUp, Eye, Mic, Brain, Award, Target, CheckCircle, AlertTriangle } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  ArrowLeft, TrendingUp, Eye, Mic, Brain,
+  Award, Target, CheckCircle, AlertTriangle
+} from 'lucide-react';
+
+
+// Mock interview results (you can later fetch from backend instead)
+const interviewResults = [
+  {
+    id: '1',
+    overallScore: 85,
+    metrics: [
+      {
+        category: 'Clarity of Voice',
+        score: 92,
+        badge: 'Excellent',
+        color: 'emerald',
+        icon: <Mic className="w-5 h-5" />,
+        feedback: 'Your articulation and vocal clarity were outstanding throughout the interview.'
+      },
+      {
+        category: 'Confidence (Eye Contact)',
+        score: 78,
+        badge: 'Good',
+        color: 'blue',
+        icon: <Eye className="w-5 h-5" />,
+        feedback: 'Good eye contact maintained. Try to look directly at the camera more consistently.'
+      },
+      {
+        category: 'Technical Keywords',
+        score: 50,
+        badge: 'Needs Improvement',
+        color: 'orange',
+        icon: <Brain className="w-5 h-5" />,
+        feedback: 'Include more industry-specific terminology and technical concepts in your responses.'
+      }
+    ]
+  },
+  {
+    id: '2',
+    overallScore: 72,
+    metrics: [
+      {
+        category: 'Clarity of Voice',
+        score: 68,
+        badge: 'Average',
+        color: 'orange',
+        icon: <Mic className="w-5 h-5" />,
+        feedback: 'Try to slow down slightly and articulate more clearly.'
+      },
+      {
+        category: 'Confidence (Eye Contact)',
+        score: 75,
+        badge: 'Good',
+        color: 'blue',
+        icon: <Eye className="w-5 h-5" />,
+        feedback: 'Decent confidence, but consider practicing with a camera.'
+      },
+      {
+        category: 'Technical Keywords',
+        score: 55,
+        badge: 'Needs Improvement',
+        color: 'orange',
+        icon: <Brain className="w-5 h-5" />,
+        feedback: 'Include more specific technical terms and concepts.'
+      }
+    ]
+  }
+];
 
 const ResultsPage = () => {
+  const { interviewId } = useParams();
   const navigate = useNavigate();
 
-  const overallScore = 85;
-  const metrics = [
-    {
-      category: 'Clarity of Voice',
-      score: 92,
-      badge: 'Excellent',
-      color: 'emerald',
-      icon: <Mic className="w-5 h-5" />,
-      feedback: 'Your articulation and vocal clarity were outstanding throughout the interview.'
-    },
-    {
-      category: 'Confidence (Eye Contact)',
-      score: 78,
-      badge: 'Good',
-      color: 'blue',
-      icon: <Eye className="w-5 h-5" />,
-      feedback: 'Good eye contact maintained. Try to look directly at the camera more consistently.'
-    },
-    {
-      category: 'Technical Keywords',
-      score: 50,
-      badge: 'Needs Improvement',
-      color: 'orange',
-      icon: <Brain className="w-5 h-5" />,
-      feedback: 'Include more industry-specific terminology and technical concepts in your responses.'
-    }
-  ];
+  const result = interviewResults.find((r) => r.id === interviewId);
+  console.log("Interview ID from URL:", interviewId);
+  if (!result) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-center text-red-500">
+        No results found for Interview ID: {interviewId}
+      </div>
+    );
+  }
+
+  const { overallScore, metrics } = result;
+
 
   const getBadgeStyles = (color) => {
     const styles = {

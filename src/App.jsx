@@ -17,7 +17,9 @@ function App() {
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/interview" element={<InterviewInterface />} />
-            <Route path="/results" element={<ResultsPage />} />
+            {/* <Route path="/results" element={<ResultsPage />} /> */}
+            <Route path="/results/:interviewId" element={<ResultsPage />} />
+
           </Routes>
         </div>
         <Footer />
