@@ -12,8 +12,11 @@ import {
 // Mock interview results (you can later fetch from backend instead)
 const interviewResults = [
   {
-    id: '1',
+    id: '1753311835655',
     overallScore: 85,
+    totalQuestions: 10,
+    correctAnswers: 8,
+    timeTaken: '3 mins 45 secs',
     metrics: [
       {
         category: 'Clarity of Voice',
@@ -44,6 +47,9 @@ const interviewResults = [
   {
     id: '2',
     overallScore: 72,
+    totalQuestions: 10,
+    correctAnswers: 6,
+    timeTaken: '4 mins 20 secs',
     metrics: [
       {
         category: 'Clarity of Voice',
@@ -96,11 +102,12 @@ const ResultsPage = () => {
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
             Interview ID: {interviewId}
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => navigate('/dashboard')}
               className="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              aria-label="Return to Dashboard"
             >
               <Home className="w-5 h-5" />
               Return to Dashboard
@@ -108,6 +115,7 @@ const ResultsPage = () => {
             <button
               onClick={() => navigate('/interview')}
               className="flex items-center justify-center gap-2 bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              aria-label="Try Another Interview"
             >
               <Play className="w-5 h-5" />
               Try Another Interview
@@ -118,30 +126,28 @@ const ResultsPage = () => {
     );
   }
 
-  const { overallScore, metrics: performanceMetrics } = result;
+  const { overallScore, metrics: performanceMetrics, totalQuestions, correctAnswers, timeTaken } = result;
+
+  const incorrectAnswers = totalQuestions - correctAnswers;
+  const accuracy = ((correctAnswers / totalQuestions) * 100).toFixed(2);
 
   const pieData = [
-    { name: 'Correct', value: Math.round((overallScore / 100) * 20) },
-    { name: 'Incorrect', value: 20 - Math.round((overallScore / 100) * 20) },
+    { name: 'Correct', value: correctAnswers },
+    { name: 'Incorrect', value: incorrectAnswers },
   ];
 
   const COLORS = ['#4ade80', '#f87171']; // green, red
 
   const scoreData = [
-    { name: 'Session 1', score: 60 },
-    { name: 'Session 2', score: 72 },
-    { name: 'Session 3', score: overallScore },
+    { name: 'Prev Session 1', score: 60 },
+    { name: 'Prev Session 2', score: 72 },
+    { name: 'Current Session', score: overallScore },
   ];
-  const totalQuestions = 20;
-  const correctAnswers = 15;
-  const incorrectAnswers = totalQuestions - correctAnswers;
-  const accuracy = ((correctAnswers / totalQuestions) * 100).toFixed(2);
-  const timeTaken = "3 mins 45 secs";
 
   const basicStats = [
-    { label: "Total Questions", value: 10 },
-    { label: "Accuracy", value: "80%" },
-    { label: "Time Taken", value: "4 mins" },
+    { label: "Total Questions", value: totalQuestions },
+    { label: "Accuracy", value: `${accuracy}%` },
+    { label: "Time Taken", value: timeTaken },
   ];
 
   const getBadgeStyles = (color) => {
@@ -181,8 +187,9 @@ const ResultsPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 
-                       px-4 py-2 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800 transition-colors"
+            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900
+                        px-4 py-2 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800 transition-colors"
+            aria-label="Back to Dashboard"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Dashboard</span>
@@ -264,8 +271,7 @@ const ResultsPage = () => {
               </div>
 
 
-              {/* Metrics Section */}
-
+              {/* Basic Stats Section */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 text-center">
                 {basicStats.map((stat, index) => (
                   <div
@@ -283,6 +289,7 @@ const ResultsPage = () => {
               </div>
 
 
+              {/* Metrics Section */}
               {performanceMetrics.map((metric, index) => (
                 <div key={index} className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -371,7 +378,7 @@ const ResultsPage = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> 
 
             {/* Next Steps */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-6 dark:from-blue-950 dark:to-purple-950 dark:border-blue-800">
@@ -401,14 +408,16 @@ const ResultsPage = () => {
           <button
             onClick={() => navigate('/interview')}
             className="px-8 py-3 bg-purple-600 text-white rounded-xl font-semibold
-                       hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 transform hover:scale-105 transition-all duration-200"
+                        hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 transform hover:scale-105 transition-all duration-200"
+            aria-label="Practice Again"
           >
             Practice Again
           </button>
           <button
             onClick={() => navigate('/dashboard')}
             className="px-8 py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold
-                       hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors"
+                        hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 transition-colors"
+            aria-label="Back to Dashboard"
           >
             Back to Dashboard
           </button>
