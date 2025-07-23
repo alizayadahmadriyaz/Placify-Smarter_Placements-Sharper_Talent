@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, Mic, Bot, Send, AlertCircle, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import Loader from '../components/Loader';
 
 
 const InterviewInterface = () => {
@@ -109,7 +110,7 @@ const InterviewInterface = () => {
     setMessages(updatedMessages);
     setUserInput("");
   };
-
+if (isLoading) return <Loader type="interviewPage"/>;
 
   return (
     <motion.div
@@ -213,6 +214,7 @@ const InterviewInterface = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <div className="dark:bg-gray-800 bg-white rounded-2xl h-full p-8 flex flex-col transition-colors duration-300">
+            
             {/* Header */}
             <div className="flex items-center gap-3 border-b-2 border-gray-300 pb-4 mb-4">
               <Bot className="h-8 w-8 text-blue-700" />
