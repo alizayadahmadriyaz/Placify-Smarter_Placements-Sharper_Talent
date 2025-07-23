@@ -5,6 +5,9 @@ import {
   Award, Target, CheckCircle, AlertTriangle,
   Home, Play
 } from 'lucide-react';
+import {
+  PieChart, Pie, Cell, Tooltip, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Legend,
+} from "recharts";
 
 // Mock interview results (you can later fetch from backend instead)
 const interviewResults = [
@@ -70,6 +73,7 @@ const interviewResults = [
   }
 ];
 
+
 const ResultsPage = () => {
   const { interviewId } = useParams();
   const navigate = useNavigate();
@@ -114,7 +118,31 @@ const ResultsPage = () => {
     );
   }
 
-  const { overallScore, metrics } = result;
+  const { overallScore, metrics: performanceMetrics } = result;
+
+  const pieData = [
+    { name: 'Correct', value: Math.round((overallScore / 100) * 20) },
+    { name: 'Incorrect', value: 20 - Math.round((overallScore / 100) * 20) },
+  ];
+
+  const COLORS = ['#4ade80', '#f87171']; // green, red
+
+  const scoreData = [
+    { name: 'Session 1', score: 60 },
+    { name: 'Session 2', score: 72 },
+    { name: 'Session 3', score: overallScore },
+  ];
+  const totalQuestions = 20;
+  const correctAnswers = 15;
+  const incorrectAnswers = totalQuestions - correctAnswers;
+  const accuracy = ((correctAnswers / totalQuestions) * 100).toFixed(2);
+  const timeTaken = "3 mins 45 secs";
+
+  const basicStats = [
+    { label: "Total Questions", value: 10 },
+    { label: "Accuracy", value: "80%" },
+    { label: "Time Taken", value: "4 mins" },
+  ];
 
   const getBadgeStyles = (color) => {
     const styles = {
@@ -186,7 +214,7 @@ const ResultsPage = () => {
             <div className="bg-white/20 dark:bg-white/10 rounded-xl p-4">
               <p className="text-lg font-medium mb-2">🎉 Great Performance!</p>
               <p className="text-purple-100 dark:text-purple-200">
-                You demonstrated strong communication skills and professional presence. 
+                You demonstrated strong communication skills and professional presence.
                 Keep refining your technical vocabulary to reach the next level.
               </p>
             </div>
@@ -202,7 +230,60 @@ const ResultsPage = () => {
             </h2>
 
             <div className="space-y-6">
-              {metrics.map((metric, index) => (
+              {/* Improved Grid: Charts + Stats Summary */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                {/* Pie Chart Box */}
+                <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Correct vs Incorrect</h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie data={pieData} dataKey="value" cx="50%" cy="50%" outerRadius={80} label>
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Line Chart Box */}
+                <div className="bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Score Progress</h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={scoreData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="score" stroke="#3b82f6" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+
+              {/* Metrics Section */}
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 text-center">
+                {basicStats.map((stat, index) => (
+                  <div
+                    key={index}
+                    className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md flex flex-col justify-center items-center min-h-[100px]"
+                  >
+                    <span className="text-base font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">
+                      {stat.label}
+                    </span>
+                    <span className="text-lg mt-1 text-blue-600 dark:text-blue-400 font-medium">
+                      {stat.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+
+              {performanceMetrics.map((metric, index) => (
                 <div key={index} className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
@@ -218,19 +299,22 @@ const ResultsPage = () => {
                       </span>
                     </div>
                   </div>
-                  
+
+                  {/* Progress Bar */}
                   <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-3">
                     <div
                       className={`h-3 rounded-full transition-all duration-500 ${getProgressColor(metric.color)}`}
                       style={{ width: `${metric.score}%` }}
                     ></div>
                   </div>
-                  
+
+                  {/* Feedback */}
                   <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                     {metric.feedback}
                   </p>
                 </div>
               ))}
+
             </div>
           </div>
 
@@ -261,7 +345,7 @@ const ResultsPage = () => {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Personalized Feedback
               </h3>
-              
+
               <div className="space-y-4">
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 dark:bg-emerald-950 dark:border-emerald-800">
                   <div className="flex items-start space-x-2">
