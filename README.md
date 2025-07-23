@@ -8,6 +8,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/MonishRaman/Placify-Smarter_Placements-Sharper_Talent)](https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent/stargazers)
 [![Join our Discord](https://img.shields.io/badge/Join_Discord-7289DA?logo=discord\&logoColor=white)](https://discord.gg/WdAdQPAB)
 
+
 Welcome to the official repository for **Placify**, a project by **Innovision Technologies Pvt Ltd**, participating in **GirlScript Summer of Code (GSSoC) 2025**. We're thrilled to have you join our mission!
 
 **Tagline:** *Unboxing New Ideas*
