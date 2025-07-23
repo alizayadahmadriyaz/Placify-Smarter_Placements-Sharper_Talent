@@ -7,6 +7,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/MonishRaman/Placify-Smarter_Placements-Sharper_Talent)](https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent/issues)
 [![GitHub forks](https://img.shields.io/github/forks/MonishRaman/Placify-Smarter_Placements-Sharper_Talent)](https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent/network)
 [![GitHub stars](https://img.shields.io/github/stars/MonishRaman/Placify-Smarter_Placements-Sharper_Talent)](https://github.com/MonishRaman/Placify-Smarter_Placements-Sharper_Talent/stargazers)
+[![Join our Discord](https://img.shields.io/badge/Join_Discord-7289DA?logo=discord&logoColor=white)](https://discord.gg/WdAdQPAB)
+
 
 Welcome to the official repository for **Placify**, a project by **Innovision Technologies Pvt Ltd** participating in the GirlScript Summer of Code (GSSoC) 2025! We are thrilled to have you here.
 
