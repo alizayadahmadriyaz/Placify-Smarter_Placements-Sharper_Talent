@@ -6,7 +6,9 @@ import Dashboard from "./pages/Dashboard";
 import InterviewInterface from "./pages/InterviewInterface";
 import ResultsPage from "./pages/ResultsPage";
 import Footer from "./components/Footer";
-
+import InstitutionDashboard from './components/InstitutionDashboard';
+import EmployeeDashboard from './components/EmployeeDashboard';
+import CompanyDashboard from './components/CompanyDashboard';
 function App() {
   return (
     <Router>
@@ -19,7 +21,9 @@ function App() {
             <Route path="/interview" element={<InterviewInterface />} />
             {/* <Route path="/results" element={<ResultsPage />} /> */}
             <Route path="/results/:interviewId" element={<ResultsPage />} />
-
+            <Route path="/dashboard/institution" element={<InstitutionDashboard />} />
+            <Route path="/dashboard/employee" element={<EmployeeDashboard />} />
+            <Route path="/dashboard/company" element={<CompanyDashboard />} />
           </Routes>
         </div>
         <Footer />
