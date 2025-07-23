@@ -1,11 +1,22 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, Mic, Bot, Send, AlertCircle, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
+
 const InterviewInterface = () => {
+  // loading simulation
+    const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 8000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const navigate = useNavigate();
   const videoRef = useRef(null);
+
   const chatEndRef = useRef(null);
 
   const [cameraPermission, setCameraPermission] = useState("pending");
@@ -30,15 +41,18 @@ const InterviewInterface = () => {
     "How do you prioritize your work?",
     "Why should we hire you?",
     "Thank you for your time. We will get back to you shortly",
-  ];
 
+  ];
+  
   useEffect(() => {
     requestCameraAccess();
   }, []);
 
+
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
 
   const requestCameraAccess = async () => {
     try {
@@ -57,6 +71,7 @@ const InterviewInterface = () => {
       setCameraPermission("denied");
     }
   };
+
 
   const interviewId = Date.now().toString();
 
@@ -94,6 +109,7 @@ const InterviewInterface = () => {
     setMessages(updatedMessages);
     setUserInput("");
   };
+
 
   return (
     <motion.div
