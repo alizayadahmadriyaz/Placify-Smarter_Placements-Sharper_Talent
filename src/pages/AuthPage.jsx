@@ -22,14 +22,16 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+
         <motion.div
           className="bg-white rounded-2xl shadow-2xl p-8"
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
+
           {/* Header */}
           <motion.div
             className="text-center mb-8"
@@ -39,16 +41,17 @@ const AuthPage = () => {
             viewport={{ once: true, amount: 0.5 }}
           >
             <div className="flex items-center justify-center space-x-2 mb-4">
-              <Brain className="w-8 h-8 text-purple-600" />
-              <span className="text-2xl font-bold text-gray-900">Placify</span>
+              <Brain className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">Placify</span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
               {isLogin ? 'Welcome back' : 'Create account'}
             </h2>
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-600 dark:text-gray-300 mt-2">
               {isLogin ? 'Sign in to your account' : 'Start your journey with us'}
             </p>
           </motion.div>
+
 
           {/* Form with fade transition */}
           <AnimatePresence mode="wait">
@@ -82,7 +85,9 @@ const AuthPage = () => {
                     placeholder="Enter your email"
                   />
                 </div>
+
               </div>
+
 
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
@@ -116,7 +121,9 @@ const AuthPage = () => {
                     )}
                   </button>
                 </div>
+
               </div>
+
 
               <button
                 type="submit"
@@ -138,10 +145,11 @@ const AuthPage = () => {
             viewport={{ once: true, amount: 0.5 }}
           >
             <p className="text-gray-600">
+
               {isLogin ? "Don't have an account?" : "Already have an account?"}
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="ml-2 text-purple-600 hover:text-purple-700 font-semibold"
+                className="ml-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold"
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>
@@ -157,6 +165,7 @@ const AuthPage = () => {
             viewport={{ once: true, amount: 0.5 }}
           >
             <p className="text-sm text-purple-700 text-center">
+
               <strong>Demo Mode:</strong> Enter any email and password to continue
             </p>
           </motion.div>

@@ -43,19 +43,35 @@ const InterviewInterface = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
+  const interviewId = Date.now().toString(); // simple ID
 
-  const handleFinishInterview = () => {
-    // Stop camera stream
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject;
-      stream.getTracks().forEach(track => track.stop());
-    }
-    navigate('/results');
+ const handleFinishInterview = () => {
+  // Stop camera stream
+  if (videoRef.current && videoRef.current.srcObject) {
+    const stream = videoRef.current.srcObject;
+    stream.getTracks().forEach(track => track.stop());
+  }
+
+  // Prepare result
+  const resultData = {
+    id: interviewId,
+    name: "Candidate Name", // Replace this with dynamic user info if available
+    score: 7,
+    total: questions.length,
+    feedback: "Good communication and clarity."
   };
+
+  // Save to localStorage
+  localStorage.setItem(interviewId, JSON.stringify(resultData));
+
+  // Navigate to results page
+  navigate(`/results/${interviewId}`);
+};
 
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
   return (
+
     <motion.div
       className="min-h-screen dark:bg-gray-900 dark:text-white bg-gray-100 text-gray-900 transition-colors duration-300"
       initial={{ opacity: 0 }}
@@ -70,6 +86,7 @@ const InterviewInterface = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
+
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
@@ -95,7 +112,9 @@ const InterviewInterface = () => {
               </motion.div>
             </div>
           </div>
+
           <div className="dark:text-white text-gray-900">
+
             <span className="text-sm">Question {currentQuestionIndex + 1} of {questions.length}</span>
           </div>
         </div>
@@ -103,6 +122,7 @@ const InterviewInterface = () => {
 
       <div className="flex h-screen">
         {/* Left Panel - Video Feed */}
+
         <motion.div
           className="flex-1 p-6"
           initial={{ x: -40, opacity: 0 }}
@@ -111,6 +131,7 @@ const InterviewInterface = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <div className="rounded-2xl h-full flex items-center justify-center relative overflow-hidden dark:bg-black bg-white transition-colors duration-300">
+
             {cameraPermission === 'pending' && (
               <motion.div
                 className="text-center"
@@ -119,8 +140,10 @@ const InterviewInterface = () => {
                 transition={{ duration: 0.4 }}
               >
                 <AlertCircle className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
+
                 <h3 className="text-xl font-semibold mb-2 dark:text-white text-gray-900">Camera Permission Required</h3>
                 <p className="dark:text-gray-400 text-gray-600 mb-4">Please allow camera access to continue with the interview</p>
+
                 <button
                   onClick={requestCameraAccess}
                   className="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium transition-colors"
@@ -138,8 +161,10 @@ const InterviewInterface = () => {
                 transition={{ duration: 0.4 }}
               >
                 <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
+
                 <h3 className="text-xl font-semibold mb-2 dark:text-white text-gray-900">Camera Access Denied</h3>
                 <p className="dark:text-gray-400 text-gray-600 mb-4">Please enable camera access in your browser settings</p>
+
                 <button
                   onClick={requestCameraAccess}
                   className="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium transition-colors"
@@ -176,6 +201,7 @@ const InterviewInterface = () => {
         </motion.div>
 
         {/* Right Panel - Questions */}
+
         <motion.div
           className="w-1/2 p-6"
           initial={{ x: 40, opacity: 0 }}
@@ -184,6 +210,7 @@ const InterviewInterface = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <div className="dark:bg-gray-800 bg-white rounded-2xl h-full p-8 flex flex-col transition-colors duration-300">
+
             {/* Progress Bar */}
             <motion.div
               className="mb-8"
@@ -194,12 +221,16 @@ const InterviewInterface = () => {
             >
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm dark:text-gray-400 text-gray-600">Progress</span>
+
                 <span className="text-sm dark:text-gray-400 text-gray-600">
+
                   {Math.round(((currentQuestionIndex + 1) / questions.length) * 100)}%
                 </span>
               </div>
               <div className="w-full dark:bg-gray-700 bg-gray-200 rounded-full h-2">
+
                 <motion.div
+
                   className="bg-purple-600 h-2 rounded-full transition-all duration-300"
                   style={{
                     width: `${((currentQuestionIndex + 1) / questions.length) * 100}%`
@@ -223,6 +254,7 @@ const InterviewInterface = () => {
                 <h2 className="text-3xl font-bold mb-6 leading-tight dark:text-white text-gray-900">
                   {questions[currentQuestionIndex]}
                 </h2>
+
                 <motion.div
                   className="bg-purple-600/20 dark:bg-purple-600/20 bg-purple-100 border border-purple-500/30 rounded-xl p-4"
                   initial={{ opacity: 0, scale: 0.98 }}
@@ -230,6 +262,7 @@ const InterviewInterface = () => {
                   transition={{ duration: 0.4, delay: 0.2 }}
                 >
                   <p className="dark:text-purple-200 text-purple-800 text-sm">
+
                     💡 <strong>Tip:</strong> Take your time to think before answering. 
                     Speak clearly and maintain eye contact with the camera.
                   </p>
@@ -271,7 +304,9 @@ const InterviewInterface = () => {
 
               <button
                 onClick={() => navigate('/dashboard')}
+
                 className="w-full dark:text-gray-400 text-gray-600 hover:text-white dark:hover:text-white py-2 transition-colors"
+
               >
                 Exit Interview
               </button>
