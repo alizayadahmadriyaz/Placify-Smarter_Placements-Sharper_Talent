@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -21,19 +22,43 @@ const AuthPage = () => {
       const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       const { token, user } = response.data;
 
-      // Store token & user info
+
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
 
-      // Redirect based on role (optional)
-      navigate('/dashboard');
+
+      const decoded = jwtDecode(token);
+      const role = decoded?.role;
+
+      if (!role) {
+        throw new Error("Role not found in token.");
+      }
+
+      // Redirect based on role
+      switch (role) {
+        case 'student':
+          navigate('/dashboard');
+          break;
+        case 'institution':
+          navigate('/dashboard/institution');
+          break;
+        case 'employee':
+          navigate('/dashboard/employee');
+          break;
+        case 'company':
+          navigate('/dashboard/company');
+          break;
+        default:
+          throw new Error('Invalid role in token');
+      }
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || err.message || 'Login failed');
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
