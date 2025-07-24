@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
 import axios from 'axios';
-
+import { useAuth } from '../context/AuthContext'; 
+import { jwtDecode } from 'jwt-decode'; 
 const AuthPage = () => {
   const navigate = useNavigate();
+  const { setIsAuthenticated } = useAuth();  
+
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,27 +16,42 @@ const AuthPage = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      const { token, user } = response.data;
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    const { token } = response.data;
 
-      // Store token & user info
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', token);
+    setIsAuthenticated(true);
 
-      // Redirect based on role (optional)
-      navigate('/dashboard');
-    } catch (err) {
-      console.error('Login error:', err);
-      setError(err.response?.data?.message || 'Login failed');
-    } finally {
-      setLoading(false);
+    const decoded = jwtDecode(token);
+    const role = decoded.role;
+
+    switch (role) {
+      case 'institution':
+        navigate('/dashboard/institution');
+        break;
+      case 'employee':
+        navigate('/dashboard/employee');
+        break;
+      case 'company':
+        navigate('/dashboard/company');
+        break;
+      default:
+        navigate('/dashboard');
     }
-  };
+
+  } catch (err) {
+    console.error('Login error:', err);
+    setError(err.response?.data?.message || 'Login failed');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
