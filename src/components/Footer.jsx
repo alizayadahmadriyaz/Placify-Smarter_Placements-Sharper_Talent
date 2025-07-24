@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Brain,
   ArrowUp,
@@ -48,19 +49,19 @@ const Footer = () => {
     {
       name: "GitHub",
       icon: <Github className="w-5 h-5" />,
-      href: "#",
+      href: "https://github.com/npratik01/Placify-Smarter_Placements-Sharper_Talent",
       color: "hover:text-gray-800 dark:hover:text-gray-200",
     },
     {
       name: "LinkedIn",
       icon: <Linkedin className="w-5 h-5" />,
-      href: "#",
+      href: "https://linkedin.com/company/placify",
       color: "hover:text-blue-600",
     },
     {
       name: "Twitter",
       icon: <Twitter className="w-5 h-5" />,
-      href: "#",
+      href: "https://twitter.com/placify",
       color: "hover:text-blue-400",
     },
   ];
@@ -105,13 +106,13 @@ const Footer = () => {
               <ul className="space-y-2">
                 {navigationLinks.map((link) => (
                   <li key={link.name}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200 text-sm flex items-center group"
                     >
                       <span>{link.name}</span>
                       <ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -125,13 +126,13 @@ const Footer = () => {
               <ul className="space-y-2">
                 {userRoles.map((role) => (
                   <li key={role.name}>
-                    <a
-                      href={role.href}
+                    <Link
+                      to={role.href}
                       className="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200 text-sm flex items-center group"
                     >
                       <span>{role.name}</span>
                       <ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -149,13 +150,13 @@ const Footer = () => {
                 <Mail className="w-4 h-4" />
                 <span>support@placify.com</span>
               </a>
-              <a
-                href="#feedback"
+              <Link
+                to="/feedback"
                 className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Feedback</span>
-              </a>
+              </Link>
             </div>
 
             {/* Social Media Links */}
@@ -164,6 +165,8 @@ const Footer = () => {
                 <a
                   key={social.name}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`text-gray-500 dark:text-gray-400 ${social.color} transition-colors duration-200 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700`}
                   aria-label={social.name}
                 >
