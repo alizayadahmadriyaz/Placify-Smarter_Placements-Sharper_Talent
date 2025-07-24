@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import InterviewInterface from "./pages/InterviewInterface";
 import ResultsPage from "./pages/ResultsPage";
 import Footer from "./components/Footer";
+import ProfilePage from "./pages/ProfilePage";
 
 import InstitutionDashboard from './components/InstitutionDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
@@ -42,6 +43,9 @@ function App() {
             <Route path="/register/institution" element={<InstitutionForm />} />
             <Route path="/register/employee" element={<EmployeeForm />} />
             <Route path="/register/company" element={<CompanyForm />} />
+
+             
+            <Route path="/profile" element={<ProfilePage />} />                 
           </Routes>
         </div>
         <Footer />
