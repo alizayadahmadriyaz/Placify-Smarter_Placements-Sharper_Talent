@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
+import axios from 'axios';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -8,10 +9,30 @@ const AuthPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/dashboard');
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { token, user } = response.data;
+
+      // Store token & user info
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Redirect based on role (optional)
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(err.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,8 +53,11 @@ const AuthPage = () => {
             </p>
           </div>
 
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                 Email address
@@ -44,7 +68,6 @@ const AuthPage = () => {
                 </div>
                 <input
                   id="email"
-                  name="email"
                   type="email"
                   required
                   value={email}
@@ -58,6 +81,7 @@ const AuthPage = () => {
               </div>
             </div>
 
+            {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                 Password
@@ -68,7 +92,6 @@ const AuthPage = () => {
                 </div>
                 <input
                   id="password"
-                  name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
@@ -84,40 +107,32 @@ const AuthPage = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" />
-                  ) : (
-                    <Eye className="w-5 h-5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" />
-                  )}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-purple-600 dark:bg-purple-500 text-white py-3 px-4 rounded-xl font-semibold
-                         hover:bg-purple-700 dark:hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400
-                         focus:ring-offset-2 transform hover:scale-105 transition-all duration-200"
+              disabled={loading}
+              className="w-full bg-purple-600 text-white py-3 px-4 rounded-xl font-semibold
+                         hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
+                         transition-all duration-200 disabled:opacity-50"
             >
-              {isLogin ? 'Sign In' : 'Sign Up'}
+              {loading ? 'Signing in...' : isLogin ? 'Sign In' : 'Sign Up'}
             </button>
           </form>
 
+          {/* Switch */}
           <div className="mt-6 text-center">
             <p className="text-gray-600 dark:text-gray-300">
               {isLogin ? "Don't have an account?" : "Already have an account?"}
               <button
                 onClick={isLogin ? () => navigate('/register') : () => setIsLogin(true)}
-                className="ml-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold"
+                className="ml-2 text-purple-600 font-semibold"
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>
-            </p>
-          </div>
-
-          <div className="mt-6 p-4 bg-purple-50 dark:bg-gray-800 rounded-xl">
-            <p className="text-sm text-purple-700 dark:text-purple-300 text-center">
-              <strong>Demo Mode:</strong> Enter any email and password to continue
             </p>
           </div>
         </div>
@@ -127,5 +142,3 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
-
-
