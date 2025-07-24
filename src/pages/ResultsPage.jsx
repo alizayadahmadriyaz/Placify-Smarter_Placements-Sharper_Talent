@@ -485,24 +485,39 @@ const ResultsPage = () => {
                       <PieChartIcon className="w-4 h-4 text-blue-500 mr-2" />
                       Correct vs Incorrect
                     </h3>
-                    <div className="flex items-center space-x-4">
-                      {pieData.map((entry, index) => (
-                        <div key={index} className="flex items-center space-x-1">
-                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></div>
-                          <span className="text-xs text-gray-600 dark:text-gray-400">{entry.name}</span>
-                        </div>
-                      ))}
-                    </div>
                   </div>
-                  <ResponsiveContainer width="100%" height={260}>
-                    <PieChart>
+                  <div className="flex justify-center mb-3">
+                    {pieData.map((entry, index) => (
+                      <div key={index} className="flex items-center px-3">
+                        <div className="w-3 h-3 rounded-full mr-1" style={{ backgroundColor: entry.color }}></div>
+                        <span className="text-xs text-gray-600 dark:text-gray-400">{entry.name}: {entry.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <ResponsiveContainer width="100%" height={270}>
+                    <PieChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
                       <Pie 
                         data={pieData} 
                         dataKey="value" 
                         cx="50%" 
                         cy="50%" 
                         outerRadius={80} 
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) => {
+                          // Smaller, more compact labels
+                          return (
+                            <text 
+                              x={0} 
+                              y={0} 
+                              textAnchor="middle" 
+                              fill="#333" 
+                              fontSize={10} 
+                              fontWeight="normal"
+                              dominantBaseline="central"
+                            >
+                              {`${(percent * 100).toFixed(0)}%`}
+                            </text>
+                          );
+                        }}
                         labelLine={false}
                         animationDuration={1000}
                       >
@@ -524,11 +539,19 @@ const ResultsPage = () => {
                           boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                    </PieChart>
+                      </PieChart>
                   </ResponsiveContainer>
-                </div>
-
-                {/* Line Chart with enhanced styling */}
+                  <div className="flex justify-center items-center mt-2 space-x-6 text-center">
+                    <div>
+                      <span className="text-sm font-medium block text-emerald-600">Correct</span>
+                      <span className="text-xl font-bold text-gray-800 dark:text-gray-200">{correctAnswers}</span>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium block text-red-600">Incorrect</span>
+                      <span className="text-xl font-bold text-gray-800 dark:text-gray-200">{incorrectAnswers}</span>
+                    </div>
+                  </div>
+                </div>                {/* Line Chart with enhanced styling */}
                 <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-all duration-200">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                     <TrendingUp className="w-4 h-4 text-green-500 mr-2" />
