@@ -1,9 +1,14 @@
-import React  from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Brain, Play, Calendar, Clock, TrendingUp, Award, LogOut } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import { useEffect, useState } from 'react';
-import Loader from '../components/Loader'; 
+import Loader from '../components/Loader';
+import Navbar from "../components/Navbar";
+import { UserCircle } from 'lucide-react';
+import { Menu, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
+import { Settings } from 'lucide-react';
 const Dashboard = () => {
   const navigate = useNavigate();
   // loader simulation
@@ -38,14 +43,61 @@ const Dashboard = () => {
       status: 'Completed'
     }
   ];
-
+  const Dashboard = () => {
+    return (
+      <>
+        <Navbar />
+        {/* Your dashboard content below */}
+      </>
+    );
+  };
   const getScoreColor = (score) => {
     if (score >= 90) return 'text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900';
     if (score >= 80) return 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900';
     if (score >= 70) return 'text-orange-600 bg-orange-50 dark:text-orange-400 dark:bg-orange-900';
     return 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900';
   };
+   const ProfileDropdown = () => (
+    <Menu as="div" className="relative inline-block text-left">
+      <div>
+        <Menu.Button className="inline-flex items-center px-2 py-1 rounded-full focus:outline-none">
+          <UserCircle className="w-7 h-7 text-gray-600 dark:text-gray-300" />
+        </Menu.Button>
+      </div>
 
+      <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5">
+          {/* <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <p className="text-sm font-medium text-gray-900 dark:text-white">John Doe</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">johndoe@example.com</p>
+          </div> */}
+          <div className="py-1">
+            <Menu.Item>
+              {({ active }) => (
+                <button onClick={() => navigate('/profile')}
+                  className={`${active ? 'bg-gray-100 dark:bg-gray-700' : ''} flex items-center px-4 py-2 text-sm w-full text-left text-gray-700 dark:text-gray-200`}>
+                  <UserCircle className="w-4 h-4 mr-2" />
+                  Profile
+                </button>
+              )}
+            </Menu.Item>
+            
+            <Menu.Item>
+              {({ active }) => (
+                <button onClick={() => navigate('/')}
+                  className={`${active ? 'bg-gray-100 dark:bg-gray-700' : ''} flex items-center px-4 py-2 text-sm w-full text-left text-gray-700 dark:text-gray-200`}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </button>
+              )}
+            </Menu.Item>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
+  );
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
@@ -59,14 +111,8 @@ const Dashboard = () => {
             <div className='flex items-center space-x-2'>
 
               <ThemeToggle />
-              <button
-                onClick={() => navigate('/')}
-                className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white 
-              px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              >
-                <LogOut className="w-5 h-5" />
-                <span>Sign Out</span>
-              </button>
+              <ProfileDropdown />
+
             </div>
           </div>
         </div>
@@ -92,11 +138,11 @@ const Dashboard = () => {
               </div>
               <div>
                 <p className="text-sm font-semibold text-gray-600 dark:text-gray-300">Total Interviews</p>
-                                {isLoading ? (
+                {isLoading ? (
                   <Loader />
                 ) : (
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">12</p>
-                  )}
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">12</p>
+                )}
               </div>
             </div>
           </div>
@@ -108,11 +154,11 @@ const Dashboard = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-300 font-semibold">Average Score</p>
-                                {isLoading ? (
+                {isLoading ? (
                   <Loader />
                 ) : (
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">85.7</p>
-                  )}
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">85.7</p>
+                )}
               </div>
             </div>
           </div>
@@ -127,8 +173,8 @@ const Dashboard = () => {
                 {isLoading ? (
                   <Loader />
                 ) : (
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">24.5</p>
-                  )}
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">24.5</p>
+                )}
               </div>
             </div>
           </div>
