@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Brain, Users, Target, CheckCircle } from "lucide-react";
+import { ArrowRight, Brain, Users,Zap,User, Target, CheckCircle } from "lucide-react";
 import ThemeToggle from "../components/ThemeToggle";
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -36,29 +36,61 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <Brain className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">Placify</span>
-            </div>
-            <div>
+          <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-purple-200 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 py-2 md:py-4 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
+        
+        {/* Logo + Placify Text + Get Started + Theme Toggle (on mobile) */}
+        <div className="flex items-center space-x-2 md:space-x-3 w-full md:w-auto justify-between md:justify-start">
+          <div className="flex items-center space-x-2 md:space-x-3">
+            <Brain className="md:w-8 md:h-8 w-6 h-6 text-purple-600 dark:text-purple-400" />
+            <span className="md:text-4xl text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
+              Placify
+            </span>
+          </div>
+
+          {/* Show Get Started + ThemeToggle on mobile beside logo */}
+          <div className="flex md:hidden items-center space-x-2">
+            <button
+              className="bg-purple-600 flex text-sm items-center hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-full transition-all duration-300"
+              onClick={() => navigate("/auth")}
+            >
+              <Zap className="w-4 h-4 mr-1" />
+              Get Started
+            </button>
 
             <ThemeToggle />
-            <button
-              onClick={() => navigate("/auth")}
-              className="px-4 py-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium transition-colors"
-              >
-              Sign In
-            </button>
-              </div>
           </div>
         </div>
-      </header>
+
+        {/* Right Side: Buttons (visible on md+) */}
+        <div className="hidden md:flex items-center space-x-6">
+          {/* Sign In */}
+          <button
+            className="text-xl px-6 py-3 flex items-center space-x-2 bg-transparent border border-gray-300 dark:text-white dark:border-gray-600 rounded-full hover:bg-purple-600 hover:text-white dark:hover:bg-gray-800 transition"
+            onClick={() => navigate("/auth")}
+          >
+            <User className="w-6 h-6" />
+            <span>Sign In</span>
+          </button>
+
+          {/* Get Started */}
+          <button
+            className="bg-purple-600 flex text-xl items-center hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-full transition-all duration-300"
+            onClick={() => navigate("/auth")}
+          >
+            <Zap className="w-5 h-5 mr-2" />
+            Get Started
+          </button>
+
+          {/* Theme Toggle */}
+          <ThemeToggle />
+        </div>
+      </div>
+    </nav>
+
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-purple-800 dark:via-purple-900 dark:to-indigo-950 text-white transition-colors duration-300">
+      <section className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-purple-800 dark:via-purple-900 dark:to-indigo-950 text-white transition-colors mt-16 duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">

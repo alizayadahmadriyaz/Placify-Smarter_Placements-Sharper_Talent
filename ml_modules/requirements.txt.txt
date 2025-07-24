@@ -1,0 +1,8 @@
+opencv-python
+tensorflow
+fer
+librosa
+transformers
+scikit-learn
+speechrecognition
+numpy
