@@ -17,7 +17,7 @@ import StudentForm from './pages/register/StudentForm';
 import InstitutionForm from './pages/register/InstitutionForm';
 import EmployeeForm from './pages/register/EmployeeForm';
 import CompanyForm from './pages/register/CompanyForm';
-
+import { motion } from "framer-motion";
 
 function App() {
   return (
