@@ -34,3 +34,4 @@ const pastInterviews = await Interview.find({ status: 'completed' });
     res.status(500).json({ message: 'Server error while fetching past interviews' });
   }
 });
+export default router;
