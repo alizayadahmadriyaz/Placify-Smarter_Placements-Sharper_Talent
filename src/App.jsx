@@ -18,7 +18,12 @@ import InstitutionForm from './pages/register/InstitutionForm';
 import EmployeeForm from './pages/register/EmployeeForm';
 import CompanyForm from './pages/register/CompanyForm';
 
+
 import ProtectedRoute from './components/ProtectedRoute';
+
+import { motion } from "framer-motion";
+
+
 function App() {
   return (
     <Router>
