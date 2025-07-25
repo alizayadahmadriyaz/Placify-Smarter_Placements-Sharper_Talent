@@ -13,7 +13,7 @@
     "@headlessui/react": "^2.2.5",
     "@material-tailwind/react": "^2.1.10",
     "axios": "^1.11.0",
-    "framer-motion": "^12.23.7",
+    "framer-motion": "^12.23.9",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.525.0",
     "react": "^18.3.1",
@@ -32,6 +32,6 @@
     "globals": "^15.9.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
-    "vite": "^5.4.2"
+    "vite": "^7.0.6"
   }
 }

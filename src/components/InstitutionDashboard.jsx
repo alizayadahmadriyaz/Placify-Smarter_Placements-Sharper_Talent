@@ -4,7 +4,7 @@ const InstitutionDashboard = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold">Institution</h1>
-      <p>Welcome to the Institution Dashboard!</p>
+      <p>Welcome to  Institution Dashboard!</p>
     </div>
   );
 };
