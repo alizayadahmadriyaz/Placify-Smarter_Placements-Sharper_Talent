@@ -25,7 +25,7 @@ export default function StudentForm() {
         role: 'student',
       };
 
-     await axios.post(`http://localhost:5000/api/auth/register`, payload);
+     await axios.post(`http://localhost:5000/api/auth/register/student`, payload);
       setSuccess(true);
       setFormData({
         fullName: '',

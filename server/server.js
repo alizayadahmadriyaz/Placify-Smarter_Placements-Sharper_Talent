@@ -1,24 +1,32 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import healthRoutes from "./routes/health.js";
+import authRoutes from "./routes/auth.js";
+import interviewRoutes from "./routes/interview.js";
 
-import healthRoutes from './routes/health.js';
-import authRoutes from './routes/auth.js';
-import interviewRoutes from './routes/interview.js';
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ====== Middlewares ======
-app.use(cors({ origin: '*', credentials: true }));
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
-// ====== Routes ======
-app.use('/api/health', healthRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/interviews', interviewRoutes);
+// ====== API Routes ======
+app.use("/api/health", healthRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/interviews", interviewRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Backend server is up and running ");
+});
 
 // ====== Database Connection ======
 mongoose
@@ -27,12 +35,9 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log('MongoDB Connected');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    console.log("MongoDB Connected");
+    app.listen(PORT, () =>
+      console.log(`Server running on port ${PORT}`)
+    );
   })
-  .catch((err) => console.error('MongoDB connection error:', err));
-
-// ====== Default Route ======
-app.get('/', (req, res) => {
-  res.send('Backend server is up and running');
-});
+  .catch((err) => console.error("MongoDB connection error:", err));
