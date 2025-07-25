@@ -17,7 +17,12 @@ import StudentForm from './pages/register/StudentForm';
 import InstitutionForm from './pages/register/InstitutionForm';
 import EmployeeForm from './pages/register/EmployeeForm';
 import CompanyForm from './pages/register/CompanyForm';
+
+
+import ProtectedRoute from './components/ProtectedRoute';
+
 import { motion } from "framer-motion";
+
 
 function App() {
   return (
@@ -25,27 +30,72 @@ function App() {
       <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
         <div>
           <Routes>
-            {/* Core Application Routes */}
+            {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/interview" element={<InterviewInterface />} />
-            <Route path="/results/:interviewId" element={<ResultsPage />} />
-
-            <Route path="/dashboard/institution" element={<InstitutionDashboard />} />
-            <Route path="/dashboard/employee" element={<EmployeeDashboard />} />
-            <Route path="/dashboard/company" element={<CompanyDashboard />} />
-
-            
-            {/* Registration Flow */}
             <Route path="/register" element={<RoleSelectionPage />} />
             <Route path="/register/student" element={<StudentForm />} />
             <Route path="/register/institution" element={<InstitutionForm />} />
             <Route path="/register/employee" element={<EmployeeForm />} />
             <Route path="/register/company" element={<CompanyForm />} />
 
-             
-            <Route path="/profile" element={<ProfilePage />} />                 
+            {/* Protected Routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/interview"
+              element={
+                <ProtectedRoute>
+                  <InterviewInterface />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/results/:interviewId"
+              element={
+                <ProtectedRoute>
+                  <ResultsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/institution"
+              element={
+                <ProtectedRoute>
+                  <InstitutionDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/employee"
+              element={
+                <ProtectedRoute>
+                  <EmployeeDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/company"
+              element={
+                <ProtectedRoute>
+                  <CompanyDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
         <Footer />
