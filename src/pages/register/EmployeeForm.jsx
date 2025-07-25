@@ -44,9 +44,10 @@ export default function EmployeeForm() {
   };
 
   return (
+    <div className='min-h-screen flex items-center bg-purple-600'>
     <motion.div
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+      className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md">
         <motion.div
         className="flex items-center justify-center gap-3 mb-6"
                 initial={{ opacity: 0, x: -20 }}
@@ -167,5 +168,6 @@ export default function EmployeeForm() {
         </motion.button>
       </motion.form>
     </motion.div>
+    </div>
   );
 }
