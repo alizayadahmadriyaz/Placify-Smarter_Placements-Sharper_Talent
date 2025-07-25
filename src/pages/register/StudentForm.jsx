@@ -43,8 +43,9 @@ export default function StudentForm() {
   };
 
   return (
+    <div className='min-h-screen flex items-center bg-purple-600'>
 <motion.div 
-      className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md "
+      className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md "
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -185,5 +186,6 @@ export default function StudentForm() {
         </motion.button>
       </motion.form>
     </motion.div>
+    </div>
   );
 }

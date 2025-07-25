@@ -44,7 +44,8 @@ export default function InstitutionForm() {
   };
 
   return (
-    <motion.div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
+    <div className='min-h-screen flex items-center bg-purple-600'>
+    <motion.div className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md"
       transition={{ duration: 0.6, ease: "easeOut" }}>
       <motion.div
         className="flex items-center gap-3 mb-6"
@@ -162,5 +163,6 @@ export default function InstitutionForm() {
         </motion.button>
       </motion.form>
     </motion.div>
+    </div>
   );
 }
