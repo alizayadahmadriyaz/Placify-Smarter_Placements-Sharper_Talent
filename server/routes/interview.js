@@ -2,6 +2,7 @@
 import express from 'express';
 import Interview from '../models/Interview.js';
 import verifyToken from '../middleware/authMiddleware.js'; // Optional: for protected access
+import handleVideo from "../controllers/videoController.js"
 
 const router = express.Router();
 
@@ -34,4 +35,5 @@ const pastInterviews = await Interview.find({ status: 'completed' });
     res.status(500).json({ message: 'Server error while fetching past interviews' });
   }
 });
+router.post("/upload", handleVideo )
 export default router;

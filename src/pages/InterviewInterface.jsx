@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, Mic, Bot, Send, AlertCircle, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
-import Loader from '../components/Loader';
-
+import Loader from "../components/Loader";
+import axios from "axios";
 
 const InterviewInterface = () => {
   // loading simulation
-    const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 8000);
@@ -17,7 +16,9 @@ const InterviewInterface = () => {
 
   const navigate = useNavigate();
   const videoRef = useRef(null);
-
+  const streamRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const recordedChunksRef = useRef([]);
   const chatEndRef = useRef(null);
 
   const [cameraPermission, setCameraPermission] = useState("pending");
@@ -42,18 +43,15 @@ const InterviewInterface = () => {
     "How do you prioritize your work?",
     "Why should we hire you?",
     "Thank you for your time. We will get back to you shortly",
-
   ];
-  
+
   useEffect(() => {
     requestCameraAccess();
   }, []);
 
-
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
 
   const requestCameraAccess = async () => {
     try {
@@ -62,9 +60,25 @@ const InterviewInterface = () => {
         audio: true,
       });
 
+      streamRef.current = stream;
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
+      //initializing the mediaRecorder
+      mediaRecorderRef.current = new MediaRecorder(stream, {
+        mimeType: "video/webm; codecs=vp9,opus",
+      });
+
+      //collection of chunks
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordedChunksRef.current.push(event.data);
+        }
+      };
+
+      //start the recording
+      mediaRecorderRef.current.start();
 
       setCameraPermission("granted");
     } catch (error) {
@@ -73,25 +87,74 @@ const InterviewInterface = () => {
     }
   };
 
-
   const interviewId = Date.now().toString();
 
+  //here in the handlefinish interview I will stop recording and create a blob of the recorded video after collecting the chunks
   const handleFinishInterview = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject;
-      stream.getTracks().forEach((track) => track.stop());
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === "recording"
+    ) {
+      mediaRecorderRef.current.onstop = async () => {
+        try {
+          const videoBlob = new Blob(recordedChunksRef.current, {
+            type: "video/webm; codecs=vp9,opus",
+          });
+          const formData = new FormData();
+          formData.append("video", videoBlob, `interview_${interviewId}.webm`);
+          formData.append("interviewId", interviewId);
+          const response = await axios.post(
+            "http://localhost:5000/api/interviews/upload",
+            formData
+          );
+          console.log("Video Blob Uploaded successfully");
+
+          if (streamRef.current) {
+            streamRef.current.getTracks().forEach((track) => track.stop());
+          }
+          const resultData = {
+            id: interviewId,
+            name: "Candidate Name",
+            score: 7,
+            videoUploaded: true,
+            total: interviewQuestions.length,
+            feedback: "Good communication and clarity.",
+          };
+          localStorage.setItem(interviewId, JSON.stringify(resultData));
+          navigate(`/results/${interviewId}`);
+        } catch (error) {
+          console.log("Error uploading video Blob");
+
+          const resultData = {
+            id: interviewId,
+            name: "Candidate Name",
+            score: 7,
+            videoUploaded: false,
+            total: interviewQuestions.length,
+            feedback: "Good communication and clarity.",
+          };
+          localStorage.setItem(interviewId, JSON.stringify(resultData));
+          navigate(`/results/${interviewId}`);
+        }
+      };
+
+      mediaRecorderRef.current.stop();
+    } else {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject;
+        stream.getTracks().forEach((track) => track.stop());
+      }
+      const resultData = {
+        id: interviewId,
+        name: "Candidate Name",
+        score: 7,
+        videoUploaded: false,
+        total: interviewQuestions.length,
+        feedback: "Good communication and clarity.",
+      };
+      localStorage.setItem(interviewId, JSON.stringify(resultData));
+      navigate(`/results/${interviewId}`);
     }
-
-    const resultData = {
-      id: interviewId,
-      name: "Candidate Name",
-      score: 7,
-      total: interviewQuestions.length,
-      feedback: "Good communication and clarity.",
-    };
-
-    localStorage.setItem(interviewId, JSON.stringify(resultData));
-    navigate(`/results/${interviewId}`);
   };
 
   const handleSend = () => {
@@ -110,10 +173,10 @@ const InterviewInterface = () => {
     setMessages(updatedMessages);
     setUserInput("");
   };
-if (isLoading) return <Loader type="interviewPage"/>;
+  if (isLoading) return <Loader type="interviewPage" />;
 
   return (
-<motion.div
+    <motion.div
       className="min-h-screen dark:bg-gray-900 dark:text-white bg-gray-100 text-gray-900 transition-colors duration-300"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -128,28 +191,38 @@ if (isLoading) return <Loader type="interviewPage"/>;
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <motion.div 
+          <motion.div
             className="flex items-center space-x-4"
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             {cameraPermission === "granted" && (
-              <motion.div 
+              <motion.div
                 className="flex items-center space-x-1 text-emerald-500"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.4, type: "spring", stiffness: 200 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 0.4,
+                  type: "spring",
+                  stiffness: 200,
+                }}
               >
                 <Camera className="w-4 h-4" />
                 <span className="text-sm">Camera Active</span>
               </motion.div>
             )}
-            <motion.div 
+            <motion.div
               className="flex items-center space-x-1 text-emerald-500"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.5, type: "spring", stiffness: 200 }}
+              transition={{
+                duration: 0.4,
+                delay: 0.5,
+                type: "spring",
+                stiffness: 200,
+              }}
             >
               <Mic className="w-4 h-4" />
               <span className="text-sm">Mic Active</span>
@@ -166,7 +239,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <motion.div 
+          <motion.div
             className="rounded-2xl h-full flex items-center justify-center relative overflow-hidden dark:bg-black bg-white transition-colors duration-300"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -174,7 +247,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
             whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
           >
             {cameraPermission === "pending" && (
-              <motion.div 
+              <motion.div
                 className="text-center"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -187,7 +260,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
                 >
                   <AlertCircle className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
                 </motion.div>
-                <motion.h3 
+                <motion.h3
                   className="text-xl font-semibold mb-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -195,7 +268,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
                 >
                   Camera Permission Required
                 </motion.h3>
-                <motion.p 
+                <motion.p
                   className="text-gray-600 mb-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -217,7 +290,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
               </motion.div>
             )}
             {cameraPermission === "denied" && (
-              <motion.div 
+              <motion.div
                 className="text-center"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -230,7 +303,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
                 >
                   <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
                 </motion.div>
-                <motion.h3 
+                <motion.h3
                   className="text-xl font-semibold mb-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -238,7 +311,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
                 >
                   Camera Access Denied
                 </motion.h3>
-                <motion.p 
+                <motion.p
                   className="text-gray-600 mb-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -271,22 +344,22 @@ if (isLoading) return <Loader type="interviewPage"/>;
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
                 />
-                <motion.div 
+                <motion.div
                   className="absolute bottom-4 left-4 flex items-center space-x-2 bg-black/50 px-3 py-2 rounded-lg"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.4, delay: 0.8 }}
                 >
-                  <motion.div 
+                  <motion.div
                     className="w-2 h-2 bg-red-500 rounded-full"
-                    animate={{ 
+                    animate={{
                       opacity: [1, 0.3, 1],
-                      scale: [1, 0.8, 1]
+                      scale: [1, 0.8, 1],
                     }}
-                    transition={{ 
-                      duration: 1.5, 
+                    transition={{
+                      duration: 1.5,
                       repeat: Infinity,
-                      ease: "easeInOut"
+                      ease: "easeInOut",
                     }}
                   />
                   <span className="text-sm text-white">Recording</span>
@@ -303,15 +376,14 @@ if (isLoading) return <Loader type="interviewPage"/>;
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <motion.div 
+          <motion.div
             className="dark:bg-gray-800 bg-white rounded-2xl h-full p-8 flex flex-col transition-colors duration-300"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
           >
-            
             {/* Header */}
-            <motion.div 
+            <motion.div
               className="flex items-center gap-3 border-b-2 border-gray-300 pb-4 mb-4"
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -320,11 +392,16 @@ if (isLoading) return <Loader type="interviewPage"/>;
               <motion.div
                 initial={{ rotate: -180, scale: 0 }}
                 animate={{ rotate: 0, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.7, type: "spring", stiffness: 200 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.7,
+                  type: "spring",
+                  stiffness: 200,
+                }}
               >
                 <Bot className="h-8 w-8 text-blue-700" />
               </motion.div>
-              <motion.h2 
+              <motion.h2
                 className="text-2xl font-semibold"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -334,7 +411,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
               </motion.h2>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               className="mb-4"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -355,7 +432,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
             </motion.div>
 
             {/* Scrollable Chat Area */}
-            <motion.div 
+            <motion.div
               className="flex-1 overflow-y-auto pr-2 space-y-3 mb-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -369,18 +446,18 @@ if (isLoading) return <Loader type="interviewPage"/>;
                   }`}
                   initial={{ opacity: 0, y: 20, scale: 0.8 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ 
-                    duration: 0.4, 
-                    delay: 1.1 + (index * 0.1),
+                  transition={{
+                    duration: 0.4,
+                    delay: 1.1 + index * 0.1,
                     type: "spring",
-                    stiffness: 200
+                    stiffness: 200,
                   }}
                 >
                   {msg.sender === "bot" && (
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      transition={{ duration: 0.3, delay: 1.2 + (index * 0.1) }}
+                      transition={{ duration: 0.3, delay: 1.2 + index * 0.1 }}
                     >
                       <Bot className="w-6 h-6 text-blue-700 mr-2" />
                     </motion.div>
@@ -401,7 +478,7 @@ if (isLoading) return <Loader type="interviewPage"/>;
             </motion.div>
 
             {/* Input Area */}
-            <motion.div 
+            <motion.div
               className="flex items-center gap-2 border-t border-gray-300 pt-4"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -424,7 +501,12 @@ if (isLoading) return <Loader type="interviewPage"/>;
                 className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition"
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
-                transition={{ duration: 0.4, delay: 1.5, type: "spring", stiffness: 200 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 1.5,
+                  type: "spring",
+                  stiffness: 200,
+                }}
                 whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
                 whileTap={{ scale: 0.9 }}
               >
