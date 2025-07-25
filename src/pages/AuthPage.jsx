@@ -4,6 +4,7 @@ import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
 import axios from 'axios';
 
 import { useAuth } from '../context/AuthContext'; 
+import { useUser } from '../context/UserContext';
 import { jwtDecode } from 'jwt-decode'; 
 
 import { motion } from 'framer-motion';
@@ -11,6 +12,7 @@ import { motion } from 'framer-motion';
 const AuthPage = () => {
   const navigate = useNavigate();
   const { setIsAuthenticated } = useAuth();  
+  const { authenticateUser } = useUser();
 
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -20,41 +22,71 @@ const AuthPage = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-  try {
-    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-    const { token } = response.data;
+    try {
+      let token;
+      
+      // First try to authenticate from local storage users
+      try {
+        const result = authenticateUser(email, password);
+        token = result.token;
+      } catch (localAuthErr) {
+        console.log('Local auth failed, trying API:', localAuthErr.message);
+        
+        // If local auth fails, try the API (if backend exists)
+        try {
+          const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+          token = response.data.token;
+        } catch (apiErr) {
+          console.error('API auth failed:', apiErr);
+          throw new Error('Invalid email or password');
+        }
+      }
+      
+      // If we got a token from either source, proceed with login
+      if (token) {
+        // Verify token has correct format (header.payload.signature)
+        if (!token.includes('.') || token.split('.').length !== 3) {
+          throw new Error('Invalid token format');
+        }
+        
+        localStorage.setItem('token', token);
+        setIsAuthenticated(true);
 
-    localStorage.setItem('token', token);
-    setIsAuthenticated(true);
+        try {
+          const decoded = jwtDecode(token);
+          const role = decoded.role;
 
-    const decoded = jwtDecode(token);
-    const role = decoded.role;
-
-    switch (role) {
-      case 'institution':
-        navigate('/dashboard/institution');
-        break;
-      case 'employee':
-        navigate('/dashboard/employee');
-        break;
-      case 'company':
-        navigate('/dashboard/company');
-        break;
-      default:
-        navigate('/dashboard');
+          switch (role) {
+            case 'institution':
+              navigate('/dashboard/institution');
+              break;
+            case 'employee':
+              navigate('/dashboard/employee');
+              break;
+            case 'company':
+              navigate('/dashboard/company');
+              break;
+            default:
+              navigate('/dashboard');
+          }
+        } catch (decodeErr) {
+          console.error('Token decode error:', decodeErr);
+          throw new Error('Invalid token format');
+        }
+      } else {
+        throw new Error('Login failed');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(err.message || 'Login failed');
+    } finally {
+      setLoading(false);
     }
-
-  } catch (err) {
-    console.error('Login error:', err);
-    setError(err.response?.data?.message || 'Login failed');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
 
   return (

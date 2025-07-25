@@ -1,191 +1,172 @@
+// src/pages/register/StudentForm.jsx
 import { GraduationCap } from 'lucide-react';
 import { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/UserContext';
 import FormInput from '../../components/FormInput';
-import { motion } from 'framer-motion';
+import RegistrationHeader from '../../components/RegistrationHeader';
+import Header from '../../components/Header';
+
 export default function StudentForm() {
+  const navigate = useNavigate();
+  const { addUser } = useUser();
   const [formData, setFormData] = useState({
     fullName: '',
     university: '',
     major: '',
     email: '',
-    password: ''
+    password: '',
+    role: 'student'
   });
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
-    setError(null);
+    
+    // Basic validation
+    if (!formData.fullName || !formData.university || !formData.major || !formData.email || !formData.password) {
+      setError('All fields are required');
+      setLoading(false);
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      setLoading(false);
+      return;
+    }
+    
+    // Password validation (at least 6 characters)
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      setLoading(false);
+      return;
+    }
+    
     try {
-      const payload = {
-        ...formData,
-        role: 'student',
-      };
-
-     await axios.post(`http://localhost:5000/api/auth/register/student`, payload);
-      setSuccess(true);
-      setFormData({
-        fullName: '',
-        university: '',
-        major: '',
-        email: '',
-        password: ''
+      // Save user to local storage
+      try {
+        addUser(formData);
+        console.log('Student Registration Data saved to local storage:', formData);
+      } catch (localStorageError) {
+        setError(localStorageError.message);
+        setLoading(false);
+        return;
+      }
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Simulate successful registration
+      alert('Registration successful! Please login with your email and password.');
+      navigate('/auth'); // Redirect to login page
+      
+      /* Uncomment this when backend is ready
+      const response = await fetch('http://localhost:5000/api/auth/register/student', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-    } catch (err) {
-      console.log(err);
-      setError(err.response?.data?.message || 'Registration failed');
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+      
+      // Registration successful
+      alert('Registration successful! Please login.');
+      navigate('/auth'); // Redirect to login page
+      */
+    } catch (error) {
+      console.error('Registration error:', error);
+      if (error.message === 'Failed to fetch') {
+        setError('Server connection error. The backend server might not be running. Please try again later.');
+      } else {
+        setError(error.message || 'Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className='min-h-screen flex items-center bg-purple-600'>
-<motion.div 
-      className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md "
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
-      <motion.div 
-        className="flex items-center gap-3 mb-6"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <motion.div
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ duration: 0.5, delay: 0.3, type: "spring", stiffness: 200 }}
-        >
-          <GraduationCap className="text-purple-600 h-8 w-8" />
-        </motion.div>
-        <motion.h1 
-          className="text-2xl font-bold text-gray-800"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
-        >
-          Student Registration
-        </motion.h1>
-      </motion.div>
-
-      {error && (
-        <motion.p 
-          className="text-red-500 text-sm mb-4"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          {error}
-        </motion.p>
-      )}
+    <div className="min-h-screen bg-gray-50">
+      <Header />
       
-      {success && (
-        <motion.p 
-          className="text-green-500 text-sm mb-4"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          Registration successful!
-        </motion.p>
-      )}
-
-      <motion.form 
-        onSubmit={handleSubmit} 
-        className="space-y-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.5 }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.6 }}
-        >
-          <FormInput
-            label="Full Name"
-            value={formData.fullName}
-            onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-            required
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.7 }}
-        >
-          <FormInput
-            label="University Name"
-            value={formData.university}
-            onChange={(e) => setFormData({...formData, university: e.target.value})}
-            required
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.8 }}
-        >
-          <FormInput
-            label="Major/Field of Study"
-            value={formData.major}
-            onChange={(e) => setFormData({...formData, major: e.target.value})}
-            required
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.9 }}
-        >
-          <FormInput
-            type="email"
-            label="Email"
-            value={formData.email}
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
-            required
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 1.0 }}
-        >
-          <FormInput
-            type="password"
-            label="Password"
-            value={formData.password}
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
-            required
-          />
-        </motion.div>
-
-        <motion.button
-          type="submit"
-          className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-200"
-          disabled={loading}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 1.1 }}
-          whileHover={{ 
-            scale: 1.02,
-            transition: { duration: 0.2 }
-          }}
-          whileTap={{ scale: 0.98 }}
-        >
-          {loading ? 'Registering...' : 'Register as Student'}
-        </motion.button>
-      </motion.form>
-    </motion.div>
+      <div className="pt-16"> {/* Add padding to account for fixed header */}
+        <RegistrationHeader
+          title="Student Registration"
+          subtitle="Join thousands of students who have landed their dream jobs with Placify's AI-powered interview coaching and placement assistance."
+          tagline="Takes less than 2 minutes. No resume required."
+          icon={<GraduationCap className="w-10 h-10 text-white" />}
+          color="purple"
+          userType="student"
+        />
+      </div>
+      
+      <div className="py-12 px-4">
+        <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-md border border-red-200">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <FormInput
+              label="Full Name"
+              value={formData.fullName}
+              onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              required
+            />
+            
+            <FormInput
+              label="University Name"
+              value={formData.university}
+              onChange={(e) => setFormData({...formData, university: e.target.value})}
+              required
+            />
+            
+            <FormInput
+              label="Major/Field of Study"
+              value={formData.major}
+              onChange={(e) => setFormData({...formData, major: e.target.value})}
+              required
+            />
+            
+            <FormInput
+              type="email"
+              label="Email"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              required
+            />
+            
+            <FormInput
+              type="password"
+              label="Password"
+              value={formData.password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              required
+            />
+            
+            <button
+              type="submit"
+              className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-200 disabled:bg-purple-400"
+              disabled={loading}
+            >
+              {loading ? 'Registering...' : 'Register as Student'}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
