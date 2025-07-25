@@ -1,10 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Brain, Users,Zap,User, Target, CheckCircle } from "lucide-react";
+import {
+  ArrowRight,
+  Brain,
+  Users,
+  Zap,
+  User,
+  Target,
+  CheckCircle,
+  Menu,
+  X,
+} from "lucide-react";
 import ThemeToggle from "../components/ThemeToggle";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Handle scroll effect for dynamic navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroSection = document.getElementById("hero-section");
+      if (heroSection) {
+        const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+        // Trigger earlier for smoother transition
+        setIsScrolled(window.scrollY > heroBottom - 200);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const features = [
     {
@@ -35,91 +63,248 @@ const LandingPage = () => {
   ];
 
   return (
-<div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-      {/* Header */}
-      <motion.nav 
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-purple-200 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-700 shadow-sm"
-      >
-        <div className="max-w-7xl mx-auto px-6 py-2 md:py-4 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
-          
-          {/* Logo + Placify Text + Get Started + Theme Toggle (on mobile) */}
-          <motion.div 
-            initial={{ x: -50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex items-center space-x-2 md:space-x-3 w-full md:w-auto justify-between md:justify-start"
-          >
-            <div className="flex items-center space-x-2 md:space-x-3">
-              <Brain className="md:w-8 md:h-8 w-6 h-6 text-purple-600 dark:text-purple-400" />
-              <span className="md:text-4xl text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
-                Placify
-              </span>
-            </div>
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+      {/* Enhanced Navbar */}
+      <AnimatePresence>
+        <motion.nav
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+            isScrolled
+              ? "backdrop-blur-xs bg-white/80 dark:bg-gray-900/80 shadow-lg border-b border-gray-200/50 dark:border-gray-700/50"
+              : "backdrop-blur-xs bg-purple-600/20 dark:bg-purple-800/20 border-b border-purple-300/30 dark:border-purple-600/30"
+          }`}
+          style={{
+            backdropFilter: isScrolled ? "blur(12px)" : "blur(8px)",
+            WebkitBackdropFilter: isScrolled ? "blur(12px)" : "blur(8px)",
+          }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16 lg:h-20">
+              {/* Logo Section */}
+              <motion.div
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="flex items-center space-x-3"
+              >
+                <motion.div
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                  className="p-2 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl shadow-lg"
+                >
+                  <Brain className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
+                </motion.div>
+                <span
+                  className={`text-2xl lg:text-3xl font-bold transition-all duration-500 ${
+                    isScrolled
+                      ? "bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent"
+                      : "text-white"
+                  }`}
+                >
+                  Placify
+                </span>
+              </motion.div>
 
-            {/* Show Get Started + ThemeToggle on mobile beside logo */}
-            <div className="flex md:hidden items-center space-x-2">
+              {/* Desktop Navigation */}
+              <motion.div
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="hidden lg:flex items-center space-x-6"
+              >
+                {/* Sign In Button */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`relative px-6 py-2.5 font-medium rounded-xl transition-all duration-500
+                           ${
+                             isScrolled
+                               ? "text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 before:absolute before:inset-0 before:rounded-xl before:bg-gray-100 dark:before:bg-gray-800 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+                               : "text-white/90 hover:text-white before:absolute before:inset-0 before:rounded-xl before:bg-white/10 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+                           }`}
+                  onClick={() => navigate("/auth")}
+                >
+                  <span className="relative z-10 flex items-center space-x-2">
+                    <User className="w-4 h-4" />
+                    <span>Sign In</span>
+                  </span>
+                </motion.button>
+
+                {/* Get Started Button */}
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`relative px-6 py-2.5 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden group ${
+                    isScrolled
+                      ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
+                      : "bg-white text-purple-600 hover:bg-gray-50"
+                  }`}
+                  onClick={() => navigate("/auth")}
+                >
+                  <span className="relative z-10 flex items-center space-x-2">
+                    <Zap className="w-4 h-4" />
+                    <span>Get Started</span>
+                  </span>
+                  {isScrolled && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-purple-700 to-indigo-700"
+                      initial={{ x: "100%" }}
+                      whileHover={{ x: 0 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
+                </motion.button>
+
+                {/* Theme Toggle */}
+                <ThemeToggle />
+              </motion.div>
+              {/* Mobile Menu Button */}
               <motion.button
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-purple-600 flex text-sm items-center hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-full transition-all duration-300"
-                onClick={() => navigate("/auth")}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className={`lg:hidden p-2 rounded-xl transition-all duration-500 ${
+                  isScrolled
+                    ? "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
+                    : "bg-white/10 hover:bg-white/20"
+                }`}
               >
-                <Zap className="w-4 h-4 mr-1" />
-                Get Started
+                <AnimatePresence mode="wait">
+                  {isMobileMenuOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <X
+                        className={`w-5 h-5 ${
+                          isScrolled
+                            ? "text-gray-600 dark:text-gray-300"
+                            : "text-white"
+                        }`}
+                      />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Menu
+                        className={`w-5 h-5 ${
+                          isScrolled
+                            ? "text-gray-600 dark:text-gray-300"
+                            : "text-white"
+                        }`}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.button>
-
-              <ThemeToggle />
             </div>
-          </motion.div>
+            {/* Mobile Menu */}
+            <AnimatePresence>
+              {isMobileMenuOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className={`lg:hidden overflow-hidden border-t transition-colors duration-500 ${
+                    isScrolled
+                      ? "border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90"
+                      : "border-purple-300/30 dark:border-purple-600/30 bg-purple-600/20 dark:bg-purple-800/20"
+                  }`}
+                  style={{
+                    backdropFilter: "blur(12px)",
+                    WebkitBackdropFilter: "blur(12px)",
+                  }}
+                >
+                  <div className="py-4 space-y-3">
+                    <motion.button
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.1 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        navigate("/auth");
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 ${
+                        isScrolled
+                          ? "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                          : "text-white/90 hover:bg-white/10"
+                      }`}
+                    >
+                      <User className="w-5 h-5" />
+                      <span>Sign In</span>
+                    </motion.button>
 
-          {/* Right Side: Buttons (visible on md+) */}
-          <motion.div 
-            initial={{ x: 50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="hidden md:flex items-center space-x-6"
-          >
-            {/* Sign In */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="text-xl px-6 py-3 flex items-center space-x-2 bg-transparent border border-gray-300 dark:text-white dark:border-gray-600 rounded-full hover:bg-purple-600 hover:text-white dark:hover:bg-gray-800 transition"
-              onClick={() => navigate("/auth")}
-            >
-              <User className="w-6 h-6" />
-              <span>Sign In</span>
-            </motion.button>
-
-            {/* Get Started */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-purple-600 flex text-xl items-center hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-full transition-all duration-300"
-              onClick={() => navigate("/auth")}
-            >
-              <Zap className="w-5 h-5 mr-2" />
-              Get Started
-            </motion.button>
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
-          </motion.div>
-        </div>
-      </motion.nav>
+                    <motion.button
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => {
+                        navigate("/auth");
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 ${
+                        isScrolled
+                          ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
+                          : "bg-white text-purple-600"
+                      }`}
+                    >
+                      <Zap className="w-5 h-5" />
+                      <span>Get Started</span>
+                    </motion.button>
+                    <motion.div
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="flex items-center justify-between px-4 py-3"
+                    >
+                      <span
+                        className={`transition-colors duration-500 ${
+                          isScrolled
+                            ? "text-gray-700 dark:text-gray-200"
+                            : "text-white/90"
+                        }`}
+                      >
+                        Theme
+                      </span>
+                      <ThemeToggle />
+                    </motion.div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.nav>
+      </AnimatePresence>
 
       {/* Hero Section */}
-      <motion.section 
+      <motion.section
+        id="hero-section"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.5 }}
-        className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-purple-800 dark:via-purple-900 dark:to-indigo-950 text-white transition-colors mt-16 duration-300"
+        className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-purple-800 dark:via-purple-900 dark:to-indigo-950 text-white transition-colors duration-300 pt-24 lg:pt-28"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
-            <motion.h1 
+            <motion.h1
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.7 }}
@@ -127,9 +312,11 @@ const LandingPage = () => {
             >
               Placify: Smarter Placements.
               <br />
-              <span className="text-purple-200 dark:text-purple-300">Sharper Talent.</span>
+              <span className="text-purple-200 dark:text-purple-300">
+                Sharper Talent.
+              </span>
             </motion.h1>
-            <motion.p 
+            <motion.p
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.9 }}
@@ -139,7 +326,7 @@ const LandingPage = () => {
               the best talent, leaving both students and companies frustrated
               with mismatched placements.
             </motion.p>
-            <motion.p 
+            <motion.p
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 1.1 }}
@@ -168,7 +355,7 @@ const LandingPage = () => {
       </motion.section>
 
       {/* Features Section */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -176,7 +363,7 @@ const LandingPage = () => {
         className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             initial={{ y: 50, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8 }}
@@ -205,7 +392,9 @@ const LandingPage = () => {
                            hover:bg-white dark:hover:bg-gray-700 border border-transparent hover:border-purple-100 
                            dark:hover:border-purple-400 transform hover:-translate-y-1"
               >
-                <div className="text-purple-600 dark:text-purple-400 mb-4">{feature.icon}</div>
+                <div className="text-purple-600 dark:text-purple-400 mb-4">
+                  {feature.icon}
+                </div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
                   {feature.title}
                 </h3>
@@ -219,7 +408,7 @@ const LandingPage = () => {
       </motion.section>
 
       {/* Benefits Section */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -243,8 +432,8 @@ const LandingPage = () => {
               </p>
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
-                  <motion.div 
-                    key={index} 
+                  <motion.div
+                    key={index}
                     initial={{ x: -30, opacity: 0 }}
                     whileInView={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -252,12 +441,14 @@ const LandingPage = () => {
                     className="flex items-center space-x-3"
                   >
                     <CheckCircle className="w-6 h-6 text-emerald-500 dark:text-emerald-400" />
-                    <span className="text-lg text-gray-700 dark:text-gray-200">{benefit}</span>
+                    <span className="text-lg text-gray-700 dark:text-gray-200">
+                      {benefit}
+                    </span>
                   </motion.div>
                 ))}
               </div>
             </motion.div>
-            <motion.div 
+            <motion.div
               initial={{ x: 50, opacity: 0, scale: 0.9 }}
               whileInView={{ x: 0, opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
@@ -266,7 +457,7 @@ const LandingPage = () => {
               className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl"
             >
               <div className="text-center">
-                <motion.div 
+                <motion.div
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
@@ -275,8 +466,10 @@ const LandingPage = () => {
                 >
                   85%
                 </motion.div>
-                <div className="text-gray-600 dark:text-gray-300 mb-6">Success Rate</div>
-                <motion.div 
+                <div className="text-gray-600 dark:text-gray-300 mb-6">
+                  Success Rate
+                </div>
+                <motion.div
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
@@ -285,8 +478,10 @@ const LandingPage = () => {
                 >
                   10K+
                 </motion.div>
-                <div className="text-gray-600 dark:text-gray-300 mb-6">Students Placed</div>
-                <motion.div 
+                <div className="text-gray-600 dark:text-gray-300 mb-6">
+                  Students Placed
+                </div>
+                <motion.div
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.6 }}
@@ -295,7 +490,9 @@ const LandingPage = () => {
                 >
                   500+
                 </motion.div>
-                <div className="text-gray-600 dark:text-gray-300">Partner Companies</div>
+                <div className="text-gray-600 dark:text-gray-300">
+                  Partner Companies
+                </div>
               </div>
             </motion.div>
           </div>
@@ -303,7 +500,7 @@ const LandingPage = () => {
       </motion.section>
 
       {/* CTA Section */}
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -311,7 +508,7 @@ const LandingPage = () => {
         className="py-20 bg-white dark:bg-gray-950 text-white transition-colors duration-300"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h2 
+          <motion.h2
             initial={{ y: 30, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8 }}
@@ -320,7 +517,7 @@ const LandingPage = () => {
           >
             Ready to Ace Your Next Interview?
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ y: 30, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
