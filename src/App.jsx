@@ -38,7 +38,7 @@ function App() {
             <Route path="/register/institution" element={<InstitutionForm />} />
             <Route path="/register/employee" element={<EmployeeForm />} />
             <Route path="/register/company" element={<CompanyForm />} />
-
+          
             {/* Protected Routes */}
             <Route
               path="/dashboard"
