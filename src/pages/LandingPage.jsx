@@ -405,7 +405,7 @@ const LandingPage = () => {
 
                   {/* Button background animation */}
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:text-white transition-opacity duration-300"
                     whileHover={{ scale: 1.05 }}
                   />
                   <motion.span
