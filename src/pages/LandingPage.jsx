@@ -294,62 +294,330 @@ const LandingPage = () => {
         </motion.nav>
       </AnimatePresence>
 
-      {/* Hero Section */}
+      {/* Enhanced Hero Section */}
       <motion.section
         id="hero-section"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.5 }}
-        className="bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-purple-800 dark:via-purple-900 dark:to-indigo-950 text-white transition-colors duration-300 pt-24 lg:pt-28"
+        className="relative min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-purple-800 dark:via-purple-900 dark:to-indigo-950 text-white transition-colors duration-300 pt-24 lg:pt-28 overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center">
-            <motion.h1
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
+        {/* Background Pattern/Decoration */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+          <div className="absolute top-40 right-10 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000"></div>
+          <div className="absolute bottom-20 left-20 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000"></div>
+        </div>
+
+        {/* Grid Pattern Overlay */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-15 pb-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-200px)]">
+            {/* Left Column - Text Content */}
+            <motion.div
+              className="text-center lg:text-left space-y-8"
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="text-5xl md:text-6xl font-bold mb-6 leading-tight"
             >
-              Placify: Smarter Placements.
-              <br />
-              <span className="text-purple-200 dark:text-purple-300">
-                Sharper Talent.
-              </span>
-            </motion.h1>
-            <motion.p
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="text-xl md:text-2xl text-purple-100 dark:text-purple-200 mb-8 max-w-3xl mx-auto leading-relaxed"
+              {/* Badge */}
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-sm font-medium"
+              >
+                <Brain className="w-4 h-4 mr-2" />
+                AI-Powered Recruitment & Skill Assessment
+              </motion.div>
+
+              {/* Main Headline */}
+              <motion.h1
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.9 }}
+                className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
+              >
+                <span className="block">Placify:</span>
+                <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                  Smarter Placements.
+                </span>
+                <span className="block text-purple-200 dark:text-purple-300 text-3xl md:text-4xl lg:text-5xl mt-2">
+                  Sharper Talent.
+                </span>
+              </motion.h1>
+              {/* Subtitle */}
+              <motion.p
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1.1 }}
+                className="text-lg md:text-xl text-purple-100 dark:text-purple-200 leading-relaxed max-w-2xl lg:max-w-none"
+              >
+                Revolutionize campus placements with our AI-powered platform
+                that streamlines 60-70% of recruitment processes. From automated
+                resume screening to adaptive assessments, we bridge the gap
+                between industry needs and candidate readiness.
+              </motion.p>
+
+              {/* Stats Row */}
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1.2 }}
+                className="flex flex-wrap justify-center lg:justify-start gap-8 text-sm"
+              >
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-yellow-300">
+                    60-70%
+                  </div>
+                  <div className="text-purple-200">Process Automation</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-300">10x</div>
+                  <div className="text-purple-200">Faster Screening</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-300">500+</div>
+                  <div className="text-purple-200">Students per Day</div>
+                </div>
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1.4 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              >
+                {/* Primary CTA Button */}
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate("/auth")}
+                  className="group relative inline-flex items-center justify-center px-6 py-4 text-lg font-semibold text-purple-700 bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center space-x-2">
+                    <Zap className="w-5 h-5" />
+                    <span>Transform Your Placements</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+
+                  {/* Button background animation */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    whileHover={{ scale: 1.05 }}
+                  />
+                  <motion.span
+                    className="absolute inset-0 bg-white group-hover:text-white transition-colors duration-300 rounded-2xl"
+                    whileHover={{ backgroundColor: "transparent" }}
+                  />
+                </motion.button>
+
+                {/* Secondary CTA Button */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    document
+                      .getElementById("features-section")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white border-2 border-white/30 rounded-2xl hover:bg-white/10 hover:border-white/50 transition-all duration-300 backdrop-blur-sm"
+                >
+                  {" "}
+                  <span className="flex items-center space-x-2">
+                    <Target className="w-5 h-5" />
+                    <span>See How It Works</span>
+                  </span>
+                </motion.button>
+              </motion.div>
+
+              {/* Trust Indicators */}
+              <motion.div
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1.6 }}
+                className="flex items-center justify-center lg:justify-start space-x-6 text-sm text-purple-200"
+              >
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-300" />
+                  <span>AI-Powered Screening</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-300" />
+                  <span>Adaptive Assessments</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-300" />
+                  <span>Real-time Analytics</span>
+                </div>
+              </motion.div>
+            </motion.div>
+            {/* Right Column - AI Image/Illustration */}
+            <motion.div
+              className="relative"
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
             >
-              Campus hiring is broken. Traditional interviews fail to identify
-              the best talent, leaving both students and companies frustrated
-              with mismatched placements.
-            </motion.p>
-            <motion.p
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.1 }}
-              className="text-lg md:text-xl text-purple-200 dark:text-purple-300 mb-12 max-w-2xl mx-auto"
-            >
-              Transform your interview skills with AI-powered practice sessions.
-              Get real-time feedback, build confidence, and land your dream job
-              with personalized coaching.
-            </motion.p>
-            <motion.button
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.3 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate("/auth")}
-              className="bg-white dark:bg-gray-900 text-purple-600 dark:text-purple-400 px-8 py-4 rounded-xl font-semibold text-lg 
-                         hover:bg-gray-50 dark:hover:bg-gray-800 transform hover:scale-105 transition-all duration-200 
-                         shadow-xl hover:shadow-2xl inline-flex items-center space-x-2"
-            >
-              <span>Get Started</span>
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
+              {/* Main Image Container */}
+              <div className="relative">
+                {/* Glowing background effect */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-300 to-indigo-400 rounded-3xl blur-3xl opacity-30"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 5, 0],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                {/* AI Generated Image Placeholder */}
+                <motion.div
+                  className="relative bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl"
+                  whileHover={{ y: -10, rotateY: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {/* Mock AI Interview Scene */}
+                  <div className="aspect-square bg-gradient-to-br from-purple-100 via-blue-50 to-indigo-100 rounded-2xl p-6 relative overflow-hidden">
+                    {/* Floating AI Elements */}
+                    <motion.div
+                      className="absolute top-4 right-4 w-12 h-12 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center"
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                    >
+                      <Brain className="w-6 h-6 text-white" />
+                    </motion.div>
+                    {/* Interview Simulation Visualization */}
+                    <div className="space-y-4">
+                      {/* User Avatar */}
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
+                          <User className="w-6 h-6 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="h-3 bg-purple-200 rounded-full mb-2"></div>
+                          <div className="h-2 bg-purple-100 rounded-full w-3/4"></div>
+                        </div>
+                      </div>
+
+                      {/* AI Analysis Bars */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-xs text-purple-700">
+                          <span>Technical Skills</span>
+                          <span>92%</span>
+                        </div>
+                        <motion.div
+                          className="h-2 bg-purple-100 rounded-full overflow-hidden"
+                          initial={{ width: 0 }}
+                          animate={{ width: "100%" }}
+                          transition={{ duration: 2, delay: 2 }}
+                        >
+                          <motion.div
+                            className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"
+                            initial={{ width: "0%" }}
+                            animate={{ width: "92%" }}
+                            transition={{ duration: 2, delay: 2.5 }}
+                          />
+                        </motion.div>
+
+                        <div className="flex items-center justify-between text-xs text-purple-700">
+                          <span>Communication</span>
+                          <span>88%</span>
+                        </div>
+                        <motion.div
+                          className="h-2 bg-purple-100 rounded-full overflow-hidden"
+                          initial={{ width: 0 }}
+                          animate={{ width: "100%" }}
+                          transition={{ duration: 2, delay: 2.2 }}
+                        >
+                          <motion.div
+                            className="h-full bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full"
+                            initial={{ width: "0%" }}
+                            animate={{ width: "88%" }}
+                            transition={{ duration: 2, delay: 2.7 }}
+                          />
+                        </motion.div>
+
+                        <div className="flex items-center justify-between text-xs text-purple-700">
+                          <span>Industry Readiness</span>
+                          <span>95%</span>
+                        </div>
+                        <motion.div
+                          className="h-2 bg-purple-100 rounded-full overflow-hidden"
+                          initial={{ width: 0 }}
+                          animate={{ width: "100%" }}
+                          transition={{ duration: 2, delay: 2.4 }}
+                        >
+                          <motion.div
+                            className="h-full bg-gradient-to-r from-purple-400 to-pink-500 rounded-full"
+                            initial={{ width: "0%" }}
+                            animate={{ width: "95%" }}
+                            transition={{ duration: 2, delay: 2.9 }}
+                          />
+                        </motion.div>
+                      </div>
+
+                      {/* Success Indicator */}
+                      <motion.div
+                        className="mt-6 p-3 bg-green-100 rounded-xl border-2 border-green-200"
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 3.5 }}
+                      >
+                        <div className="flex items-center space-x-2 text-green-700">
+                          <CheckCircle className="w-5 h-5" />
+                          <span className="text-sm font-medium">
+                            Interview Success!
+                          </span>
+                        </div>
+                      </motion.div>
+                    </div>
+                    {/* Floating particles */}
+                    {[...Array(6)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute w-2 h-2 bg-purple-300 rounded-full"
+                        style={{
+                          top: `${Math.random() * 100}%`,
+                          left: `${Math.random() * 100}%`,
+                        }}
+                        animate={{
+                          y: [-20, 20, -20],
+                          opacity: [0.3, 1, 0.3],
+                        }}
+                        transition={{
+                          duration: 3 + Math.random() * 2,
+                          repeat: Infinity,
+                          delay: Math.random() * 2,
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Tech Stack Icons */}
+                  <div className="absolute -bottom-4 -left-4 bg-white rounded-xl p-3 shadow-lg">
+                    <div className="flex space-x-2">
+                      <div className="w-6 h-6 bg-blue-500 rounded"></div>
+                      <div className="w-6 h-6 bg-green-500 rounded"></div>
+                      <div className="w-6 h-6 bg-purple-500 rounded"></div>
+                    </div>
+                  </div>
+
+                  <div className="absolute -top-4 -right-4 bg-white rounded-xl p-3 shadow-lg">
+                    <Zap className="w-6 h-6 text-yellow-500" />
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </motion.section>
