@@ -141,7 +141,7 @@ const LandingPage = () => {
                       ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
                       : "bg-white text-purple-600 hover:bg-gray-50"
                   }`}
-                  onClick={() => navigate("/auth")}
+                  onClick={() => navigate("/register")}
                 >
                   <span className="relative z-10 flex items-center space-x-2">
                     <Zap className="w-4 h-4" />
@@ -257,7 +257,7 @@ const LandingPage = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => {
-                        navigate("/auth");
+                        navigate("/register");
                         setIsMobileMenuOpen(false);
                       }}
                       className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 ${
@@ -394,7 +394,7 @@ const LandingPage = () => {
                 <motion.button
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate("/auth")}
+                  onClick={() => navigate("/register")}
                   className="group relative inline-flex items-center justify-center px-6 py-4 text-lg font-semibold text-purple-700 bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center space-x-2">
@@ -802,7 +802,7 @@ const LandingPage = () => {
             viewport={{ once: true }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate("/interview")}
+            onClick={() => navigate("/register")}
             className="bg-purple-600 dark:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg 
                        hover:bg-purple-700 dark:hover:bg-purple-800 transform hover:scale-105 transition-all duration-200 
                        shadow-xl hover:shadow-2xl inline-flex items-center space-x-2"
