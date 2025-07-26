@@ -57,9 +57,7 @@ function App() {
             <Route
               path="/interview"
               element={
-                <ProtectedRoute>
                   <InterviewInterface />
-                </ProtectedRoute>
               }
             />
             <Route
