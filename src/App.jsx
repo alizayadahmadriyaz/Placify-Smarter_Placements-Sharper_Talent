@@ -7,6 +7,7 @@ import InterviewInterface from "./pages/InterviewInterface";
 import ResultsPage from "./pages/ResultsPage";
 import Footer from "./components/Footer";
 import ProfilePage from "./pages/ProfilePage";
+import FeedbackPage from "./pages/FeedbackPage";
 
 import InstitutionDashboard from './components/InstitutionDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
@@ -23,8 +24,12 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 import { motion } from "framer-motion";
 
+import useLenis from "./components/useLenis"; // Import the custom hook for smooth scrolling
+
 
 function App() {
+  // Initialize Lenis for smooth scrolling
+  useLenis();
   return (
     <Router>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
@@ -38,6 +43,7 @@ function App() {
             <Route path="/register/institution" element={<InstitutionForm />} />
             <Route path="/register/employee" element={<EmployeeForm />} />
             <Route path="/register/company" element={<CompanyForm />} />
+            <Route path="/feedback" element={<FeedbackPage />} />
           
             {/* Protected Routes */}
             <Route

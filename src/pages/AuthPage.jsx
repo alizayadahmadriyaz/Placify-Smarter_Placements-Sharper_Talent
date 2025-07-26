@@ -177,7 +177,7 @@ const AuthPage = () => {
                   <Mail className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </div>
                 <motion.input
-                  whileFocus={{ scale: 1.02 }}
+                  whileFocus={{ scale: 1.0 }}
                   transition={{ duration: 0.2 }}
                   id="email"
                   type="email"
@@ -207,7 +207,7 @@ const AuthPage = () => {
                   <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </div>
                 <motion.input
-                  whileFocus={{ scale: 1.02 }}
+                  whileFocus={{ scale: 1.0 }}
                   transition={{ duration: 0.2 }}
                   id="password"
                   type={showPassword ? 'text' : 'password'}
