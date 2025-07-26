@@ -802,7 +802,7 @@ const LandingPage = () => {
             viewport={{ once: true }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate("/auth")}
+            onClick={() => navigate("/interview")}
             className="bg-purple-600 dark:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg 
                        hover:bg-purple-700 dark:hover:bg-purple-800 transform hover:scale-105 transition-all duration-200 
                        shadow-xl hover:shadow-2xl inline-flex items-center space-x-2"
