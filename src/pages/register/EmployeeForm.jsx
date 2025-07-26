@@ -1,173 +1,171 @@
 import { Briefcase } from 'lucide-react';
 import { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/UserContext';
 import FormInput from '../../components/FormInput';
-import { motion } from 'framer-motion';
+import RegistrationHeader from '../../components/RegistrationHeader';
+import Header from '../../components/Header';
+
 export default function EmployeeForm() {
+  const navigate = useNavigate();
+  const { addUser } = useUser();
   const [formData, setFormData] = useState({
     fullName: '',
     currentCompany: '',
     jobTitle: '',
     email: '',
-    password: ''
+    password: '',
+    role: 'employee'
   });
-
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
-    setSuccess('');
-
+    setLoading(true);
+    
+    // Basic validation
+    if (!formData.fullName || !formData.currentCompany || !formData.jobTitle || !formData.email || !formData.password) {
+      setError('All fields are required');
+      setLoading(false);
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      setLoading(false);
+      return;
+    }
+    
+    // Password validation (at least 6 characters)
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      setLoading(false);
+      return;
+    }
+      
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register/employee', {
-        ...formData,
-        role: 'employee'
+      // Save user to local storage
+      try {
+        addUser(formData);
+        console.log('Employee Registration Data saved to local storage:', formData);
+      } catch (localStorageError) {
+        setError(localStorageError.message);
+        setLoading(false);
+        return;
+      }
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Simulate successful registration
+      alert('Employee registration successful! Please login with your email and password.');
+      navigate('/auth'); // Redirect to login page
+      
+      /* Uncomment this when backend is ready
+      const response = await fetch('http://localhost:5000/api/auth/register/employee', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-
-      setSuccess(res.data.message || 'Employee registered successfully!');
-      setFormData({
-        fullName: '',
-        currentCompany: '',
-        jobTitle: '',
-        email: '',
-        password: ''
-      });
-    } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+      
+      // Registration successful
+      alert('Employee registration successful! Please login.');
+      navigate('/auth'); // Redirect to login page
+      */
+    } catch (error) {
+      console.error('Registration error:', error);
+      if (error.message === 'Failed to fetch') {
+        setError('Server connection error. The backend server might not be running. Please try again later.');
+      } else {
+        setError(error.message || 'Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className='min-h-screen flex items-center bg-purple-600'>
-    <motion.div
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-md">
-        <motion.div
-        className="flex items-center justify-center gap-3 mb-6"
-                initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}>
-
-      <motion.div className="flex"
-        initial={{ scale: 0, rotate: -180 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ duration: 0.5, delay: 0.3, type: "spring", stiffness: 200 }}
-        >
-        <Briefcase className="text-green-600 h-8 w-8" />
-      </motion.div>
-        <motion.h1
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.4 }}
-          
-          className="text-2xl font-bold text-gray-800">Employee Registration</motion.h1>
-          </motion.div>
-
-      {error && <motion.p
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-        className="text-red-500 mb-2">{error}</motion.p>}
-      {success && <motion.p className="text-green-500 mb-2"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}>{success}</motion.p>}
-
-      <motion.form
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.5 }} onSubmit={handleSubmit} className="space-y-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.6 }}
-        >
-
-          <FormInput
-            label="Full Name"
-            value={formData.fullName}
-            onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-            required
-          />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.6 }}
-        >
-
-          <FormInput
-            label="Current Company"
-            value={formData.currentCompany}
-            onChange={(e) => setFormData({ ...formData, currentCompany: e.target.value })}
-            required
-          />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.6 }}
-        >
-
-          <FormInput
-            label="Job Title"
-            value={formData.jobTitle}
-            onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
-            required
-          />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.6 }}
-        >
-
-          <FormInput
-            type="email"
-            label="Email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required
-          />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.6 }}
-        >
-
-          <FormInput
-            type="password"
-            label="Password"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            required
-          />
-        </motion.div>
-
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 1.0 }}
-          whileHover={{
-            scale: 1.02,
-            transition: { duration: 0.2 }
-          }}
-          whileTap={{ scale: 0.98 }}
-          type="submit"
-          disabled={loading}
-          className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-200 disabled:opacity-50"
-        >
-          {loading ? 'Registering...' : 'Register as Employee'}
-        </motion.button>
-      </motion.form>
-    </motion.div>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <div className="pt-16">
+        <RegistrationHeader
+          title="HR Professional Registration"
+          subtitle="Revolutionize your recruitment process with AI-powered candidate assessment and streamlined hiring workflows designed for HR professionals."
+          tagline="Quick setup for recruiting teams"
+          icon={<Briefcase className="w-10 h-10 text-white" />}
+          color="green"
+          userType="employee"
+        />
+      </div>
+      
+      <div className="py-12 px-4">
+        <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-md border border-red-200">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <FormInput
+              label="Full Name"
+              value={formData.fullName}
+              onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              required
+            />
+            
+            <FormInput
+              label="Current Company"
+              value={formData.currentCompany}
+              onChange={(e) => setFormData({...formData, currentCompany: e.target.value})}
+              required
+            />
+            
+            <FormInput
+              label="Job Title"
+              value={formData.jobTitle}
+              onChange={(e) => setFormData({...formData, jobTitle: e.target.value})}
+              required
+            />
+            
+            <FormInput
+              type="email"
+              label="Email"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              required
+            />
+            
+            <FormInput
+              type="password"
+              label="Password"
+              value={formData.password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              required
+            />
+            
+            <button
+              type="submit"
+              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-200 disabled:bg-green-400"
+              disabled={loading}
+            >
+              {loading ? 'Registering...' : 'Register as Employee'}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,10 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
-import healthRoutes from "./routes/health.js";
-import authRoutes from "./routes/auth.js";
-import interviewRoutes from "./routes/interview.js";
+import feedbackRoutes from "./routes/feedback.js";
 
 dotenv.config();
 
@@ -20,24 +17,25 @@ app.use(
 app.use(express.json());
 
 // ====== API Routes ======
-app.use("/api/health", healthRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/interviews", interviewRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Backend server is up and running ");
+  res.json({ 
+    message: "Placify Feedback Server is running! 📧",
+    status: "active",
+    endpoints: {
+      feedback: "/api/feedback",
+      test: "/api/feedback/test"
+    }
+  });
 });
 
-// ====== Database Connection ======
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("MongoDB Connected");
-    app.listen(PORT, () =>
-      console.log(`Server running on port ${PORT}`)
-    );
-  })
-  .catch((err) => console.error("MongoDB connection error:", err));
+app.get("/test", (req, res) => {
+  res.json({ message: "Server is working!", timestamp: new Date().toISOString() });
+});
+
+// ====== Start Server ======
+app.listen(PORT, () => {
+  console.log(`✅ Feedback server running on port ${PORT}`);
+  console.log(`📧 Ready to send emails!`);
+});
