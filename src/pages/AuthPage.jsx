@@ -2,19 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
 import axios from 'axios';
-
-
-import { useAuth } from '../context/AuthContext'; 
-import { useUser } from '../context/UserContext';
-import { jwtDecode } from 'jwt-decode'; 
-
-
+import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import {jwtDecode} from 'jwt-decode';
 const AuthPage = () => {
   const navigate = useNavigate();
   const { setIsAuthenticated } = useAuth();  
-  const { authenticateUser } = useUser();
 
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -24,7 +17,6 @@ const AuthPage = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-
   e.preventDefault();
   setLoading(true);
   setError('');
@@ -60,12 +52,10 @@ const AuthPage = () => {
     } catch (err) {
       console.error('Login error:', err);
       setError(err.response?.data?.message || 'Login failed');
-
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
 <motion.div 
@@ -155,7 +145,7 @@ const AuthPage = () => {
                   <Mail className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </div>
                 <motion.input
-                  whileFocus={{ scale: 1.0 }}
+                  whileFocus={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                   id="email"
                   type="email"
@@ -185,7 +175,7 @@ const AuthPage = () => {
                   <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </div>
                 <motion.input
-                  whileFocus={{ scale: 1.0 }}
+                  whileFocus={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                   id="password"
                   type={showPassword ? 'text' : 'password'}
