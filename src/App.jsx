@@ -25,6 +25,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { motion } from "framer-motion";
 
 import useLenis from "./components/useLenis"; // Import the custom hook for smooth scrolling
+import ScrollToTop from "./components/ScrollToTop";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
   useLenis();
   return (
     <Router>
+      <ScrollToTop/>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
         <div>
           <Routes>
