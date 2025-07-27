@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 // Importing the database URI from environment configuration
-import { DB_URI } from "./env.js";
+import { MONGO_URI } from "./env.js";
 
 // Exit early if the environment variable is missing
-if (!DB_URI) {
-  console.error("❌ DB_URI is not defined in the environment variables.");
+if (!MONGO_URI) {
+  console.error("❌ MONGO_URI is not defined in the environment variables.");
   process.exit(1);
 }
 
@@ -12,7 +12,7 @@ if (!DB_URI) {
 const connectToDatabase = async () => {
   try {
     // Attempt to connect to the database using the provided URI
-    await mongoose.connect(DB_URI);
+    await mongoose.connect(MONGO_URI);
     console.log("💽 Connected to DataBase");
   } catch (error) {
     // Log error message if connection fails

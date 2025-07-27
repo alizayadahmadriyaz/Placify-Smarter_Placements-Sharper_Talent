@@ -3,7 +3,9 @@ import cors from "cors";
 import feedbackRoutes from "./routes/feedback.js";
 import {PORT} from "./config/env.js" // ✅ Load PORT from centralized env file
 import connectToDatabase from "./config/db.js";
-
+import healthRoutes from "./routes/health.js";
+import authRoutes from "./routes/auth.js";
+import interviewRoutes from "./routes/interview.js";
 const app = express();
 
 app.use(
@@ -15,6 +17,9 @@ app.use(
 app.use(express.json());
 
 // ====== API Routes ======
+app.use("/api/health", healthRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/interviews", interviewRoutes);
 app.use("/api/feedback", feedbackRoutes);
 
 app.get("/", (req, res) => {
@@ -35,7 +40,7 @@ app.get("/test", (req, res) => {
 // ====== Start Server ======
 app.listen(PORT || 5000, async () => {
   console.log(`✅ Feedback server running on port ${PORT}`);
-  // Optional: connect to MongoDB (requires valid DB_URI)
+  // Optional: connect to MongoDB (requires valid MONGO_URI)
   await connectToDatabase(); // 🔄 Comment this out if not using MongoDB
   console.log(`📧 Ready to send emails!`);
 });
