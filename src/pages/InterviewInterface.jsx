@@ -231,10 +231,10 @@ const InterviewInterface = () => {
         </div>
       </motion.div>
 
-      <div className="flex h-screen">
+      <div className="flex flex-col lg:flex-row min-h-screen">
         {/* Left Panel - Video Feed */}
         <motion.div
-          className="flex-1 p-6"
+          className="hidden lg:flex w-full lg:w-1/2 px-6 py-12"
           initial={{ x: -40, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -339,7 +339,7 @@ const InterviewInterface = () => {
                   autoPlay
                   muted
                   playsInline
-                  className="w-full h-full object-cover rounded-2xl"
+                  className="w-full h-64 sm:h-80 md:h-full object-cover rounded-2xl"
                   initial={{ opacity: 0, scale: 1.1 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
@@ -368,10 +368,13 @@ const InterviewInterface = () => {
             )}
           </motion.div>
         </motion.div>
+        <div className="block lg:hidden w-full px-6 py-6 text-center text-xl bg-blue-600 font-semibold text-gray-700 dark:text-gray-300">
+          👀 You are being watched — camera is recording in the background.
+        </div>
 
         {/* Right Panel - Chat Interface */}
         <motion.div
-          className="w-1/2 p-6"
+          className="w-full lg:w-1/2 p-4 sm:p-6 md:p-8"
           initial={{ x: 40, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -433,7 +436,7 @@ const InterviewInterface = () => {
 
             {/* Scrollable Chat Area */}
             <motion.div
-              className="flex-1 overflow-y-auto pr-2 space-y-3 mb-4"
+              className="overflow-y-auto pr-2 space-y-3 mb-4 h-[500px] sm:h-[350px] md:h-[400px] lg:h-[450px]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.0 }}
