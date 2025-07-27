@@ -1,12 +1,9 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import feedbackRoutes from "./routes/feedback.js";
-
-dotenv.config();
+import {PORT} from "./config/env.js" // ✅ Load PORT from centralized env file
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
@@ -35,7 +32,7 @@ app.get("/test", (req, res) => {
 });
 
 // ====== Start Server ======
-app.listen(PORT, () => {
+app.listen(PORT || 5000, () => {
   console.log(`✅ Feedback server running on port ${PORT}`);
   console.log(`📧 Ready to send emails!`);
 });
