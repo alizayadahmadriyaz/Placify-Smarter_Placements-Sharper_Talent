@@ -31,6 +31,16 @@ app.get("/test", (req, res) => {
   res.json({ message: "Server is working!", timestamp: new Date().toISOString() });
 });
 
+
+//404 error handler
+app.use((req,res)=>{
+  res.status(404).json({error:'End point Not found'});
+});
+//global error handler
+app.use((err,req,res,next)=>{
+  console.error(err.stack);
+  res.status(500).json({error:'Internal server errror'});
+})
 // ====== Start Server ======
 app.listen(PORT || 5000, () => {
   console.log(`✅ Feedback server running on port ${PORT}`);
