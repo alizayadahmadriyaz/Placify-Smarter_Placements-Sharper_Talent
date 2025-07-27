@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import feedbackRoutes from "./routes/feedback.js";
 import {PORT} from "./config/env.js" // ✅ Load PORT from centralized env file
+import connectToDatabase from "./config/db.js";
 
 const app = express();
 
@@ -32,7 +33,9 @@ app.get("/test", (req, res) => {
 });
 
 // ====== Start Server ======
-app.listen(PORT || 5000, () => {
+app.listen(PORT || 5000, async () => {
   console.log(`✅ Feedback server running on port ${PORT}`);
+  // Optional: connect to MongoDB (requires valid DB_URI)
+  await connectToDatabase(); // 🔄 Comment this out if not using MongoDB
   console.log(`📧 Ready to send emails!`);
 });
