@@ -1,6 +1,8 @@
 // src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
+import { User } from 'lucide-react';
+
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState({
@@ -102,60 +104,62 @@ const ProfilePage = () => {
             </div>
 
             {/* Profile image section */}
-            <div className="flex flex-col items-center mb-6 relative group">
-              <label
-                htmlFor="profile-upload"
-                className={`w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-medium text-sm cursor-pointer relative overflow-hidden shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl ${
-                  isLoaded ? 'animate-bounce' : ''
-                }`}
-                style={{animationDuration: '2s', animationIterationCount: '1'}}
-              >
-                {image ? (
-                  <img
-                    src={image}
-                    alt="Profile"
-                    className="w-full h-full object-cover rounded-full transition-all duration-300"
-                  />
-                ) : (
-                  <span className="text-center">Profile</span>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="profile-upload"
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-                {/* Hover overlay */}
-                {image && (
-                  <div className="absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const action = window.confirm("Do you want to remove your profile picture?");
-                        if (action) {
-                          setImage(null);
-                          localStorage.removeItem("profileImage");
-                        }
-                      }}
-                      className="text-sm bg-red-500 px-3 py-1 rounded hover:bg-red-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                )}
-              </label>
+          
+<div className="flex flex-col items-center mb-6 relative group">
+  <label
+    htmlFor="profile-upload"
+    className={`w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-medium text-sm cursor-pointer relative overflow-hidden shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+      isLoaded ? 'animate-bounce' : ''
+    }`}
+    style={{ animationDuration: '2s', animationIterationCount: '1' }}
+  >
+    {image ? (
+      <img
+        src={image}
+        alt="user"
+        className="w-full h-full object-cover rounded-full transition-all duration-300"
+      />
+    ) : (
+      <User className="w-10 h-10 text-gray-500" />
+    )}
 
-              {/* Separate Change Button (for clarity) */}
-              {image && (
-                <label
-                  htmlFor="profile-upload"
-                  className="mt-2 text-purple-600 text-sm cursor-pointer hover:underline transition-colors duration-300"
-                >
-                  Change Profile Picture
-                </label>
-              )}
-            </div>
+    <input
+      type="file"
+      accept="image/*"
+      id="profile-upload"
+      onChange={handleImageChange}
+      className="hidden"
+    />
+
+    {image && (
+      <div className="absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            const action = window.confirm("Do you want to remove your profile picture?");
+            if (action) {
+              setImage(null);
+              localStorage.removeItem("profileImage");
+            }
+          }}
+          className="text-sm bg-red-500 px-3 py-1 rounded hover:bg-red-600"
+        >
+          Remove
+        </button>
+      </div>
+    )}
+  </label>
+
+  {image && (
+    <label
+      htmlFor="profile-upload"
+      className="mt-2 text-purple-600 text-sm cursor-pointer hover:underline transition-colors duration-300"
+    >
+      Change Profile Picture
+    </label>
+  )}
+</div>
+
 
             {/* Profile form */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
