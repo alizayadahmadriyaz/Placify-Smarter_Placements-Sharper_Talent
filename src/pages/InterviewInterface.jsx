@@ -4,6 +4,7 @@ import { Camera, Mic, Bot, Send, AlertCircle, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Loader from "../components/Loader";
 import axios from "axios";
+import QuestionBank from "./register/QuestionBank";
 
 const InterviewInterface = () => {
   // loading simulation
@@ -30,6 +31,8 @@ const InterviewInterface = () => {
       text: "Hi let's start with the interview. Tell me about yourself.",
     },
   ]);
+
+  <QuestionBank/>
 
   const interviewQuestions = [
     "Hi let's start with the interview. Tell me about yourself.",
