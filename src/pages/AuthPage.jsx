@@ -73,9 +73,17 @@ const AuthPage = () => {
         <motion.div 
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
           whileHover={{ scale: 1.02 }}
-          className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8"
+          whileTap={{ scale: 0.99 }}
+          transition={{
+            duration: 0.8,
+            delay: 0.2,
+            type: "spring",
+            stiffness: 200,
+            damping: 12,
+            mass: 0.5
+          }}
+          className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 hover:shadow-2xl transition-shadow duration-300"
         >
           {/* Header */}
           <motion.div 
