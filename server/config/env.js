@@ -16,6 +16,6 @@ config({ path: ".env" });
  */
 export const {
   PORT,        // Port number your server will listen on
-  DB_URI,      // MongoDB connection string
+  MONGO_URI,      // MongoDB connection string
   JWT_SECRET,  // Secret key used for signing JWT tokens
 } = process.env;
