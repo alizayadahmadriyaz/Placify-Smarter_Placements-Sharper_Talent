@@ -4,10 +4,11 @@ import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
+
 const AuthPage = () => {
   const navigate = useNavigate();
-  const { setIsAuthenticated } = useAuth();  
+  const { setIsAuthenticated } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -17,22 +18,31 @@ const AuthPage = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-  try {
-    const response = await axios.post('https://placify-smarter-placements-sharper-puce.vercel.app/api/auth/login', { email, password });
-    const { token, user } = response.data;
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        email,
+        password,
+      });
+
+      const { token, user } = response.data;
 
       // Store token & user info
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-       const decoded = jwtDecode(token);
-      const role = decoded.role;
+      console.log('Token stored:', token);
 
-      // Redirect based on role (optional)
-     switch (role) {
+      const decoded = jwtDecode(token);
+      const role = decoded.role;
+      console.log('User role:', role);
+
+      setIsAuthenticated(true); // ✅ Set authenticated flag
+
+      // Redirect based on role
+      switch (role) {
         case 'student':
           navigate('/dashboard');
           break;
@@ -58,19 +68,19 @@ const AuthPage = () => {
   };
 
   return (
-<motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
       className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
     >
-      <motion.div 
+      <motion.div
         initial={{ y: 50, opacity: 0, scale: 0.95 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
         className="max-w-md w-full space-y-8"
       >
-        <motion.div 
+        <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           whileHover={{ scale: 1.02 }}
@@ -78,30 +88,37 @@ const AuthPage = () => {
           transition={{
             duration: 0.8,
             delay: 0.2,
-            type: "spring",
+            type: 'spring',
             stiffness: 200,
             damping: 12,
-            mass: 0.5
+            mass: 0.5,
           }}
           className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 hover:shadow-2xl transition-shadow duration-300"
         >
           {/* Header */}
-          <motion.div 
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center mb-8"
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.5, type: "spring", stiffness: 200 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.5,
+                type: 'spring',
+                stiffness: 200,
+              }}
               className="flex items-center justify-center space-x-2 mb-4"
             >
               <Brain className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">Placify</span>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                Placify
+              </span>
             </motion.div>
-            <motion.h2 
+            <motion.h2
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.6 }}
@@ -109,7 +126,7 @@ const AuthPage = () => {
             >
               {isLogin ? 'Welcome back' : 'Create account'}
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.7 }}
@@ -120,7 +137,7 @@ const AuthPage = () => {
           </motion.div>
 
           {error && (
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -132,11 +149,11 @@ const AuthPage = () => {
           )}
 
           {/* Form */}
-          <motion.form 
+          <motion.form
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.8 }}
-            onSubmit={handleSubmit} 
+            onSubmit={handleSubmit}
             className="space-y-6"
           >
             {/* Email */}
@@ -183,7 +200,7 @@ const AuthPage = () => {
                   <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </div>
                 <motion.input
-                  whileFocus={{ scale: 1.02 }}
+                  whileFocus={{ scale:  1.02 }}
                   transition={{ duration: 0.2 }}
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -208,6 +225,7 @@ const AuthPage = () => {
               </div>
             </motion.div>
 
+            {/* Submit Button */}
             <motion.button
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -231,8 +249,8 @@ const AuthPage = () => {
             </motion.button>
           </motion.form>
 
-          {/* Switch */}
-          <motion.div 
+          {/* Switch to Sign Up/Sign In */}
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 1.2 }}
