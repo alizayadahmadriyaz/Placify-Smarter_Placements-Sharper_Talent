@@ -12,7 +12,7 @@ export default function CompanyForm() {
   const [formData, setFormData] = useState({
     companyName: '',
     industry: '',
-    email: '', // Changed from hrEmail to email for consistency
+    hrEmail: '', // Changed from hrEmail to email for consistency
     password: '',
     role: 'company'
   });
@@ -25,7 +25,7 @@ export default function CompanyForm() {
     setLoading(true);
     
     // Basic validation
-    if (!formData.companyName || !formData.industry || !formData.email || !formData.password) {
+    if (!formData.companyName || !formData.industry || !formData.hrEmail || !formData.password) {
       setError('All fields are required');
       setLoading(false);
       return;
@@ -33,7 +33,7 @@ export default function CompanyForm() {
     
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(formData.hrEmail)) {
       setError('Please enter a valid email address');
       setLoading(false);
       return;
@@ -48,23 +48,23 @@ export default function CompanyForm() {
     
     try {
       // Save user to local storage
-      try {
-        addUser(formData);
-        console.log('Company Registration Data saved to local storage:', formData);
-      } catch (localStorageError) {
-        setError(localStorageError.message);
-        setLoading(false);
-        return;
-      }
+      // try {
+      //   addUser(formData);
+      //   console.log('Company Registration Data saved to local storage:', formData);
+      // } catch (localStorageError) {
+      //   setError(localStorageError.message);
+      //   setLoading(false);
+      //   return;
+      // }
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // // Simulate API delay
+      // await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Simulate successful registration
-      alert('Company registration successful! Please login with your email and password.');
-      navigate('/auth'); // Redirect to login page
+      // // Simulate successful registration
+      // alert('Company registration successful! Please login with your email and password.');
+      // navigate('/auth'); // Redirect to login page
       
-      /* Uncomment this when backend is ready
+      //  Uncomment this when backend is ready
       const response = await fetch('http://localhost:5000/api/auth/register/company', {
         method: 'POST',
         headers: {
@@ -82,7 +82,7 @@ export default function CompanyForm() {
       // Registration successful
       alert('Company registration successful! Please login.');
       navigate('/auth'); // Redirect to login page
-      */
+  
     } catch (error) {
       console.error('Registration error:', error);
       if (error.message === 'Failed to fetch') {
@@ -135,8 +135,8 @@ export default function CompanyForm() {
             <FormInput
               type="email"
               label="HR Contact Email"
-              value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              value={formData.hrEmail}
+              onChange={(e) => setFormData({...formData, hrEmail: e.target.value})}
               required
             />
             

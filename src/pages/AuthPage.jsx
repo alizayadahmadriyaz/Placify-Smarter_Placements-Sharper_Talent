@@ -22,7 +22,7 @@ const AuthPage = () => {
   setError('');
 
   try {
-    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    const response = await axios.post('https://placify-smarter-placements-sharper-puce.vercel.app/api/auth/login', { email, password });
     const { token, user } = response.data;
 
       // Store token & user info
