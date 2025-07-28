@@ -6,6 +6,8 @@ import { useUser } from '../../context/UserContext';
 import FormInput from '../../components/FormInput';
 import RegistrationHeader from '../../components/RegistrationHeader';
 import Header from '../../components/Header';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function InstitutionForm() {
   const navigate = useNavigate();
@@ -25,14 +27,14 @@ export default function InstitutionForm() {
     e.preventDefault();
     setError('');
     setLoading(true);
-    
+
     // Basic validation
     if (!formData.institutionName || !formData.website || !formData.contactPerson || !formData.email || !formData.password) {
       setError('All fields are required');
       setLoading(false);
       return;
     }
-    
+
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
@@ -40,7 +42,7 @@ export default function InstitutionForm() {
       setLoading(false);
       return;
     }
-    
+
     // Website validation
     try {
       new URL(formData.website);
@@ -49,14 +51,14 @@ export default function InstitutionForm() {
       setLoading(false);
       return;
     }
-    
+
     // Password validation (at least 6 characters)
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
       setLoading(false);
       return;
     }
-    
+
     try {
       // Save user to local storage
       try {
@@ -67,14 +69,18 @@ export default function InstitutionForm() {
         setLoading(false);
         return;
       }
-      
+
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Success toast
+      toast.success('Institution registration successful! Please login with your email and password.');
       
-      // Simulate successful registration
-      alert('Institution registration successful! Please login with your email and password.');
-      navigate('/auth'); // Redirect to login page
-      
+      // Redirect after short delay
+      setTimeout(() => {
+        navigate('/auth');
+      }, 2000);
+
       /* Uncomment this when backend is ready
       const response = await fetch('http://localhost:5000/api/auth/register/institution', {
         method: 'POST',
@@ -83,16 +89,15 @@ export default function InstitutionForm() {
         },
         body: JSON.stringify(formData),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
       }
-      
-      // Registration successful
-      alert('Institution registration successful! Please login.');
-      navigate('/auth'); // Redirect to login page
+
+      toast.success('Institution registration successful! Please login.');
+      setTimeout(() => navigate('/auth'), 3000);
       */
     } catch (error) {
       console.error('Registration error:', error);
@@ -109,7 +114,8 @@ export default function InstitutionForm() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+      <ToastContainer position="top-center" autoClose={3000} />
+
       <div className="pt-16">
         <RegistrationHeader
           title="Institution Registration"
@@ -120,7 +126,7 @@ export default function InstitutionForm() {
           userType="institution"
         />
       </div>
-      
+
       <div className="py-12 px-4">
         <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
           {error && (
@@ -132,41 +138,41 @@ export default function InstitutionForm() {
             <FormInput
               label="Institution Name"
               value={formData.institutionName}
-              onChange={(e) => setFormData({...formData, institutionName: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, institutionName: e.target.value })}
               required
             />
-            
+
             <FormInput
               label="Website"
               type="url"
               value={formData.website}
-              onChange={(e) => setFormData({...formData, website: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
               required
             />
-            
+
             <FormInput
               label="Contact Person"
               value={formData.contactPerson}
-              onChange={(e) => setFormData({...formData, contactPerson: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
               required
             />
-            
+
             <FormInput
               type="email"
               label="Email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
-            
+
             <FormInput
               type="password"
               label="Password"
               value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
             />
-            
+
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200 disabled:bg-blue-400"

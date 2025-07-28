@@ -5,6 +5,8 @@ import { useUser } from '../../context/UserContext';
 import FormInput from '../../components/FormInput';
 import RegistrationHeader from '../../components/RegistrationHeader';
 import Header from '../../components/Header';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function EmployeeForm() {
   const navigate = useNavigate();
@@ -62,8 +64,10 @@ export default function EmployeeForm() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Simulate successful registration
-      alert('Employee registration successful! Please login with your email and password.');
-      navigate('/auth'); // Redirect to login page
+      toast.success('Employee registration successful! Please login with your email and password.');
+      setTimeout(() => {
+        navigate('/auth');
+      }, 2000);
       
       /* Uncomment this when backend is ready
       const response = await fetch('http://localhost:5000/api/auth/register/employee', {
@@ -166,6 +170,8 @@ export default function EmployeeForm() {
           </form>
         </div>
       </div>
+
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 }

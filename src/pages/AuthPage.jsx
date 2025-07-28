@@ -4,7 +4,10 @@ import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const AuthPage = () => {
   const navigate = useNavigate();
   const { setIsAuthenticated } = useAuth();  
@@ -17,22 +20,22 @@ const AuthPage = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-  try {
-    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-    const { token, user } = response.data;
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { token, user } = response.data;
 
-      // Store token & user info
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-       const decoded = jwtDecode(token);
+      const decoded = jwtDecode(token);
       const role = decoded.role;
 
-      // Redirect based on role (optional)
-     switch (role) {
+      toast.success('Login successful!');
+
+      switch (role) {
         case 'student':
           navigate('/dashboard');
           break;
@@ -51,14 +54,15 @@ const AuthPage = () => {
       }
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.response?.data?.message || 'Login failed');
+      const errorMessage = err.response?.data?.message || 'Login failed';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-<motion.div 
+    <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -77,7 +81,6 @@ const AuthPage = () => {
           whileHover={{ scale: 1.02 }}
           className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8"
         >
-          {/* Header */}
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -111,19 +114,6 @@ const AuthPage = () => {
             </motion.p>
           </motion.div>
 
-          {error && (
-            <motion.p 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="text-red-500 text-center mb-4"
-            >
-              {error}
-            </motion.p>
-          )}
-
-          {/* Form */}
           <motion.form 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -131,7 +121,6 @@ const AuthPage = () => {
             onSubmit={handleSubmit} 
             className="space-y-6"
           >
-            {/* Email */}
             <motion.div
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -161,7 +150,6 @@ const AuthPage = () => {
               </div>
             </motion.div>
 
-            {/* Password */}
             <motion.div
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -223,7 +211,6 @@ const AuthPage = () => {
             </motion.button>
           </motion.form>
 
-          {/* Switch */}
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -244,6 +231,18 @@ const AuthPage = () => {
           </motion.div>
         </motion.div>
       </motion.div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </motion.div>
   );
 };

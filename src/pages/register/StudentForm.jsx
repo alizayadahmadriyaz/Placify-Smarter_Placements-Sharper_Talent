@@ -6,6 +6,8 @@ import { useUser } from '../../context/UserContext';
 import FormInput from '../../components/FormInput';
 import RegistrationHeader from '../../components/RegistrationHeader';
 import Header from '../../components/Header';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function StudentForm() {
   const navigate = useNavigate();
@@ -63,8 +65,10 @@ export default function StudentForm() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Simulate successful registration
-      alert('Registration successful! Please login with your email and password.');
-      navigate('/auth'); // Redirect to login page
+      toast.success('Registration successful! Please login with your email and password.', {
+        position: 'top-center'
+      });
+      setTimeout(() => navigate('/auth'), 2000); // Redirect to login after showing toast
       
       /* Uncomment this when backend is ready
       const response = await fetch('http://localhost:5000/api/auth/register/student', {
@@ -82,8 +86,8 @@ export default function StudentForm() {
       }
       
       // Registration successful
-      alert('Registration successful! Please login.');
-      navigate('/auth'); // Redirect to login page
+      toast.success('Registration successful! Please login.', { position: 'top-center' });
+      setTimeout(() => navigate('/auth'), 3000);
       */
     } catch (error) {
       console.error('Registration error:', error);
@@ -167,6 +171,9 @@ export default function StudentForm() {
           </form>
         </div>
       </div>
+
+      {/* Toast container to show toast messages */}
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 }
