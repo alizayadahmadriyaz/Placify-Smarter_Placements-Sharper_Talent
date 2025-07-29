@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
 
-const genAI = new GoogleGenerativeAI("AIzaSyDrtgNN9qKg_zDI9J8FnlMs97N5CeQCYv4");
+const genAI = new GoogleGenerativeAI("");
 
 const Chatbot = () => {
   const [open, setOpen] = useState(false);
