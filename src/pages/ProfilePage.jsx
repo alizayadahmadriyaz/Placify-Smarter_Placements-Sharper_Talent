@@ -2,9 +2,12 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { User } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
+
   const [profile, setProfile] = useState({
     name: "Jane Doe",
     email: "janedoe@example.com",
@@ -68,6 +71,7 @@ const ProfilePage = () => {
       button.style.transform = 'scale(1)';
       button.style.background = '';
       button.innerHTML = 'Save Changes';
+        
     }, 1500);
   };
 
@@ -82,6 +86,15 @@ const ProfilePage = () => {
   return (
     <>
       <Navbar />
+       {/* Top redirect button */}
+    <div className="flex justify-start px-6 pt-4">
+      <button
+        onClick={() => navigate('/dashboard')}
+        className="bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-indigo-700 shadow-md transition-all duration-300"
+      >
+        Go to Dashboard
+      </button>
+    </div>
       
       {/* Animated gradient background */}
       <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 relative overflow-hidden">
