@@ -8,7 +8,7 @@ const Chatbot = () => {
   const [open, setOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [messages, setMessages] = useState([
-    { from: "bot", text: "Hi! I'm your AI assistant. How can I help you today?", timestamp: Date.now() }
+    { from: "bot", text: "Hi! I'm your AI assistant. How can I help you today? add your gemini api key", timestamp: Date.now() }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
