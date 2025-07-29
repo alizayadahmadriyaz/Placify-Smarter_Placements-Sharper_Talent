@@ -86,7 +86,7 @@ export default function CompanyForm() {
 
       toast.success('Company registration successful! Please login.');
       navigate('/auth');
-      */
+      
 
     } catch (error) {
       console.error('Registration error:', error);

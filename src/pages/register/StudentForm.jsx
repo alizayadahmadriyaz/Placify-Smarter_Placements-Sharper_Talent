@@ -90,7 +90,7 @@ export default function StudentForm() {
 
       toast.success('Registration successful! Please login.', { position: 'top-center' });
       setTimeout(() => navigate('/auth'), 3000);
-      */
+      
 
     } catch (error) {
       console.error('Registration error:', error);
