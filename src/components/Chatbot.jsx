@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
 
-const genAI = new GoogleGenerativeAI("");
+const genAI = new GoogleGenerativeAI("gemini_api_key");
 
 const Chatbot = () => {
   const [open, setOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [messages, setMessages] = useState([
-    { from: "bot", text: "Hi! I'm your AI assistant. How can I help you today? add your gemini api key", timestamp: Date.now() }
+    { from: "bot", text: "Hi! I'm your AI assistant. How can I help you today? add your GENERATIVE-AI IN COMPONENTS/CHATBOT.JSX api key", timestamp: Date.now() }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +58,7 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // or "gemini-1.5-flash"
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
       const result = await model.generateContent(input.trim());
       const response = await result.response;
       const text = response.text();
@@ -80,7 +80,6 @@ const Chatbot = () => {
     }
   };
 
-
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -97,7 +96,6 @@ const Chatbot = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* Chat Toggle Button */}
       {!open && (
         <button
           onClick={toggleChat}
@@ -110,14 +108,22 @@ const Chatbot = () => {
         </button>
       )}
 
-      {/* Chat Window */}
       {(open || isAnimating) && (
-        <div className={`w-96 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-out transform origin-bottom-right ${
-          open && !isAnimating 
-            ? 'scale-100 opacity-100 translate-y-0' 
-            : 'scale-95 opacity-0 translate-y-2'
-        }`}>
-          {/* Header */}
+        <div 
+          className={`w-96 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-gray-200 dark:border-gray-700 transition-all duration-300 ease-out transform origin-bottom-right ${
+            open && !isAnimating 
+              ? 'scale-100 opacity-100 translate-y-0' 
+              : 'scale-95 opacity-0 translate-y-2'
+          }`}
+          onWheel={(e) => {
+            e.stopPropagation();
+            const messagesContainer = e.currentTarget.querySelector('[data-messages-container]');
+            if (messagesContainer && messagesContainer.contains(e.target)) {
+              return;
+            }
+            e.preventDefault();
+          }}
+        >
           <div className="flex justify-between items-center p-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
@@ -137,8 +143,11 @@ const Chatbot = () => {
             </button>
           </div>
 
-          {/* Messages Container */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-96 min-h-80 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+          <div 
+            data-messages-container
+            className="flex-1 overflow-y-auto p-4 space-y-4 max-h-96 min-h-80 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
+            style={{ scrollbarWidth: 'thin' }}
+          >
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -147,7 +156,6 @@ const Chatbot = () => {
                 } animate-in slide-in-from-bottom-3 fade-in duration-300`}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                {/* Avatar */}
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                   msg.from === "user" 
                     ? "bg-purple-100 text-purple-600" 
@@ -156,7 +164,6 @@ const Chatbot = () => {
                   {msg.from === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                 </div>
 
-                {/* Message Bubble */}
                 <div className={`flex flex-col max-w-xs ${
                   msg.from === "user" ? "items-end" : "items-start"
                 }`}>
@@ -174,7 +181,6 @@ const Chatbot = () => {
               </div>
             ))}
 
-            {/* Loading Indicator */}
             {isLoading && (
               <div className="flex items-start space-x-2 animate-in slide-in-from-bottom-3 fade-in duration-300">
                 <div className="w-8 h-8 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center animate-pulse">
@@ -191,7 +197,6 @@ const Chatbot = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
           <div className="border-t border-gray-200 dark:border-gray-700 p-4">
             <div className="flex items-end space-x-2">
               <div className="flex-1 relative">
