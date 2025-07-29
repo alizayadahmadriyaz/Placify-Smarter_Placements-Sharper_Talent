@@ -5,6 +5,8 @@ import { useUser } from '../../context/UserContext';
 import FormInput from '../../components/FormInput';
 import RegistrationHeader from '../../components/RegistrationHeader';
 import Header from '../../components/Header';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function CompanyForm() {
   const navigate = useNavigate();
@@ -12,7 +14,9 @@ export default function CompanyForm() {
   const [formData, setFormData] = useState({
     companyName: '',
     industry: '',
-    hrEmail: '', // Changed from hrEmail to email for consistency
+
+    email: '',
+
     password: '',
     role: 'company'
   });
@@ -23,46 +27,46 @@ export default function CompanyForm() {
     e.preventDefault();
     setError('');
     setLoading(true);
-    
-    // Basic validation
-    if (!formData.companyName || !formData.industry || !formData.hrEmail || !formData.password) {
+
+
+    if (!formData.companyName || !formData.industry || !formData.email || !formData.password) {
+
       setError('All fields are required');
       setLoading(false);
       return;
     }
-    
-    // Email validation
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.hrEmail)) {
       setError('Please enter a valid email address');
       setLoading(false);
       return;
     }
-    
-    // Password validation (at least 6 characters)
+
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
       setLoading(false);
       return;
     }
-    
+
     try {
-      // Save user to local storage
-      // try {
-      //   addUser(formData);
-      //   console.log('Company Registration Data saved to local storage:', formData);
-      // } catch (localStorageError) {
-      //   setError(localStorageError.message);
-      //   setLoading(false);
-      //   return;
-      // }
-      
-      // // Simulate API delay
-      // await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // // Simulate successful registration
-      // alert('Company registration successful! Please login with your email and password.');
-      // navigate('/auth'); // Redirect to login page
+
+      try {
+        addUser(formData);
+        console.log('Company Registration Data saved to local storage:', formData);
+      } catch (localStorageError) {
+        setError(localStorageError.message);
+        setLoading(false);
+        return;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      toast.success('Company registration successful! Please login with your email and password.');
+      setTimeout(() => {
+        navigate('/auth');
+      }, 2000);
+
       
       //  Uncomment this when backend is ready
       const response = await fetch('http://localhost:5000/api/auth/register/company', {
@@ -72,17 +76,18 @@ export default function CompanyForm() {
         },
         body: JSON.stringify(formData),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
       }
+
+
+      toast.success('Company registration successful! Please login.');
+      navigate('/auth');
       
-      // Registration successful
-      alert('Company registration successful! Please login.');
-      navigate('/auth'); // Redirect to login page
-  
+
     } catch (error) {
       console.error('Registration error:', error);
       if (error.message === 'Failed to fetch') {
@@ -98,7 +103,8 @@ export default function CompanyForm() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+      <ToastContainer position="top-center" />
+
       <div className="pt-16">
         <RegistrationHeader
           title="Company Registration"
@@ -109,7 +115,7 @@ export default function CompanyForm() {
           userType="company"
         />
       </div>
-      
+
       <div className="py-12 px-4">
         <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
           {error && (
@@ -121,33 +127,35 @@ export default function CompanyForm() {
             <FormInput
               label="Company Name"
               value={formData.companyName}
-              onChange={(e) => setFormData({...formData, companyName: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
               required
             />
-            
+
             <FormInput
               label="Industry"
               value={formData.industry}
-              onChange={(e) => setFormData({...formData, industry: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
               required
             />
-            
+
             <FormInput
               type="email"
               label="HR Contact Email"
-              value={formData.hrEmail}
-              onChange={(e) => setFormData({...formData, hrEmail: e.target.value})}
+
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+
               required
             />
-            
+
             <FormInput
               type="password"
               label="Password"
               value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
             />
-            
+
             <button
               type="submit"
               className="w-full bg-orange-600 text-white py-2 px-4 rounded-md hover:bg-orange-700 transition duration-200 disabled:bg-orange-400"
