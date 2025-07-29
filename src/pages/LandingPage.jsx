@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import ThemeToggle from "../components/ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
-
+import Chatbot from "../components/Chatbot"; 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -812,6 +812,7 @@ const LandingPage = () => {
           </motion.button>
         </div>
       </motion.section>
+      <Chatbot />
     </div>
   );
 };
