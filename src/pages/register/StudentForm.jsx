@@ -52,25 +52,26 @@ export default function StudentForm() {
     
     try {
       // Save user to local storage
-      try {
-        addUser(formData);
-        console.log('Student Registration Data saved to local storage:', formData);
-      } catch (localStorageError) {
-        setError(localStorageError.message);
-        setLoading(false);
-        return;
-      }
+      // try {
+      //   addUser(formData);
+      //   console.log('Student Registration Data saved to local storage:', formData);
+      // } catch (localStorageError) {
+      //   setError(localStorageError.message);
+      //   setLoading(false);
+      //   return;
+      // }
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // // Simulate API delay
+      // await new Promise(resolve => setTimeout(resolve, 1000));
       
+
       // Simulate successful registration
       toast.success('Registration successful! Please login with your email and password.', {
         position: 'top-center'
       });
       setTimeout(() => navigate('/auth'), 2000); // Redirect to login after showing toast
+
       
-      /* Uncomment this when backend is ready
       const response = await fetch('http://localhost:5000/api/auth/register/student', {
         method: 'POST',
         headers: {
@@ -86,9 +87,11 @@ export default function StudentForm() {
       }
       
       // Registration successful
+
       toast.success('Registration successful! Please login.', { position: 'top-center' });
       setTimeout(() => navigate('/auth'), 3000);
       */
+
     } catch (error) {
       console.error('Registration error:', error);
       if (error.message === 'Failed to fetch') {

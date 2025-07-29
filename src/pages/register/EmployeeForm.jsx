@@ -50,26 +50,28 @@ export default function EmployeeForm() {
     }
       
     try {
-      // Save user to local storage
-      try {
-        addUser(formData);
-        console.log('Employee Registration Data saved to local storage:', formData);
-      } catch (localStorageError) {
-        setError(localStorageError.message);
-        setLoading(false);
-        return;
-      }
+      // // Save user to local storage
+      // try {
+      //   addUser(formData);
+      //   console.log('Employee Registration Data saved to local storage:', formData);
+      // } catch (localStorageError) {
+      //   setError(localStorageError.message);
+      //   setLoading(false);
+      //   return;
+      // }
       
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // // Simulate API delay
+      // await new Promise(resolve => setTimeout(resolve, 1000));
       
+
       // Simulate successful registration
       toast.success('Employee registration successful! Please login with your email and password.');
       setTimeout(() => {
         navigate('/auth');
       }, 2000);
+
       
-      /* Uncomment this when backend is ready
+      //  Uncomment this when backend is ready
       const response = await fetch('http://localhost:5000/api/auth/register/employee', {
         method: 'POST',
         headers: {
@@ -87,7 +89,7 @@ export default function EmployeeForm() {
       // Registration successful
       alert('Employee registration successful! Please login.');
       navigate('/auth'); // Redirect to login page
-      */
+      
     } catch (error) {
       console.error('Registration error:', error);
       if (error.message === 'Failed to fetch') {

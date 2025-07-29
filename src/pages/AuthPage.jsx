@@ -5,12 +5,14 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import { jwtDecode } from 'jwt-decode';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 const AuthPage = () => {
   const navigate = useNavigate();
-  const { setIsAuthenticated } = useAuth();  
+  const { setIsAuthenticated } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -24,16 +26,24 @@ const AuthPage = () => {
     setLoading(true);
     setError('');
 
+
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+
       const { token, user } = response.data;
 
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
+
+      console.log('Token stored:', token);
+
       const decoded = jwtDecode(token);
       const role = decoded.role;
+      console.log('User role:', role);
+
 
       toast.success('Login successful!');
+
 
       switch (role) {
         case 'student':
@@ -62,41 +72,60 @@ const AuthPage = () => {
   };
 
   return (
+
     <motion.div 
+
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
       className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
     >
-      <motion.div 
+      <motion.div
         initial={{ y: 50, opacity: 0, scale: 0.95 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
         className="max-w-md w-full space-y-8"
       >
-        <motion.div 
+        <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
           whileHover={{ scale: 1.02 }}
-          className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8"
+          whileTap={{ scale: 0.99 }}
+          transition={{
+            duration: 0.8,
+            delay: 0.2,
+            type: 'spring',
+            stiffness: 200,
+            damping: 12,
+            mass: 0.5,
+          }}
+          className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 hover:shadow-2xl transition-shadow duration-300"
         >
+
           <motion.div 
+
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center mb-8"
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.5, type: "spring", stiffness: 200 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.5,
+                type: 'spring',
+                stiffness: 200,
+              }}
               className="flex items-center justify-center space-x-2 mb-4"
             >
               <Brain className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">Placify</span>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                Placify
+              </span>
             </motion.div>
-            <motion.h2 
+            <motion.h2
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.6 }}
@@ -104,7 +133,7 @@ const AuthPage = () => {
             >
               {isLogin ? 'Welcome back' : 'Create account'}
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.7 }}
@@ -114,11 +143,13 @@ const AuthPage = () => {
             </motion.p>
           </motion.div>
 
+
           <motion.form 
+
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.8 }}
-            onSubmit={handleSubmit} 
+            onSubmit={handleSubmit}
             className="space-y-6"
           >
             <motion.div
@@ -163,7 +194,7 @@ const AuthPage = () => {
                   <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </div>
                 <motion.input
-                  whileFocus={{ scale: 1.02 }}
+                  whileFocus={{ scale:  1.02 }}
                   transition={{ duration: 0.2 }}
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -188,6 +219,7 @@ const AuthPage = () => {
               </div>
             </motion.div>
 
+            {/* Submit Button */}
             <motion.button
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -211,7 +243,9 @@ const AuthPage = () => {
             </motion.button>
           </motion.form>
 
+
           <motion.div 
+
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 1.2 }}

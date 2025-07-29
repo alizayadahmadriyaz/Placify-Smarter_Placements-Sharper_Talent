@@ -14,7 +14,9 @@ export default function CompanyForm() {
   const [formData, setFormData] = useState({
     companyName: '',
     industry: '',
+
     email: '',
+
     password: '',
     role: 'company'
   });
@@ -26,14 +28,16 @@ export default function CompanyForm() {
     setError('');
     setLoading(true);
 
+
     if (!formData.companyName || !formData.industry || !formData.email || !formData.password) {
+
       setError('All fields are required');
       setLoading(false);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(formData.hrEmail)) {
       setError('Please enter a valid email address');
       setLoading(false);
       return;
@@ -46,6 +50,7 @@ export default function CompanyForm() {
     }
 
     try {
+
       try {
         addUser(formData);
         console.log('Company Registration Data saved to local storage:', formData);
@@ -61,8 +66,9 @@ export default function CompanyForm() {
       setTimeout(() => {
         navigate('/auth');
       }, 2000);
+
       
-      /* Uncomment this when backend is ready
+      //  Uncomment this when backend is ready
       const response = await fetch('http://localhost:5000/api/auth/register/company', {
         method: 'POST',
         headers: {
@@ -77,9 +83,11 @@ export default function CompanyForm() {
         throw new Error(data.message || 'Registration failed');
       }
 
+
       toast.success('Company registration successful! Please login.');
       navigate('/auth');
       */
+
     } catch (error) {
       console.error('Registration error:', error);
       if (error.message === 'Failed to fetch') {
@@ -133,8 +141,10 @@ export default function CompanyForm() {
             <FormInput
               type="email"
               label="HR Contact Email"
+
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+
               required
             />
 
