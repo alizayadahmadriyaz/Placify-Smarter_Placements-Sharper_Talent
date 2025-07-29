@@ -81,9 +81,9 @@ function App() {
             <Route
               path="/dashboard/employee"
               element={
-                <ProtectedRoute>
+                // <ProtectedRoute>
                   <EmployeeDashboard />
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             />
             <Route
