@@ -78,24 +78,60 @@ export const registerCompany = async (req, res) => {
 
 // ---------------- LOGIN ----------------
 export const loginUser = async (req, res) => {
+  console.log("Login request received:", req.body);
+
   try {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
     let user = await Student.findOne({ email });
     let role = user ? "student" : null;
 
-    if (!user) { user = await Institution.findOne({ email }); role = user ? "institution" : role; }
-    if (!user) { user = await Employee.findOne({ email }); role = user ? "employee" : role; }
-    if (!user) { user = await Company.findOne({ hrEmail: email }); role = user ? "company" : role; }
+    if (!user) {
+      user = await Institution.findOne({ email });
+      role = user ? "institution" : role;
+    }
 
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    if (!user) {
+      user = await Employee.findOne({ email });
+      role = user ? "employee" : role;
+    }
+
+    if (!user) {
+      user = await Company.findOne({ hrEmail: email });
+      role = user ? "company" : role;
+    }
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials - user not found" });
+    }
+
+    if (!user.password) {
+      return res.status(400).json({ message: "Password not set for this account" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials - incorrect password" });
+    }
 
+    console.log("Generating token...");
     const token = generateToken(user._id, role);
-    res.json({ token, user: { id: user._id, role, email: user.email || user.hrEmail } });
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        role,
+        email: user.email || user.hrEmail,
+      },
+    });
+
   } catch (error) {
     console.error("Login Error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error during login" });
   }
 };
