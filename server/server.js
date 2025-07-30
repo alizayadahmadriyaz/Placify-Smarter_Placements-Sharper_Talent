@@ -6,6 +6,7 @@ import connectToDatabase from "./config/db.js";
 import healthRoutes from "./routes/health.js";
 import authRoutes from "./routes/auth.js";
 import interviewRoutes from "./routes/interview.js";
+import institutionRoutes from "./routes/institutionRoutes.js";
 const app = express();
 
 app.use(
@@ -21,7 +22,7 @@ app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/interviews", interviewRoutes);
 app.use("/api/feedback", feedbackRoutes);
-
+app.use("/api/institution", institutionRoutes);
 app.get("/", (req, res) => {
   res.json({ 
     message: "Placify Feedback Server is running! 📧",
