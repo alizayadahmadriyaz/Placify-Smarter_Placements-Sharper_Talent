@@ -170,7 +170,7 @@ const Chatbot = () => {
       {!open && (
         <button
           onClick={toggleChat}
-          className="group bg-gradient-to-r from-purple-600 to-purple-700 p-4 rounded-full text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-out animate-pulse hover:animate-none"
+          className="group bg-gradient-to-r from-purple-600 to-purple-700 p-4 rounded-full text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 ease-out animate-pulse hover:animate-none will-change-transform"
           aria-label="Open chat"
         >
           <MessageCircle className="w-6 h-6" />
@@ -207,7 +207,7 @@ const Chatbot = () => {
             </div>
             <button 
               onClick={toggleChat}
-              className="p-1 hover:bg-white/20 rounded-lg transition-all duration-200 hover:scale-110"
+              className="p-1 hover:bg-white/20 rounded-lg transition-all duration-200 hover:scale-110 will-change-transform"
               aria-label="Close chat"
             >
               <X className="w-5 h-5" />
@@ -238,7 +238,7 @@ const Chatbot = () => {
                 <div className={`flex flex-col max-w-xs ${
                   msg.from === "user" ? "items-end" : "items-start"
                 }`}>
-                  <div className={`p-3 rounded-2xl text-sm leading-relaxed transition-all duration-200 hover:shadow-md ${
+                  <div className={`p-3 rounded-2xl text-sm leading-relaxed transition-all duration-200 hover:shadow-md will-change-transform ${
                     msg.from === "user"
                       ? "bg-purple-600 text-white rounded-br-md"
                       : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-bl-md"
@@ -294,7 +294,7 @@ const Chatbot = () => {
               <button
                 onClick={sendMessage}
                 disabled={!input.trim() || isLoading}
-                className="p-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 flex-shrink-0"
+                className="p-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 flex-shrink-0 will-change-transform"
                 aria-label="Send message"
               >
                 <Send className="w-4 h-4" />
