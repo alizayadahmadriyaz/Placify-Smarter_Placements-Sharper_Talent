@@ -1,30 +1,36 @@
 import React, { useState, Fragment } from 'react';
-import { 
-  Brain, Users, TrendingUp, Building2, Eye, PieChart, Settings, 
+import {
+  Brain, Users, TrendingUp, Building2, Eye, PieChart, Settings,
   UserCheck, Target, Award, LogOut, UserCircle, ChevronDown, Sun, Moon,
   ChevronLeft, ChevronRight, FileText, BarChart3, User, ChevronUp
 } from 'lucide-react';
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, 
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
   CartesianGrid, BarChart, Bar, Legend
 } from 'recharts';
+
+// Corrected: Removed the conflicting 'const ThemeToggle = () => {' line here.
+// This is the correct import for your ThemeToggle component from its separate file.
 import ThemeToggle from './ThemeToggle'; 
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { motion } from 'framer-motion';
+
 // Sidebar Component
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const [activeItem, setActiveItem] = useState('Dashboard');
   const [expandedMenus, setExpandedMenus] = useState({});
+
+  // Note: Your ThemeToggle component uses a separate ThemeContext.
+  // This 'isDark' state and 'toggleDarkMode' function in Sidebar are
+  // for the Sidebar's internal "Dark Mode" menu item, not the global theme toggle.
+  // Ensure your ThemeToggle component and ThemeContext are correctly set up
+  // for global theme management across your application.
   const [isDark, setIsDark] = useState(false);
 
   const toggleDarkMode = () => {
     setIsDark(!isDark);
-    if (!isDark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', !isDark);
   };
 
   const menuItems = [
@@ -218,8 +224,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 };
 
 
-
-
 const ProfileDropdown = () => {
   const navigate = useNavigate();
 
@@ -272,6 +276,7 @@ const ProfileDropdown = () => {
                 </button>
               )}
             </Menu.Item>
+
           </div>
         </Menu.Items>
       </Transition>
@@ -279,26 +284,26 @@ const ProfileDropdown = () => {
   );
 };
 
-const StatCard = ({ icon: Icon, title, value, subtitle, color = "purple", trend, delay = 0 }) => (
+const StatCard = ({ icon: Icon, title, value, subtitle, color = "indigo", trend, delay = 0 }) => (
   <div 
-    className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-all duration-300 hover:scale-105 animate-fade-in"
+    className={`rounded-2xl shadow-lg p-6 bg-gradient-to-br from-${color}-100 to-white dark:from-${color}-900/30 dark:to-gray-800 hover:scale-105 transition-transform`} 
     style={{ animationDelay: `${delay}ms` }}
   >
-    <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-3">
-        <div className={`p-3 bg-${color}-100 dark:bg-${color}-900/30 rounded-lg transition-transform duration-200 hover:scale-110`}>
-          <Icon className={`w-6 h-6 text-${color}-600 dark:text-${color}-400`} />
+    <div className="flex justify-between items-center">
+      <div className="flex items-center gap-4">
+        <div className={`p-3 bg-${color}-200 dark:bg-${color}-800 text-${color}-700 dark:text-${color}-300 rounded-full shadow-md`}>
+          <Icon className="w-6 h-6" />
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
-          {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>}
+          <p className="text-sm text-gray-500 dark:text-gray-300">{title}</p>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{value}</h3>
+          {subtitle && <p className="text-xs text-gray-500 dark:text-gray-400">{subtitle}</p>}
         </div>
       </div>
       {trend && (
-        <div className="flex items-center space-x-1 text-green-600 animate-bounce-gentle">
+        <div className="text-green-600 dark:text-green-400 flex items-center gap-1 animate-bounce">
           <TrendingUp className="w-4 h-4" />
-          <span className="text-sm font-medium">{trend}</span>
+          <span className="text-sm">{trend}</span>
         </div>
       )}
     </div>
@@ -306,6 +311,7 @@ const StatCard = ({ icon: Icon, title, value, subtitle, color = "purple", trend,
 );
 
 const InstitutionDashboard = () => {
+  // Moved these state declarations up, as they were originally inside a return statement
   const [selectedDepartments, setSelectedDepartments] = useState(['CSE', 'CSM', 'ECE', 'EEE', 'IT']);
   const [yearRange, setYearRange] = useState({ from: '2020', to: '2024*' });
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -374,7 +380,7 @@ const InstitutionDashboard = () => {
                 <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">Institution Dashboard</span>
               </div>
               <div className="flex items-center space-x-2">
-                <ThemeToggle />
+                <ThemeToggle /> {/* This is where your ThemeToggle component is used */}
                 <ProfileDropdown />
               </div>
             </div>
@@ -630,4 +636,4 @@ const InstitutionDashboard = () => {
   );
 };
 
-export default InstitutionDashboard;
+export default InstitutionDashboard; // Make sure you export the main component

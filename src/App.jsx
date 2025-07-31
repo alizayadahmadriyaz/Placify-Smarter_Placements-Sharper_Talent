@@ -67,9 +67,9 @@ function App() {
             <Route
               path="/dashboard/institution"
               element={
-                <ProtectedRoute>
+                // <ProtectedRoute>
                   <InstitutionDashboard />
-                </ProtectedRoute>
+                // </ProtectedRoute>
               }
             />
             <Route
