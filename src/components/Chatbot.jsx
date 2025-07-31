@@ -1,19 +1,35 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
-
-const genAI = new GoogleGenerativeAI("gemini_api_key");
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const Chatbot = () => {
   const [open, setOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [messages, setMessages] = useState([
-    { from: "bot", text: "Hi! I'm your AI assistant. How can I help you today? add your GENERATIVE-AI IN COMPONENTS/CHATBOT.JSX api key", timestamp: Date.now() }
+    { from: "bot", text: "Hi! I'm your AI assistant. How can I help you today?", timestamp: Date.now() }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [chatSession, setChatSession] = useState(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
+  // Initialize Gemini AI and chat session once
+  const genAI = useMemo(() => new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY), []);
+  
+  const initializeChatSession = useMemo(() => {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    return model.startChat({
+      history: [],
+      generationConfig: {
+        maxOutputTokens: 1000,
+        temperature: 0.7,
+      },
+    });
+  }, [genAI]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -28,6 +44,11 @@ const Chatbot = () => {
       inputRef.current.focus();
     }
   }, [open]);
+
+  // Initialize chat session when component mounts
+  useEffect(() => {
+    setChatSession(initializeChatSession);
+  }, [initializeChatSession]);
 
   const toggleChat = () => {
     if (open) {
@@ -46,7 +67,7 @@ const Chatbot = () => {
   };
 
   const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || !chatSession) return;
 
     const userMessage = { 
       from: "user", 
@@ -58,8 +79,8 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-      const result = await model.generateContent(input.trim());
+      // Send message to chat session (maintains conversation context)
+      const result = await chatSession.sendMessage(input.trim());
       const response = await result.response;
       const text = response.text();
 
@@ -72,7 +93,7 @@ const Chatbot = () => {
       console.error("Chatbot error:", err);
       setMessages(prev => [...prev, { 
         from: "bot", 
-        text: "I apologize, but I'm having trouble connecting right now. Please try again in a moment.", 
+        text: "I apologize, but I'm having trouble connecting right now. Please check if your API key is properly configured and try again.", 
         timestamp: Date.now() 
       }]);
     } finally {
@@ -92,6 +113,56 @@ const Chatbot = () => {
       hour: '2-digit', 
       minute: '2-digit' 
     });
+  };
+
+  const MarkdownRenderer = ({ content, isUser }) => {
+    if (isUser) {
+      return <span>{content}</span>;
+    }
+
+    return (
+      <ReactMarkdown
+        components={{
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || '');
+            return !inline && match ? (
+              <SyntaxHighlighter
+                style={oneDark}
+                language={match[1]}
+                PreTag="div"
+                className="rounded-md text-sm"
+                {...props}
+              >
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
+            ) : (
+              <code 
+                className="bg-gray-200 dark:bg-gray-700 px-1 py-0.5 rounded text-sm font-mono" 
+                {...props}
+              >
+                {children}
+              </code>
+            );
+          },
+          p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+          ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
+          ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
+          li: ({ children }) => <li className="ml-2">{children}</li>,
+          h1: ({ children }) => <h1 className="text-lg font-bold mb-2">{children}</h1>,
+          h2: ({ children }) => <h2 className="text-base font-bold mb-2">{children}</h2>,
+          h3: ({ children }) => <h3 className="text-sm font-bold mb-1">{children}</h3>,
+          blockquote: ({ children }) => (
+            <blockquote className="border-l-4 border-gray-300 dark:border-gray-600 pl-3 italic mb-2">
+              {children}
+            </blockquote>
+          ),
+          strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+          em: ({ children }) => <em className="italic">{children}</em>,
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    );
   };
 
   return (
@@ -172,7 +243,7 @@ const Chatbot = () => {
                       ? "bg-purple-600 text-white rounded-br-md"
                       : "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-bl-md"
                   }`}>
-                    {msg.text}
+                    <MarkdownRenderer content={msg.text} isUser={msg.from === "user"} />
                   </div>
                   <span className="text-xs text-gray-500 mt-1 px-1">
                     {formatTime(msg.timestamp)}
