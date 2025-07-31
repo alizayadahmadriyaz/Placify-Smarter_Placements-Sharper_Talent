@@ -1,14 +1,25 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Camera, Mic, Bot, Send, AlertCircle, CheckCircle, ChevronDown } from "lucide-react";
 
-const InterviewInterface = () => {
-  // loading simulation
-  const [isLoading, setIsLoading] = useState(true);
+import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import InterviewLeft from "../components/InterviewLeft";
+import InterviewRight from "../components/InterviewRight";
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 8000);
-    return () => clearTimeout(timer);
-  }, []);
+
+const InterviewInterface = () => {
+  const navigate = useNavigate();
+  const [stopRecording, setStopRecording] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const interviewId = Date.now().toString();
+  const [isStreamReady, setIsStreamReady] = useState(false);
+
+  const handleFinishInterview = useCallback(async () => {
+    try {
+      const videoBlob = await stopRecording?.();
+
 
   const navigate = (path) => {
     console.log("Navigation would go to:", path);
@@ -21,17 +32,27 @@ const InterviewInterface = () => {
   const chatContainerRef = useRef(null); 
   const [showScrollButton, setShowScrollButton] = useState(false);
 
-  const [cameraPermission, setCameraPermission] = useState("pending");
-  const [userInput, setUserInput] = useState("");
-  const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [messages, setMessages] = useState([
-    {
-      sender: "bot",
-      text: "Hi let's start with the interview. Tell me about yourself.",
-    },
-  ]);
+      const formData = new FormData();
+      if (videoBlob)
+        formData.append("video", videoBlob, `interview_${interviewId}.webm`);
+      formData.append("answers", JSON.stringify(answers));
+      formData.append("interviewId", interviewId);
+
+
+      await axios.post("http://localhost:5000/api/interviews/upload", formData);
+
 
   const interviewQuestions = [
+
+      navigate(`/results/${interviewId}`);
+    } catch (err) {
+      console.error("Upload failed", err);
+      navigate(`/results/${interviewId}`);
+    }
+  }, [stopRecording, answers, navigate, interviewId]);
+
+  const questions = [
+
     "Hi let's start with the interview. Tell me about yourself.",
     "Why do you want to work at this company?",
     "What are your strengths and weaknesses?",
@@ -42,8 +63,9 @@ const InterviewInterface = () => {
     "What is your biggest professional achievement?",
     "How do you prioritize your work?",
     "Why should we hire you?",
-    "Thank you for your time. We will get back to you shortly",
+    "Thank you for your time. We will get back to you shortly"
   ];
+
 
   useEffect(() => {
     requestCameraAccess();
@@ -404,6 +426,20 @@ const InterviewInterface = () => {
           </div>
         </div>
       </div>
+
+  return (
+    <div className="flex flex-col lg:flex-row min-h-screen">
+      <InterviewLeft
+        onStreamReady={setIsStreamReady}
+        onRecordingReady={setStopRecording}
+      />
+      <InterviewRight
+        questions={questions}
+        onAnswersUpdate={setAnswers}
+        onFinish={handleFinishInterview}
+        isStreamReady={isStreamReady}
+      />
+
     </div>
   );
 };

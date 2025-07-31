@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import ThemeToggle from "../components/ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
-
+import Chatbot from "../components/Chatbot";
 const LandingPage = () => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -70,11 +70,10 @@ const LandingPage = () => {
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-            isScrolled
+          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
               ? "backdrop-blur-xs bg-white/80 dark:bg-gray-900/80 shadow-lg border-b border-gray-200/50 dark:border-gray-700/50"
               : "backdrop-blur-xs bg-purple-600/20 dark:bg-purple-800/20 border-b border-purple-300/30 dark:border-purple-600/30"
-          }`}
+            }`}
           style={{
             backdropFilter: isScrolled ? "blur(12px)" : "blur(8px)",
             WebkitBackdropFilter: isScrolled ? "blur(12px)" : "blur(8px)",
@@ -89,19 +88,20 @@ const LandingPage = () => {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="flex items-center space-x-3"
               >
+                {/* Added onClick to scroll to top when Brain icon is clicked */}
                 <motion.div
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.6 }}
-                  className="p-2 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl shadow-lg"
+                  className="p-2 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl shadow-lg cursor-pointer"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 >
                   <Brain className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
                 </motion.div>
                 <span
-                  className={`text-2xl lg:text-3xl font-bold transition-all duration-500 ${
-                    isScrolled
+                  className={`text-2xl lg:text-3xl font-bold transition-all duration-500 ${isScrolled
                       ? "bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent"
                       : "text-white"
-                  }`}
+                    }`}
                 >
                   Placify
                 </span>
@@ -119,11 +119,10 @@ const LandingPage = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className={`relative px-6 py-2.5 font-medium rounded-xl transition-all duration-500
-                           ${
-                             isScrolled
-                               ? "text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 before:absolute before:inset-0 before:rounded-xl before:bg-gray-100 dark:before:bg-gray-800 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
-                               : "text-white/90 hover:text-white before:absolute before:inset-0 before:rounded-xl before:bg-white/10 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
-                           }`}
+                           ${isScrolled
+                      ? "text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 before:absolute before:inset-0 before:rounded-xl before:bg-gray-100 dark:before:bg-gray-800 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+                      : "text-white/90 hover:text-white before:absolute before:inset-0 before:rounded-xl before:bg-white/10 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+                    }`}
                   onClick={() => navigate("/auth")}
                 >
                   <span className="relative z-10 flex items-center space-x-2">
@@ -136,11 +135,10 @@ const LandingPage = () => {
                 <motion.button
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`relative px-6 py-2.5 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden group ${
-                    isScrolled
+                  className={`relative px-6 py-2.5 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden group ${isScrolled
                       ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
                       : "bg-white text-purple-600 hover:bg-gray-50"
-                  }`}
+                    }`}
                   onClick={() => navigate("/register")}
                 >
                   <span className="relative z-10 flex items-center space-x-2">
@@ -168,11 +166,10 @@ const LandingPage = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={`lg:hidden p-2 rounded-xl transition-all duration-500 ${
-                  isScrolled
+                className={`lg:hidden p-2 rounded-xl transition-all duration-500 ${isScrolled
                     ? "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
                     : "bg-white/10 hover:bg-white/20"
-                }`}
+                  }`}
               >
                 <AnimatePresence mode="wait">
                   {isMobileMenuOpen ? (
@@ -184,11 +181,10 @@ const LandingPage = () => {
                       transition={{ duration: 0.2 }}
                     >
                       <X
-                        className={`w-5 h-5 ${
-                          isScrolled
+                        className={`w-5 h-5 ${isScrolled
                             ? "text-gray-600 dark:text-gray-300"
                             : "text-white"
-                        }`}
+                          }`}
                       />
                     </motion.div>
                   ) : (
@@ -200,11 +196,10 @@ const LandingPage = () => {
                       transition={{ duration: 0.2 }}
                     >
                       <Menu
-                        className={`w-5 h-5 ${
-                          isScrolled
+                        className={`w-5 h-5 ${isScrolled
                             ? "text-gray-600 dark:text-gray-300"
                             : "text-white"
-                        }`}
+                          }`}
                       />
                     </motion.div>
                   )}
@@ -219,11 +214,10 @@ const LandingPage = () => {
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`lg:hidden overflow-hidden border-t transition-colors duration-500 ${
-                    isScrolled
+                  className={`lg:hidden overflow-hidden border-t transition-colors duration-500 ${isScrolled
                       ? "border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90"
                       : "border-purple-300/30 dark:border-purple-600/30 bg-purple-600/20 dark:bg-purple-800/20"
-                  }`}
+                    }`}
                   style={{
                     backdropFilter: "blur(12px)",
                     WebkitBackdropFilter: "blur(12px)",
@@ -240,11 +234,10 @@ const LandingPage = () => {
                         navigate("/auth");
                         setIsMobileMenuOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 ${
-                        isScrolled
+                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 ${isScrolled
                           ? "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
                           : "text-white/90 hover:bg-white/10"
-                      }`}
+                        }`}
                     >
                       <User className="w-5 h-5" />
                       <span>Sign In</span>
@@ -260,11 +253,10 @@ const LandingPage = () => {
                         navigate("/register");
                         setIsMobileMenuOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 ${
-                        isScrolled
+                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 ${isScrolled
                           ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
                           : "bg-white text-purple-600"
-                      }`}
+                        }`}
                     >
                       <Zap className="w-5 h-5" />
                       <span>Get Started</span>
@@ -276,11 +268,10 @@ const LandingPage = () => {
                       className="flex items-center justify-between px-4 py-3"
                     >
                       <span
-                        className={`transition-colors duration-500 ${
-                          isScrolled
+                        className={`transition-colors duration-500 ${isScrolled
                             ? "text-gray-700 dark:text-gray-200"
                             : "text-white/90"
-                        }`}
+                          }`}
                       >
                         Theme
                       </span>
@@ -812,6 +803,7 @@ const LandingPage = () => {
           </motion.button>
         </div>
       </motion.section>
+      <Chatbot />
     </div>
   );
 };
