@@ -1,13 +1,19 @@
 import React, { useState, Fragment } from 'react';
 import { 
   Brain, Users, TrendingUp, Building2, Eye, PieChart, Settings, 
+
   UserCheck, Target, Award, LogOut, UserCircle, ChevronDown, Sun, Moon,
   ChevronLeft, ChevronRight, FileText, BarChart3, User, ChevronUp
+
 } from 'lucide-react';
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, 
   CartesianGrid, BarChart, Bar, Legend
 } from 'recharts';
+
+
+const ThemeToggle = () => {
+
 import ThemeToggle from './ThemeToggle'; 
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
@@ -16,15 +22,12 @@ import { motion } from 'framer-motion';
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const [activeItem, setActiveItem] = useState('Dashboard');
   const [expandedMenus, setExpandedMenus] = useState({});
+
   const [isDark, setIsDark] = useState(false);
 
   const toggleDarkMode = () => {
     setIsDark(!isDark);
-    if (!isDark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', !isDark);
   };
 
   const menuItems = [
@@ -79,6 +82,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   };
 
   return (
+
     <div className={`fixed left-0 top-0 h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-50 transition-all duration-300 overflow-y-auto ${
       isCollapsed ? 'w-16' : 'w-64'
     }`}>
@@ -272,6 +276,7 @@ const ProfileDropdown = () => {
                 </button>
               )}
             </Menu.Item>
+
           </div>
         </Menu.Items>
       </Transition>
@@ -279,26 +284,26 @@ const ProfileDropdown = () => {
   );
 };
 
-const StatCard = ({ icon: Icon, title, value, subtitle, color = "purple", trend, delay = 0 }) => (
+const StatCard = ({ icon: Icon, title, value, subtitle, color = "indigo", trend, delay = 0 }) => (
   <div 
-    className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-all duration-300 hover:scale-105 animate-fade-in"
+    className={`rounded-2xl shadow-lg p-6 bg-gradient-to-br from-${color}-100 to-white dark:from-${color}-900/30 dark:to-gray-800 hover:scale-105 transition-transform`} 
     style={{ animationDelay: `${delay}ms` }}
   >
-    <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-3">
-        <div className={`p-3 bg-${color}-100 dark:bg-${color}-900/30 rounded-lg transition-transform duration-200 hover:scale-110`}>
-          <Icon className={`w-6 h-6 text-${color}-600 dark:text-${color}-400`} />
+    <div className="flex justify-between items-center">
+      <div className="flex items-center gap-4">
+        <div className={`p-3 bg-${color}-200 dark:bg-${color}-800 text-${color}-700 dark:text-${color}-300 rounded-full shadow-md`}>
+          <Icon className="w-6 h-6" />
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
-          {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>}
+          <p className="text-sm text-gray-500 dark:text-gray-300">{title}</p>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{value}</h3>
+          {subtitle && <p className="text-xs text-gray-500 dark:text-gray-400">{subtitle}</p>}
         </div>
       </div>
       {trend && (
-        <div className="flex items-center space-x-1 text-green-600 animate-bounce-gentle">
+        <div className="text-green-600 dark:text-green-400 flex items-center gap-1 animate-bounce">
           <TrendingUp className="w-4 h-4" />
-          <span className="text-sm font-medium">{trend}</span>
+          <span className="text-sm">{trend}</span>
         </div>
       )}
     </div>
@@ -306,6 +311,84 @@ const StatCard = ({ icon: Icon, title, value, subtitle, color = "purple", trend,
 );
 
 const InstitutionDashboard = () => {
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
+      <header className="flex justify-between items-center mb-10">
+        <div className="flex items-center gap-2">
+          <Brain className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Institution Dashboard</h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <ProfileDropdown />
+        </div>
+      </header>
+
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard 
+          icon={Users} 
+          title="Total Students" 
+          value="1250" 
+          subtitle="Registered" 
+          color="blue" 
+          trend="+5%" 
+        />
+        <StatCard 
+          icon={UserCheck} 
+          title="Students Placed" 
+          value="890" 
+          subtitle="71.2% Placement Rate" 
+          color="green" 
+          trend="+12%" 
+        />
+        <StatCard 
+          icon={Target} 
+          title="Average Package" 
+          value="₹12.5L" 
+          subtitle="Per Annum" 
+          color="purple" 
+          trend="+8%" 
+        />
+        <StatCard 
+          icon={Award} 
+          title="Top Package" 
+          value="₹45L" 
+          subtitle="This Year" 
+          color="orange" 
+        />
+      </section>
+
+      <section className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Placement Trend</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={[{ month: 'Jan', placed: 30 }, { month: 'Feb', placed: 50 }, { month: 'Mar', placed: 40 }]}> 
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" stroke="#8884d8" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="placed" stroke="#6366f1" strokeWidth={3} dot={{ r: 4 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Department-wise Internship Offers</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={[{ year: '2022', CSE: 82, ISE: 52 }, { year: '2023', CSE: 168, ISE: 138 }]}> 
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="CSE" fill="#3b82f6" name="CSE" />
+              <Bar dataKey="ISE" fill="#f97316" name="ISE" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
+
   const [selectedDepartments, setSelectedDepartments] = useState(['CSE', 'CSM', 'ECE', 'EEE', 'IT']);
   const [yearRange, setYearRange] = useState({ from: '2020', to: '2024*' });
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -626,6 +709,7 @@ const InstitutionDashboard = () => {
           </section>
         </main>
       </div>
+
     </div>
   );
 };
