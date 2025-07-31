@@ -137,6 +137,7 @@ export default function Dashboard() {
     { icon: Briefcase, label: 'Jobs', id: 'Jobs', action: () => setActiveItem('Jobs') },
     { icon: User, label: 'Jobs Based on User', id: 'User Jobs', action: () => setActiveItem('User Jobs') },
     { icon: Code, label: 'Coding', id: 'Coding', action: () => setActiveItem('Coding') },
+    // { icon: Code, label: 'Interview Practise', id: 'Interview Practise', action: () => navigate('/interview') },
     { icon: Brain, label: 'Aptitude Questions', id: 'Aptitude', action: () => setActiveItem('Aptitude') },
     { icon: MessageSquare, label: 'Interview Experience', id: 'Interview', action: () => setActiveItem('Interview') },
   ];

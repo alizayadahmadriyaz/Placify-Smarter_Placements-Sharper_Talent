@@ -1,28 +1,31 @@
 import React, { useState, Fragment } from 'react';
-import { 
-  Brain, Users, TrendingUp, Building2, Eye, PieChart, Settings, 
-
+import {
+  Brain, Users, TrendingUp, Building2, Eye, PieChart, Settings,
   UserCheck, Target, Award, LogOut, UserCircle, ChevronDown, Sun, Moon,
   ChevronLeft, ChevronRight, FileText, BarChart3, User, ChevronUp
-
 } from 'lucide-react';
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, 
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
   CartesianGrid, BarChart, Bar, Legend
 } from 'recharts';
 
-
-const ThemeToggle = () => {
-
+// Corrected: Removed the conflicting 'const ThemeToggle = () => {' line here.
+// This is the correct import for your ThemeToggle component from its separate file.
 import ThemeToggle from './ThemeToggle'; 
 import { useNavigate } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { motion } from 'framer-motion';
+
 // Sidebar Component
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const [activeItem, setActiveItem] = useState('Dashboard');
   const [expandedMenus, setExpandedMenus] = useState({});
 
+  // Note: Your ThemeToggle component uses a separate ThemeContext.
+  // This 'isDark' state and 'toggleDarkMode' function in Sidebar are
+  // for the Sidebar's internal "Dark Mode" menu item, not the global theme toggle.
+  // Ensure your ThemeToggle component and ThemeContext are correctly set up
+  // for global theme management across your application.
   const [isDark, setIsDark] = useState(false);
 
   const toggleDarkMode = () => {
@@ -82,7 +85,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   };
 
   return (
-
     <div className={`fixed left-0 top-0 h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-50 transition-all duration-300 overflow-y-auto ${
       isCollapsed ? 'w-16' : 'w-64'
     }`}>
@@ -222,8 +224,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 };
 
 
-
-
 const ProfileDropdown = () => {
   const navigate = useNavigate();
 
@@ -311,84 +311,7 @@ const StatCard = ({ icon: Icon, title, value, subtitle, color = "indigo", trend,
 );
 
 const InstitutionDashboard = () => {
-
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
-      <header className="flex justify-between items-center mb-10">
-        <div className="flex items-center gap-2">
-          <Brain className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Institution Dashboard</h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          <ProfileDropdown />
-        </div>
-      </header>
-
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard 
-          icon={Users} 
-          title="Total Students" 
-          value="1250" 
-          subtitle="Registered" 
-          color="blue" 
-          trend="+5%" 
-        />
-        <StatCard 
-          icon={UserCheck} 
-          title="Students Placed" 
-          value="890" 
-          subtitle="71.2% Placement Rate" 
-          color="green" 
-          trend="+12%" 
-        />
-        <StatCard 
-          icon={Target} 
-          title="Average Package" 
-          value="₹12.5L" 
-          subtitle="Per Annum" 
-          color="purple" 
-          trend="+8%" 
-        />
-        <StatCard 
-          icon={Award} 
-          title="Top Package" 
-          value="₹45L" 
-          subtitle="This Year" 
-          color="orange" 
-        />
-      </section>
-
-      <section className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Placement Trend</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={[{ month: 'Jan', placed: 30 }, { month: 'Feb', placed: 50 }, { month: 'Mar', placed: 40 }]}> 
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" stroke="#8884d8" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="placed" stroke="#6366f1" strokeWidth={3} dot={{ r: 4 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Department-wise Internship Offers</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={[{ year: '2022', CSE: 82, ISE: 52 }, { year: '2023', CSE: 168, ISE: 138 }]}> 
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="CSE" fill="#3b82f6" name="CSE" />
-              <Bar dataKey="ISE" fill="#f97316" name="ISE" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </section>
-
+  // Moved these state declarations up, as they were originally inside a return statement
   const [selectedDepartments, setSelectedDepartments] = useState(['CSE', 'CSM', 'ECE', 'EEE', 'IT']);
   const [yearRange, setYearRange] = useState({ from: '2020', to: '2024*' });
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -457,7 +380,7 @@ const InstitutionDashboard = () => {
                 <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">Institution Dashboard</span>
               </div>
               <div className="flex items-center space-x-2">
-                <ThemeToggle />
+                <ThemeToggle /> {/* This is where your ThemeToggle component is used */}
                 <ProfileDropdown />
               </div>
             </div>
@@ -709,9 +632,8 @@ const InstitutionDashboard = () => {
           </section>
         </main>
       </div>
-
     </div>
   );
 };
 
-export default InstitutionDashboard;
+export default InstitutionDashboard; // Make sure you export the main component
