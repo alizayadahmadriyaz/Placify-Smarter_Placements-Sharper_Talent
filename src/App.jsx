@@ -17,7 +17,7 @@ import InstitutionForm from './pages/register/InstitutionForm';
 import EmployeeForm from './pages/register/EmployeeForm';
 import CompanyForm from './pages/register/CompanyForm';
 
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/Student/Dashboard";
 import ResumeBuilder from "./pages/Student/ResumeBuilder";
 import ResumeATS from "./pages/Student/ResumeATS";
 import Jobs from "./pages/Student/Jobs";
@@ -67,9 +67,9 @@ function App() {
             <Route
               path="/dashboard/institution"
               element={
-                // <ProtectedRoute>
+                <ProtectedRoute>
                   <InstitutionDashboard />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               }
             />
             <Route
