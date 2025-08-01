@@ -19,6 +19,7 @@ import {
   CartesianGrid,
   Legend
 } from "recharts";
+import { User, LogOut, ChevronDown } from "lucide-react";
 
 const data = [
   { name: "Jan", interviews: 10, avgScore: 70 },
@@ -31,7 +32,41 @@ const userName = "John Doe";
 
 export default function Dashboard() {
   const [isDarkMode, setIsDarkMode] = useState(false);
-
+    const [userData, setUserData] = useState(null); // <-- Added state for user
+    // Fetch user profile
+    useEffect(() => {
+      const fetchProfile = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) return;
+          console.log("Fetching profile with token:", token);
+      
+          const res = await fetch("http://localhost:5000/api/auth/profile", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+  
+          console.log("Raw Response Status:", res.status);
+  
+          const data = await res.json().catch(() => null);
+          console.log("Profile Response Data:", data);
+  
+          if (res.ok) {
+            setUserData(data);
+          } else {
+            console.error(
+              "Failed to fetch profile:",
+              data?.message || "Unknown error"
+            );
+          }
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+        }
+      };
+  
+      fetchProfile();
+    }, []);
   // Initialize theme on component mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -46,7 +81,7 @@ export default function Dashboard() {
       {/* Welcome Message */}
       <div className="text-center py-8">
         <h1 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-          Welcome back, <span className="text-blue-600 dark:text-blue-400">{userName}</span> 👋
+          Welcome back, <span className="text-blue-600 dark:text-blue-400">{userData?.fullName || "User"}</span> 👋
         </h1>
         <p className="text-gray-500 dark:text-gray-400">Here's a quick summary of your performance</p>
       </div>
