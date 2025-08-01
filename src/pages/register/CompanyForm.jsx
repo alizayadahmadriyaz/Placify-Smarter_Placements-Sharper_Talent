@@ -11,14 +11,13 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function CompanyForm() {
   const navigate = useNavigate();
   const { addUser } = useUser();
+
   const [formData, setFormData] = useState({
     companyName: '',
     industry: '',
-
     email: '',
-
     password: '',
-    role: 'company'
+    website: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,16 +27,14 @@ export default function CompanyForm() {
     setError('');
     setLoading(true);
 
-
-    if (!formData.companyName || !formData.industry || !formData.email || !formData.password) {
-
+    if (!formData.companyName || !formData.industry || !formData.email || !formData.password || !formData.website) {
       setError('All fields are required');
       setLoading(false);
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.hrEmail)) {
+    if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address');
       setLoading(false);
       return;
@@ -50,56 +47,26 @@ export default function CompanyForm() {
     }
 
     try {
-
-      try {
-        addUser(formData);
-        console.log('Company Registration Data saved to local storage:', formData);
-      } catch (localStorageError) {
-        setError(localStorageError.message);
-        setLoading(false);
-        return;
-      }
-
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      toast.success('Company registration successful! Please login with your email and password.');
-      setTimeout(() => {
-        navigate('/auth');
-      }, 2000);
-
-      
-      //  Uncomment this when backend is ready
       const response = await fetch('http://localhost:5000/api/auth/register/company', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
+      if (!response.ok) throw new Error(data.message || 'Registration failed');
 
-
-      toast.success('Company registration successful! Please login.');
-      navigate('/auth');
-      
+      toast.success('Company registration successful! Please login with your email and password.');
+      setTimeout(() => navigate('/auth'), 2000);
 
     } catch (error) {
       console.error('Registration error:', error);
-      if (error.message === 'Failed to fetch') {
-        setError('Server connection error. The backend server might not be running. Please try again later.');
-      } else {
-        setError(error.message || 'Registration failed. Please try again.');
-      }
+      setError(error.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -135,6 +102,12 @@ export default function CompanyForm() {
               label="Industry"
               value={formData.industry}
               onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+              required
+            />
+            <FormInput
+              label="Website"
+              value={formData.website}
+              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
               required
             />
 
