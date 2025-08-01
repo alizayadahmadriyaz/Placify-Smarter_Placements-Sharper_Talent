@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";       // base model
-import Student from "../models/Student.js"; // discriminator
+import User from "../models/User.js";
+import Student from "../models/Student.js";
 import Company from "../models/Company.js";
 import Employee from "../models/Employee.js";
 import Institution from "../models/Institution.js";
@@ -18,7 +18,7 @@ export const registerStudent = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await Student.create({ fullName, university, major, email, password: hashedPassword});
+    await Student.create({ fullName, university, major, email, password: hashedPassword });
 
     res.status(201).json({ message: "Student registered successfully" });
   } catch (error) {
@@ -35,7 +35,7 @@ export const registerInstitution = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await Institution.create({ institutionName, website, contactPerson, email, password: hashedPassword});
+    await Institution.create({ institutionName, website, contactPerson, email, password: hashedPassword });
 
     res.status(201).json({ message: "Institution registered successfully" });
   } catch (error) {
@@ -52,7 +52,7 @@ export const registerEmployee = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await Employee.create({ fullName, currentCompany, jobTitle, email, password: hashedPassword});
+    await Employee.create({ fullName, currentCompany, jobTitle, email, password: hashedPassword });
 
     res.status(201).json({ message: "Employee registered successfully" });
   } catch (error) {
@@ -69,14 +69,7 @@ export const registerCompany = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    await Company.create({
-      companyName,
-      industry,
-      website,
-      email,
-      password: hashedPassword
-    });
+    await Company.create({ companyName, industry, website, email, password: hashedPassword });
 
     res.status(201).json({ message: "Company registered successfully" });
   } catch (error) {
@@ -84,7 +77,6 @@ export const registerCompany = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 // ---------------- LOGIN ----------------
 export const loginUser = async (req, res) => {

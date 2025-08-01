@@ -20,7 +20,7 @@ router.post("/register/company", registerCompany);
 router.post("/login", loginUser);
 
 // Profile
-router.get("/profile", verifyToken, getProfile);
-router.put("/profile", verifyToken, updateProfile);
+router.get("/profile", verifyToken(), getProfile);
+router.put("/profile", verifyToken(), updateProfile);
 
 export default router;

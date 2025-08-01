@@ -11,65 +11,63 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const AuthPage = () => {
-  const navigate = useNavigate();
-  const { setIsAuthenticated } = useAuth();
+ const navigate = useNavigate();
+const { setIsAuthenticated } = useAuth();
 
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+const [isLogin, setIsLogin] = useState(true);
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [showPassword, setShowPassword] = useState(false);
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    const { token, user } = response.data;
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    // Store token & user in localStorage
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
 
-      const { token, user } = response.data;
+    console.log('Token stored:', token);
+    console.log('User data stored:', user);
 
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+    toast.success('Login successful!');
+    setIsAuthenticated(true);
 
-      console.log('Token stored:', token);
-
-      const decoded = jwtDecode(token);
-      const role = decoded.role;
-      console.log('User role:', role);
-
-
-      toast.success('Login successful!');
-
-
-      switch (role) {
-        case 'student':
-          navigate('/dashboard');
-          break;
-        case 'institution':
-          navigate('/dashboard/institution');
-          break;
-        case 'employee':
-          navigate('/dashboard/employee');
-          break;
-        case 'company':
-          navigate('/dashboard/company');
-          break;
-        default:
-          console.warn('Unknown role:', role);
-          navigate('/dashboard');
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      const errorMessage = err.response?.data?.message || 'Login failed';
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
+    // Redirect based on role
+    switch (user.role) {
+      case 'student':
+        navigate('/dashboard');
+        break;
+      case 'institution':
+        navigate('/dashboard/institution');
+        break;
+      case 'employee':
+        navigate('/dashboard/employee');
+        break;
+      case 'company':
+        navigate('/dashboard/company');
+        break;
+      default:
+        console.warn('Unknown role:', user.role);
+        navigate('/dashboard');
     }
-  };
+  } catch (err) {
+    console.error('Login error:', err);
+    const errorMessage = err.response?.data?.message || 'Login failed';
+    toast.error(errorMessage);
+    setError(errorMessage);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleLogoClick = () => {
     navigate('/');
