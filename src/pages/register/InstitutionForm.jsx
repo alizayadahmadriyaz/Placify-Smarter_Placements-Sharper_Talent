@@ -61,27 +61,27 @@ export default function InstitutionForm() {
 
     try {
       // Save user to local storage
-      try {
-        addUser(formData);
-        console.log('Institution Registration Data saved to local storage:', formData);
-      } catch (localStorageError) {
-        setError(localStorageError.message);
-        setLoading(false);
-        return;
-      }
+      // try {
+      //   addUser(formData);
+      //   console.log('Institution Registration Data saved to local storage:', formData);
+      // } catch (localStorageError) {
+      //   setError(localStorageError.message);
+      //   setLoading(false);
+      //   return;
+      // }
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // // Simulate API delay
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Success toast
-      toast.success('Institution registration successful! Please login with your email and password.');
+      // // Success toast
+      // toast.success('Institution registration successful! Please login with your email and password.');
 
-      // Redirect after short delay
-      setTimeout(() => {
-        navigate('/auth');
-      }, 2000);
+      // // Redirect after short delay
+      // setTimeout(() => {
+      //   navigate('/auth');
+      // }, 2000);
 
-      /*Uncomment this when backend is ready
+      // Uncomment this when backend is ready
 
       const response = await fetch('http://localhost:5000/api/auth/register/institution', {
         method: 'POST',
@@ -99,7 +99,6 @@ export default function InstitutionForm() {
 
       toast.success('Institution registration successful! Please login.');
       setTimeout(() => navigate('/auth'), 3000);
-      */
     } catch (error) {
       console.error('Registration error:', error);
       if (error.message === 'Failed to fetch') {
