@@ -66,10 +66,10 @@ export default function StudentForm() {
       
 
       // Simulate successful registration
-      toast.success('Registration successful! Please login with your email and password.', {
-        position: 'top-center'
-      });
-      setTimeout(() => navigate('/auth'), 2000); // Redirect to login after showing toast
+      // toast.success('Registration successful! Please login with your email and password.', {
+      //   position: 'top-center'
+      // });
+      // setTimeout(() => navigate('/auth'), 2000); // Redirect to login after showing toast
 
       
       const response = await fetch('http://localhost:5000/api/auth/register/student', {
