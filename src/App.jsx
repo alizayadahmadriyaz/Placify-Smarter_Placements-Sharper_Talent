@@ -1,5 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
 import LandingPage from "./pages/LandingPage";
 import AuthPage from "./pages/AuthPage";
 import ResultsPage from "./pages/ResultsPage";
@@ -7,15 +9,15 @@ import Footer from "./components/Footer";
 import ProfilePage from "./pages/ProfilePage";
 import FeedbackPage from "./pages/FeedbackPage";
 
-import InstitutionDashboard from './components/InstitutionDashboard';
-import EmployeeDashboard from './components/EmployeeDashboard';
-import CompanyDashboard from './components/CompanyDashboard';
+import InstitutionDashboard from "./components/InstitutionDashboard";
+import EmployeeDashboard from "./components/EmployeeDashboard";
+import CompanyDashboard from "./components/CompanyDashboard";
 
-import RoleSelectionPage from './pages/RoleSelectionPage';
-import StudentForm from './pages/register/StudentForm';
-import InstitutionForm from './pages/register/InstitutionForm';
-import EmployeeForm from './pages/register/EmployeeForm';
-import CompanyForm from './pages/register/CompanyForm';
+import RoleSelectionPage from "./pages/RoleSelectionPage";
+import StudentForm from "./pages/register/StudentForm";
+import InstitutionForm from "./pages/register/InstitutionForm";
+import EmployeeForm from "./pages/register/EmployeeForm";
+import CompanyForm from "./pages/register/CompanyForm";
 
 import Dashboard from "./pages/Student/Dashboard";
 import ResumeBuilder from "./pages/Student/ResumeBuilder";
@@ -28,26 +30,32 @@ import Aptitude from "./pages/Student/Aptitude";
 import InterviewExperience from "./pages/Student/InterviewExperience";
 import Settings from "./pages/Student/Settings";
 import DashboardLayout from "./layouts/DashboardLayout";
-import ProtectedRoute from './components/ProtectedRoute';
-
-import { motion } from "framer-motion";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import useLenis from "./components/useLenis";
 import ScrollToTop from "./components/ScrollToTop";
 
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function App() {
+// ✅ Wrapper to allow useLocation inside Router
+const AppWrapper = () => {
   useLenis();
 
+  const location = useLocation();
+
+  // Footer visible only on home page
+  const shouldHideFooter = location.pathname !== "/";
+
+
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
         <div>
           <Routes>
             {/* Public Routes */}
+            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/register" element={<RoleSelectionPage />} />
@@ -57,19 +65,17 @@ function App() {
             <Route path="/register/company" element={<CompanyForm />} />
             <Route path="/feedback" element={<FeedbackPage />} />
 
-            {/* Standalone Interview Route (outside dashboard layout) */}
-            <Route
-              path="/interview"
-              element={<InterviewInterface />}
-            />
+            {/* Standalone Route */}
+            <Route path="/interview" element={<InterviewInterface />} />
+
 
             {/* Other Dashboard Routes (outside student dashboard) */}
             <Route
               path="/dashboard/institution"
               element={
-                // <ProtectedRoute>
+                <ProtectedRoute>
                   <InstitutionDashboard />
-                // </ProtectedRoute>
+                </ProtectedRoute>
               }
             />
             <Route
@@ -81,7 +87,8 @@ function App() {
               element={<CompanyDashboard />}
             />
 
-            {/* Results page */}
+
+            {/* Results */}
             <Route
               path="/results/:interviewId"
               element={
@@ -91,7 +98,7 @@ function App() {
               }
             />
 
-            {/* Student Dashboard with Sidebar Layout - All student routes go here */}
+            {/* Student Dashboard Routes */}
             <Route
               path="/dashboard"
               element={
@@ -100,7 +107,6 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              {/* Nested routes - these will render in the Outlet */}
               <Route index element={<Dashboard />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="resume-builder" element={<ResumeBuilder />} />
@@ -116,7 +122,7 @@ function App() {
           </Routes>
         </div>
 
-        {/* Global Toast Notifications */}
+        {/* Toast Notifications */}
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -130,8 +136,18 @@ function App() {
           theme="colored"
         />
 
-        <Footer />
+        {/* Conditional Footer */}
+        {!shouldHideFooter && <Footer />}
       </div>
+    </>
+  );
+};
+
+// ✅ Actual App that wraps AppWrapper inside Router
+function App() {
+  return (
+    <Router>
+      <AppWrapper />
     </Router>
   );
 }

@@ -9,24 +9,28 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const AuthPage = () => {
-  const navigate = useNavigate();
-  const { setIsAuthenticated } = useAuth();
+ const navigate = useNavigate();
+const { setIsAuthenticated } = useAuth();
 
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+const [isLogin, setIsLogin] = useState(true);
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [showPassword, setShowPassword] = useState(false);
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
+
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    const { token, user } = response.data;
 
 
-    try {
-      const user = {
+try {
+  const user = {
     email,
     role: email.includes('admin') ? 'institution' : 'student' // Simulate based on email
   };
@@ -35,7 +39,6 @@ const AuthPage = () => {
   localStorage.setItem('user', JSON.stringify(user));
 
   setIsAuthenticated(true);
-
   toast.success('Login successful!');
 
   switch (user.role) {
@@ -56,9 +59,16 @@ const AuthPage = () => {
       navigate('/dashboard');
   }
 } catch (err) {
-  
+  console.error('Login error:', err);
+  const errorMessage = err.response?.data?.message || 'Login failed';
+  toast.error(errorMessage);
+  setError(errorMessage);
+} finally {
+  setLoading(false);
 }
-  };
+
+
+
 
   const handleLogoClick = () => {
     navigate('/');

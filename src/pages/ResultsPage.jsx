@@ -14,7 +14,6 @@ import {
 
 // Mock interview results (for fallback/placeholder data)
 const fallbackInterviewData = {
-  overallScore: 75,
   totalQuestions: 10,
   correctAnswers: 7,
   timeTaken: '4 mins 10 secs',
@@ -52,22 +51,68 @@ const fallbackPreviousSessions = [
   { name: 'Session 2', score: 70 },
 ];
 
+// Dynamic score calculation function
+const calculateOverallScore = (correctAnswers, totalQuestions, metrics, timeTaken) => {
+  // Base score from correct answers (60% weight)
+  const accuracyScore = (correctAnswers / totalQuestions) * 100;
+  const accuracyWeight = 0.6;
+  
+  // Average of all metrics (30% weight)
+  const metricsAverage = metrics.reduce((sum, metric) => sum + metric.score, 0) / metrics.length;
+  const metricsWeight = 0.3;
+  
+  // Time bonus/penalty (10% weight) - assume optimal time is 3-5 minutes
+  const timeInMinutes = parseFloat(timeTaken.split(' ')[0]);
+  let timeScore = 100;
+  if (timeInMinutes < 2) {
+    timeScore = 70; // Too fast, might be rushed
+  } else if (timeInMinutes > 6) {
+    timeScore = 80; // Too slow, might indicate hesitation
+  }
+  const timeWeight = 0.1;
+  
+  // Calculate weighted overall score
+  const overallScore = Math.round(
+    (accuracyScore * accuracyWeight) + 
+    (metricsAverage * metricsWeight) + 
+    (timeScore * timeWeight)
+  );
+  
+  return Math.min(100, Math.max(0, overallScore)); // Ensure score is between 0-100
+};
+
+// Function to get score label and color based on score
+const getScoreLabel = (score) => {
+  if (score >= 85) return { label: 'Excellent', color: 'bg-emerald-500' };
+  if (score >= 75) return { label: 'Good', color: 'bg-blue-500' };
+  if (score >= 60) return { label: 'Average', color: 'bg-yellow-500' };
+  return { label: 'Needs Improvement', color: 'bg-red-500' };
+};
+
+// Function to get performance summary based on score
+const getPerformanceSummary = (score, metrics) => {
+  const weakestMetric = metrics.reduce((min, metric) => 
+    metric.score < min.score ? metric : min
+  );
+  
+  if (score >= 85) {
+    return "Outstanding performance! You demonstrated excellent skills across all areas. Keep up the great work!";
+  } else if (score >= 75) {
+    return `Strong performance overall! Focus on improving your ${weakestMetric.category.toLowerCase()} to reach the next level.`;
+  } else if (score >= 60) {
+    return `Good foundation with room for improvement. Consider practicing ${weakestMetric.category.toLowerCase()} more frequently.`;
+  } else {
+    return `There's significant room for improvement. Focus on ${weakestMetric.category.toLowerCase()} and consider additional practice sessions.`;
+  }
+};
+
 // This function simulates an API call to fetch interview results
-// In a real application, replace this with your actual API call
 const fetchInterviewResults = async (interviewId) => {
-  // Simulating API delay
   await new Promise(resolve => setTimeout(resolve, 1000));
   
-  // This is where you would make a real API call like:
-  // const response = await fetch(`/api/interviews/${interviewId}`);
-  // const data = await response.json();
-  // return data;
-  
-  // For now, we'll use the mock data based on interview ID
   const interviewResults = [
     {
       id: '1753311835655',
-      overallScore: 85,
       totalQuestions: 10,
       correctAnswers: 8,
       timeTaken: '3 mins 45 secs',
@@ -90,17 +135,16 @@ const fetchInterviewResults = async (interviewId) => {
         },
         {
           category: 'Technical Keywords',
-          score: 50,
-          badge: 'Needs Improvement',
-          color: 'orange',
+          score: 70,
+          badge: 'Good',
+          color: 'blue',
           icon: <Brain className="w-5 h-5" />,
-          feedback: 'Include more industry-specific terminology and technical concepts in your responses.'
+          feedback: 'Good use of technical terminology. Continue expanding your domain-specific vocabulary.'
         }
       ]
     },
     {
       id: '2',
-      overallScore: 72,
       totalQuestions: 10,
       correctAnswers: 6,
       timeTaken: '4 mins 20 secs',
@@ -133,22 +177,12 @@ const fetchInterviewResults = async (interviewId) => {
     }
   ];
 
-  // Find result matching the ID or return null
   return interviewResults.find(r => r.id === interviewId) || null;
 };
 
-// This function simulates fetching previous session scores for a user
-// In a real application, replace this with your actual API call
 const fetchPreviousSessions = async (userId) => {
-  // Simulating API delay
   await new Promise(resolve => setTimeout(resolve, 800));
   
-  // This is where you would make a real API call like:
-  // const response = await fetch(`/api/users/${userId}/sessions`);
-  // const data = await response.json();
-  // return data;
-  
-  // For demonstration, return different data based on user ID
   if (userId === '1753311835655') {
     return [
       { name: 'Session 1', score: 60 },
@@ -161,7 +195,6 @@ const fetchPreviousSessions = async (userId) => {
     ];
   }
   
-  // Return empty array if no data for this user
   return [];
 };
 
@@ -169,13 +202,12 @@ const ResultsPage = () => {
   const { interviewId } = useParams();
   const navigate = useNavigate();
   
-  // State for interview results and loading
   const [result, setResult] = useState(null);
   const [previousSessions, setPreviousSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [overallScore, setOverallScore] = useState(0);
   
-  // Get current date for the profile section
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -183,45 +215,68 @@ const ResultsPage = () => {
   });
 
   useEffect(() => {
-    // Reset states when interview ID changes
     setIsLoading(true);
     setError(null);
     
     const loadData = async () => {
       try {
-        // Fetch interview data
         const interviewData = await fetchInterviewResults(interviewId);
         
         if (interviewData) {
           setResult(interviewData);
           
-          // Fetch previous sessions for this user
-          // Using interviewId as userId for demonstration
+          // Calculate dynamic overall score
+          const calculatedScore = calculateOverallScore(
+            interviewData.correctAnswers,
+            interviewData.totalQuestions,
+            interviewData.metrics,
+            interviewData.timeTaken
+          );
+          setOverallScore(calculatedScore);
+          
           const sessionsData = await fetchPreviousSessions(interviewId);
           
           if (sessionsData && sessionsData.length > 0) {
             setPreviousSessions(sessionsData);
           } else {
-            // Use fallback data if no previous sessions
             setPreviousSessions(fallbackPreviousSessions);
           }
         } else {
-          // If no data found, use fallback data
-          setResult({
+          const fallbackData = {
             id: interviewId,
             ...fallbackInterviewData
-          });
+          };
+          setResult(fallbackData);
+          
+          // Calculate score for fallback data
+          const calculatedScore = calculateOverallScore(
+            fallbackData.correctAnswers,
+            fallbackData.totalQuestions,
+            fallbackData.metrics,
+            fallbackData.timeTaken
+          );
+          setOverallScore(calculatedScore);
+          
           setPreviousSessions(fallbackPreviousSessions);
         }
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Failed to load interview results. Please try again.');
         
-        // Set fallback data even in error case
-        setResult({
+        const fallbackData = {
           id: interviewId,
           ...fallbackInterviewData
-        });
+        };
+        setResult(fallbackData);
+        
+        const calculatedScore = calculateOverallScore(
+          fallbackData.correctAnswers,
+          fallbackData.totalQuestions,
+          fallbackData.metrics,
+          fallbackData.timeTaken
+        );
+        setOverallScore(calculatedScore);
+        
         setPreviousSessions(fallbackPreviousSessions);
       } finally {
         setIsLoading(false);
@@ -231,7 +286,6 @@ const ResultsPage = () => {
     loadData();
   }, [interviewId]);
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-6 bg-gray-50 dark:bg-gray-900">
@@ -250,7 +304,6 @@ const ResultsPage = () => {
     );
   }
 
-  // Error state with fallback content
   if (error && !result) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-6 bg-gray-50 dark:bg-gray-900">
@@ -287,19 +340,21 @@ const ResultsPage = () => {
     );
   }
 
-  const { overallScore, metrics: performanceMetrics, totalQuestions, correctAnswers, timeTaken } = result;
-
+  const { metrics: performanceMetrics, totalQuestions, correctAnswers, timeTaken } = result;
   const incorrectAnswers = totalQuestions - correctAnswers;
-  const accuracy = ((correctAnswers / totalQuestions) * 100).toFixed(2);
+  const accuracy = ((correctAnswers / totalQuestions) * 100).toFixed(1);
+  
+  // Get score styling
+  const scoreInfo = getScoreLabel(overallScore);
+  const performanceSummary = getPerformanceSummary(overallScore, performanceMetrics);
 
   const pieData = [
-    { name: 'Correct', value: correctAnswers, color: '#4ade80' }, // green
-    { name: 'Incorrect', value: incorrectAnswers, color: '#f87171' }, // red
+    { name: 'Correct', value: correctAnswers, color: '#4ade80' },
+    { name: 'Incorrect', value: incorrectAnswers, color: '#f87171' },
   ];
 
-  const COLORS = ['#4ade80', '#f87171']; // green, red
+  const COLORS = ['#4ade80', '#f87171'];
 
-  // Combine previous sessions with current session
   const scoreData = [
     ...previousSessions,
     { name: 'Current Session', score: overallScore },
@@ -373,7 +428,6 @@ const ResultsPage = () => {
               <span>Back to Dashboard</span>
             </button>
             
-            {/* User profile section */}
             <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 py-2 px-4 rounded-full">
               <User className="w-4 h-4" />
               <span className="font-medium">Results for Alex</span>
@@ -401,23 +455,27 @@ const ResultsPage = () => {
           </p>
         </div>
 
-        {/* Overall Score Card - Gradient with enhanced visual appeal */}
-        <div className="bg-gradient-to-br from-purple-600 to-indigo-700 dark:from-purple-700 dark:to-indigo-800 
-                      rounded-2xl p-6 sm:p-8 text-white shadow-lg transform hover:translate-y-[-4px] transition-all duration-300">
+        {/* Dynamic Overall Score Card */}
+        <div className={`bg-gradient-to-br ${
+          overallScore >= 85 ? 'from-emerald-600 to-green-700 dark:from-emerald-700 dark:to-green-800' :
+          overallScore >= 75 ? 'from-blue-600 to-indigo-700 dark:from-blue-700 dark:to-indigo-800' :
+          overallScore >= 60 ? 'from-yellow-600 to-orange-700 dark:from-yellow-700 dark:to-orange-800' :
+          'from-red-600 to-pink-700 dark:from-red-700 dark:to-pink-800'
+        } rounded-2xl p-6 sm:p-8 text-white shadow-lg transform hover:translate-y-[-4px] transition-all duration-300`}>
           <div className="text-center">
             <div className="mb-6">
-              <h2 className="text-lg font-semibold text-purple-100 mb-2">Overall Performance Score</h2>
+              <h2 className="text-lg font-semibold text-opacity-80 text-white mb-2">Overall Performance Score</h2>
               <div className="flex items-center justify-center">
                 <div className="relative">
-                  <div className="text-6xl sm:text-7xl font-bold">{overallScore}</div>
+                  <div className="text-6xl sm:text-7xl font-bold animate-pulse">{overallScore}</div>
                   <div className="absolute top-0 right-0 transform translate-x-full -translate-y-1/4">
-                    <div className="bg-yellow-400 text-gray-900 text-xs font-bold px-2 py-1 rounded-full">
-                      {overallScore >= 80 ? 'Excellent' : overallScore >= 70 ? 'Good' : 'Average'}
+                    <div className={`${scoreInfo.color} text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg`}>
+                      {scoreInfo.label}
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="text-xl text-purple-200 mt-2">out of 100</div>
+              <div className="text-xl text-opacity-80 text-white mt-2">out of 100</div>
             </div>
             
             <div className="bg-white/20 dark:bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/30 shadow-inner">
@@ -425,19 +483,18 @@ const ResultsPage = () => {
                 <Sparkles className="w-5 h-5 text-yellow-300" />
                 <p className="text-lg font-medium">Performance Summary</p>
               </div>
-              <p className="text-purple-100 dark:text-purple-200 leading-relaxed">
-                You demonstrated strong communication skills and professional presence.
-                Keep refining your technical vocabulary to reach the next level.
+              <p className="text-white text-opacity-90 leading-relaxed">
+                {performanceSummary}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Main Content Grid - Responsive with better spacing */}
+        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Charts and Stats - Spans 2 columns on large screens */}
+          {/* Left Column - Charts and Stats */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Stats Cards - 3 column grid with hover effects */}
+            {/* Stats Cards */}
             <div>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
                 <Zap className="w-5 h-5 text-blue-500 mr-2" />
@@ -470,7 +527,7 @@ const ResultsPage = () => {
               </div>
             </div>
 
-            {/* Charts Section - Enhanced with better styling */}
+            {/* Charts Section */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 space-y-6">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                 <BarChart3 className="w-5 h-5 text-indigo-500 mr-2" />
@@ -478,7 +535,7 @@ const ResultsPage = () => {
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Pie Chart with enhanced styling */}
+                {/* Pie Chart */}
                 <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-all duration-200">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
@@ -503,7 +560,6 @@ const ResultsPage = () => {
                         cy="50%" 
                         outerRadius={80} 
                         label={({ name, percent }) => {
-                          // Smaller, more compact labels
                           return (
                             <text 
                               x={0} 
@@ -539,7 +595,7 @@ const ResultsPage = () => {
                           boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                         }}
                       />
-                      </PieChart>
+                    </PieChart>
                   </ResponsiveContainer>
                   <div className="flex justify-center items-center mt-2 space-x-6 text-center">
                     <div>
@@ -551,7 +607,9 @@ const ResultsPage = () => {
                       <span className="text-xl font-bold text-gray-800 dark:text-gray-200">{incorrectAnswers}</span>
                     </div>
                   </div>
-                </div>                {/* Line Chart with enhanced styling */}
+                </div>
+
+                {/* Line Chart */}
                 <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-5 shadow-sm hover:shadow-md transition-all duration-200">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                     <TrendingUp className="w-4 h-4 text-green-500 mr-2" />
@@ -603,7 +661,7 @@ const ResultsPage = () => {
               </div>
             </div>
             
-            {/* Performance Metrics Section - Styled for better readability */}
+            {/* Performance Metrics Section */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                 <Target className="w-5 h-5 text-purple-500 mr-2" />
@@ -632,7 +690,6 @@ const ResultsPage = () => {
                       </div>
                     </div>
 
-                    {/* Progress Bar with animation */}
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-3 overflow-hidden">
                       <div
                         className={`h-3 rounded-full transition-all duration-1000 ease-out ${getProgressColor(metric.color)}`}
@@ -640,7 +697,6 @@ const ResultsPage = () => {
                       ></div>
                     </div>
 
-                    {/* Feedback with better typography */}
                     <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mt-2 pl-2 border-l-2 border-gray-300 dark:border-gray-600">
                       {metric.feedback}
                     </p>
@@ -665,7 +721,9 @@ const ResultsPage = () => {
                   </div>
                   <div>
                     <span className="block text-sm font-medium text-gray-900 dark:text-white">Tone</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 text-sm">Positive and Engaging</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 text-sm">
+                      {overallScore >= 80 ? 'Positive and Engaging' : overallScore >= 60 ? 'Generally Good' : 'Needs Work'}
+                    </span>
                   </div>
                 </div>
                 
@@ -675,7 +733,9 @@ const ResultsPage = () => {
                   </div>
                   <div>
                     <span className="block text-sm font-medium text-gray-900 dark:text-white">Energy Level</span>
-                    <span className="text-blue-600 dark:text-blue-400 text-sm">Appropriate</span>
+                    <span className="text-blue-600 dark:text-blue-400 text-sm">
+                      {overallScore >= 75 ? 'Appropriate' : 'Could Improve'}
+                    </span>
                   </div>
                 </div>
                 
@@ -685,13 +745,15 @@ const ResultsPage = () => {
                   </div>
                   <div>
                     <span className="block text-sm font-medium text-gray-900 dark:text-white">Professional Demeanor</span>
-                    <span className="text-purple-600 dark:text-purple-400 text-sm">Strong</span>
+                    <span className="text-purple-600 dark:text-purple-400 text-sm">
+                      {overallScore >= 70 ? 'Strong' : overallScore >= 50 ? 'Moderate' : 'Developing'}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Personalized Feedback Cards - Enhanced with better visuals */}
+            {/* Dynamic Personalized Feedback Cards */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 hover:shadow-lg transition-all duration-200">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
                 <Award className="w-5 h-5 text-purple-500 mr-2" />
@@ -699,6 +761,7 @@ const ResultsPage = () => {
               </h3>
 
               <div className="space-y-4">
+                {/* Dynamic Positive Feedback */}
                 <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 dark:bg-emerald-900/30 dark:border-emerald-700 
                                transform hover:translate-y-[-2px] transition-all duration-200 shadow-sm hover:shadow">
                   <div className="flex items-start space-x-3">
@@ -708,13 +771,20 @@ const ResultsPage = () => {
                     <div>
                       <h4 className="font-semibold text-emerald-800 dark:text-emerald-200">What you did well:</h4>
                       <p className="text-emerald-700 dark:text-emerald-200 text-sm mt-2 leading-relaxed">
-                        You spoke clearly with excellent vocal clarity and maintained good confidence throughout the interview.
-                        Your responses were well-structured and concise.
+                        {overallScore >= 85 ? 
+                          "Outstanding performance across all metrics! Your responses were clear, confident, and technically sound." :
+                          overallScore >= 75 ?
+                          "Strong performance with good accuracy and solid communication skills. You maintained professionalism throughout." :
+                          overallScore >= 60 ?
+                          "You showed good foundational skills and maintained composure during the interview." :
+                          "You completed the interview and showed areas of potential that can be developed with practice."
+                        }
                       </p>
                     </div>
                   </div>
                 </div>
 
+                {/* Dynamic Improvement Feedback */}
                 <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 dark:bg-orange-900/30 dark:border-orange-700 
                                transform hover:translate-y-[-2px] transition-all duration-200 shadow-sm hover:shadow">
                   <div className="flex items-start space-x-3">
@@ -724,8 +794,19 @@ const ResultsPage = () => {
                     <div>
                       <h4 className="font-semibold text-orange-800 dark:text-orange-200">Areas for improvement:</h4>
                       <p className="text-orange-700 dark:text-orange-200 text-sm mt-2 leading-relaxed">
-                        Try to incorporate more technical keywords from the job description in your answers. 
-                        Practice industry-specific terminology to demonstrate deeper domain knowledge.
+                        {(() => {
+                          const weakestMetric = performanceMetrics.reduce((min, metric) => 
+                            metric.score < min.score ? metric : min
+                          );
+                          
+                          if (overallScore < 60) {
+                            return `Focus on improving ${weakestMetric.category.toLowerCase()} and overall accuracy. Consider additional practice sessions to build confidence.`;
+                          } else if (overallScore < 75) {
+                            return `Work on strengthening your ${weakestMetric.category.toLowerCase()} to reach the next performance level.`;
+                          } else {
+                            return `Fine-tune your ${weakestMetric.category.toLowerCase()} to achieve excellence in all areas.`;
+                          }
+                        })()}
                       </p>
                     </div>
                   </div>
@@ -733,7 +814,7 @@ const ResultsPage = () => {
               </div>
             </div> 
 
-            {/* Next Steps - Gradient card with enhanced styling */}
+            {/* Dynamic Next Steps */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-6 
                           dark:from-blue-900/50 dark:to-purple-900/50 dark:border-blue-700 shadow-md 
                           hover:shadow-lg transition-all duration-200">
@@ -742,39 +823,43 @@ const ResultsPage = () => {
                 Recommended Next Steps
               </h3>
               <div className="space-y-3">
-                <div className="flex items-start space-x-3 group">
-                  <div className="w-6 h-6 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center mt-0.5
-                                group-hover:bg-purple-200 dark:group-hover:bg-purple-700 transition-colors duration-200">
-                    <div className="w-2 h-2 bg-purple-500 dark:bg-purple-400 rounded-full"></div>
-                  </div>
-                  <span className="text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
-                    Practice technical vocabulary for your target role
-                  </span>
-                </div>
-                
-                <div className="flex items-start space-x-3 group">
-                  <div className="w-6 h-6 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center mt-0.5
-                                group-hover:bg-purple-200 dark:group-hover:bg-purple-700 transition-colors duration-200">
-                    <div className="w-2 h-2 bg-purple-500 dark:bg-purple-400 rounded-full"></div>
-                  </div>
-                  <span className="text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
-                    Continue maintaining excellent communication clarity
-                  </span>
-                </div>
-                
-                <div className="flex items-start space-x-3 group">
-                  <div className="w-6 h-6 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center mt-0.5
-                                group-hover:bg-purple-200 dark:group-hover:bg-purple-700 transition-colors duration-200">
-                    <div className="w-2 h-2 bg-purple-500 dark:bg-purple-400 rounded-full"></div>
-                  </div>
-                  <span className="text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
-                    Schedule another practice session to track improvement
-                  </span>
-                </div>
+                {(() => {
+                  const steps = [];
+                  
+                  if (overallScore >= 85) {
+                    steps.push("Continue maintaining your excellent performance level");
+                    steps.push("Consider mentoring others or taking on leadership roles");
+                    steps.push("Focus on advanced industry certifications");
+                  } else if (overallScore >= 75) {
+                    steps.push("Work on the identified weak areas to reach excellence");
+                    steps.push("Practice advanced interview scenarios");
+                    steps.push("Build deeper technical expertise in your field");
+                  } else if (overallScore >= 60) {
+                    steps.push("Schedule regular practice sessions to build consistency");
+                    steps.push("Focus on improving accuracy and response quality");
+                    steps.push("Study common interview questions in your domain");
+                  } else {
+                    steps.push("Take a comprehensive interview preparation course");
+                    steps.push("Practice basic communication and presentation skills");
+                    steps.push("Build fundamental knowledge in your target field");
+                  }
+                  
+                  return steps.map((step, i) => (
+                    <div key={i} className="flex items-start space-x-3 group">
+                      <div className="w-6 h-6 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center mt-0.5
+                                    group-hover:bg-purple-200 dark:group-hover:bg-purple-700 transition-colors duration-200">
+                        <div className="w-2 h-2 bg-purple-500 dark:bg-purple-400 rounded-full"></div>
+                      </div>
+                      <span className="text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
+                        {step}
+                      </span>
+                    </div>
+                  ));
+                })()}
               </div>
             </div>
             
-            {/* Action Buttons - Fixed to bottom on mobile */}
+            {/* Action Buttons */}
             <div className="lg:sticky lg:top-24 bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 
                            dark:border-gray-700 p-5 mt-auto hover:shadow-lg transition-all duration-200">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
@@ -783,13 +868,17 @@ const ResultsPage = () => {
               <div className="flex flex-col gap-3">
                 <button
                   onClick={() => navigate('/interview')}
-                  className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 
+                  className={`flex items-center justify-center gap-2 text-white px-6 py-3 
                             rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow
-                            dark:bg-purple-700 dark:hover:bg-purple-600 transform hover:translate-y-[-2px]"
+                            transform hover:translate-y-[-2px] ${
+                              overallScore >= 75 ? 
+                              'bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600' :
+                              'bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-600'
+                            }`}
                   aria-label="Practice Again"
                 >
                   <Play className="w-5 h-5" />
-                  Practice Again
+                  {overallScore >= 85 ? 'Perfect Your Skills' : overallScore >= 75 ? 'Level Up' : 'Practice Again'}
                 </button>
                 <button
                   onClick={() => navigate('/dashboard')}

@@ -65,10 +65,10 @@ export default function EmployeeForm() {
       
 
       // Simulate successful registration
-      toast.success('Employee registration successful! Please login with your email and password.');
-      setTimeout(() => {
-        navigate('/auth');
-      }, 2000);
+      // toast.success('Employee registration successful! Please login with your email and password.');
+      // setTimeout(() => {
+      //   navigate('/auth');
+      // }, 2000);
 
       
       //  Uncomment this when backend is ready
@@ -87,7 +87,7 @@ export default function EmployeeForm() {
       }
       
       // Registration successful
-      alert('Employee registration successful! Please login.');
+      toast.success('Employee registration successful! Please login with your email and password.');
       navigate('/auth'); // Redirect to login page
       
     } catch (error) {
