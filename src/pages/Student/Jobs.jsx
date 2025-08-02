@@ -33,8 +33,17 @@ const Jobs = () => {
     fetchJobs();
   }, []);
 
-  const domains = [...new Set(jobsData.map((job) => job.domain))];
-  const locations = [...new Set(jobsData.map((job) => job.location))];
+const defaultDomains = ["Web Development", "Data Science", "AI/ML", "DevOps", "UI/UX", "Cybersecurity"];
+const defaultLocations = ["Remote", "Bangalore", "Hyderabad", "Delhi", "Mumbai", "Chennai"];
+
+const domainsSet = new Set(defaultDomains);
+jobsData.forEach((job) => domainsSet.add(job.domain));
+const domains = Array.from(domainsSet);
+
+const locationsSet = new Set(defaultLocations);
+jobsData.forEach((job) => locationsSet.add(job.location));
+const locations = Array.from(locationsSet);
+
   const statuses = ["Applied", "Selected", "Rejected"];
 
   const filteredJobs = jobsData.filter((job) => {
