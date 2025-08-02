@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 import ProfilePage from "./pages/ProfilePage";
 import FeedbackPage from "./pages/FeedbackPage";
 
-import InstitutionDashboard from './components/InstitutionDashboard';
+// import InstitutionDashboard from './components/InstitutionDashboard';
 import EmployeeDashboard from './components/EmployeeDashboard';
 import CompanyDashboard from './components/CompanyDashboard';
 
@@ -29,6 +29,15 @@ import InterviewExperience from "./pages/Student/InterviewExperience";
 import Settings from "./pages/Student/Settings";
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from './components/ProtectedRoute';
+
+import InstitutionDashboardLayout from './layouts/InstitutionDashboardLayout';
+import InstitutionDashboard from './pages/Institution/InstitutionDashboard';
+import Profile from './pages/Institution/Profile';
+import StudentPerformance from './pages/Institution/StudentPerformance';
+import DepartmentPerformance from './pages/Institution/DepartmentPerformance';
+import Reports from './pages/Institution/Reports';
+import Analytics from './pages/Institution/Analytics';
+import InstitutionSettings from './pages/Institution/Settings';
 
 import { motion } from "framer-motion";
 
@@ -63,15 +72,23 @@ function App() {
               element={<InterviewInterface />}
             />
 
-            {/* Other Dashboard Routes (outside student dashboard) */}
-            <Route
-              path="/dashboard/institution"
-              element={
-                <ProtectedRoute>
-                  <InstitutionDashboard />
-                </ProtectedRoute>
-              }
-            />
+            {/* Institution Dashboard Routes */}
+          <Route
+            path="/dashboard/institution"
+            element={
+              <ProtectedRoute>
+                <InstitutionDashboardLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<InstitutionDashboard />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="student-performance" element={<StudentPerformance />} />
+            <Route path="department-performance" element={<DepartmentPerformance />} />
+            <Route path="reports" element={<Reports />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="settings" element={<InstitutionSettings />} />
+          </Route>
             <Route
               path="/dashboard/employee"
               element={<EmployeeDashboard />}
