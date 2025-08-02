@@ -49,7 +49,7 @@ const handleSubmit = async (e) => {
 
     switch (simulatedUser.role) {
 
-    switch (userRole) {
+    // switch (userRole) {
 
       case 'student':
         navigate('/dashboard');
