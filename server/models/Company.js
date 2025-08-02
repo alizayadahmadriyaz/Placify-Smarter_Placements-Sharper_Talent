@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
+import User from "./User.js";
 
 const companySchema = new mongoose.Schema({
   companyName: { type: String, required: true },
   industry: { type: String, required: true },
-  hrEmail: { type: String, required: true, unique: true, lowercase: true },
-  password: { type: String, required: true },
-}, { timestamps: true });
+  website: { type: String, required: true },
+});
 
-export default mongoose.model("Company", companySchema);
+export default User.discriminator("company", companySchema);

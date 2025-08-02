@@ -89,6 +89,11 @@ const RoleSelectionPage = () => {
     },
   ];
 
+  const handleLogoClick = () => {
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 transition-colors duration-300">
       {/* Background Pattern */}
@@ -109,10 +114,11 @@ const RoleSelectionPage = () => {
           >
             {/* Logo/Brand */}
             <motion.div
-              className="flex items-center justify-center space-x-3 mb-6"
+              className="flex items-center justify-center space-x-3 mb-6 cursor-pointer"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              onClick={handleLogoClick}
             >
               <div className="p-3 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl shadow-lg">
                 <Brain className="w-8 h-8 text-white" />
