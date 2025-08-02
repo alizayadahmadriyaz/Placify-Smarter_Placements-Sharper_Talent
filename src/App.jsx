@@ -1,39 +1,43 @@
-import React from "react";
+import { useLocation } from "react-router-dom";
+
 
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
-import LandingPage from "./pages/LandingPage";
-import AuthPage from "./pages/AuthPage";
-import ResultsPage from "./pages/ResultsPage";
-import Footer from "./components/Footer";
-import ProfilePage from "./pages/ProfilePage";
-import FeedbackPage from "./pages/FeedbackPage";
 
-import InstitutionDashboard from "./components/InstitutionDashboard";
-import EmployeeDashboard from "./components/EmployeeDashboard";
+import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
+import Footer from "./components/Footer";
+import AuthPage from "./pages/AuthPage";
+import FeedbackPage from "./pages/FeedbackPage";
+import LandingPage from "./pages/LandingPage";
+import ProfilePage from "./pages/ProfilePage";
+import ResultsPage from "./pages/ResultsPage";
+
 import CompanyDashboard from "./components/CompanyDashboard";
+import EmployeeDashboard from "./components/EmployeeDashboard";
+import InstitutionDashboard from "./components/InstitutionDashboard";
 
 import RoleSelectionPage from "./pages/RoleSelectionPage";
-import StudentForm from "./pages/register/StudentForm";
-import InstitutionForm from "./pages/register/InstitutionForm";
-import EmployeeForm from "./pages/register/EmployeeForm";
 import CompanyForm from "./pages/register/CompanyForm";
+import EmployeeForm from "./pages/register/EmployeeForm";
+import InstitutionForm from "./pages/register/InstitutionForm";
+import StudentForm from "./pages/register/StudentForm";
 
-import Dashboard from "./pages/Student/Dashboard";
-import ResumeBuilder from "./pages/Student/ResumeBuilder";
-import ResumeATS from "./pages/Student/ResumeATS";
-import Jobs from "./pages/Student/Jobs";
-import UserJobs from "./pages/Student/UserJobs";
-import Coding from "./pages/Student/Coding";
-import InterviewInterface from "./pages/Student/InterviewInterface";
-import Aptitude from "./pages/Student/Aptitude";
-import InterviewExperience from "./pages/Student/InterviewExperience";
-import Settings from "./pages/Student/Settings";
-import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import DashboardLayout from "./layouts/DashboardLayout";
+import Aptitude from "./pages/Student/Aptitude";
+import Coding from "./pages/Student/Coding";
+import Dashboard from "./pages/Student/Dashboard";
+import InterviewExperience from "./pages/Student/InterviewExperience";
+import InterviewInterface from "./pages/Student/InterviewInterface";
+import Jobs from "./pages/Student/Jobs";
+import ResumeATS from "./pages/Student/ResumeATS";
+import ResumeBuilder from "./pages/Student/ResumeBuilder";
+import Settings from "./pages/Student/Settings";
+import UserJobs from "./pages/Student/UserJobs";
 
-import useLenis from "./components/useLenis";
 import ScrollToTop from "./components/ScrollToTop";
+import useLenis from "./components/useLenis";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

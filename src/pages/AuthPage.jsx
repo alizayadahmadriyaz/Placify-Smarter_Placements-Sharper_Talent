@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
-import { jwtDecode } from 'jwt-decode';
+import { Brain, Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,19 +28,29 @@ const handleSubmit = async (e) => {
     const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
     const { token, user } = response.data;
 
-    // Store token & user in localStorage
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
+    const simulatedUser = {
+      email,
+      role: email.includes('admin') ? 'institution' : 'student'
+    };
+
+
+    localStorage.setItem('token', token || 'dummy-token');
+    localStorage.setItem('user', JSON.stringify(simulatedUser));
 
     console.log('Token stored:', token);
     // console.log('User data stored:', user);
     const userRole = user.role?.toLowerCase();
 
 
-    toast.success('Login successful!');
+
     setIsAuthenticated(true);
+    toast.success('Login successful!');
+
+
+    switch (simulatedUser.role) {
 
     switch (userRole) {
+
       case 'student':
         navigate('/dashboard');
         break;
@@ -56,7 +64,7 @@ const handleSubmit = async (e) => {
         navigate('/dashboard/company');
         break;
       default:
-        console.warn('Unknown role:', user.role);
+        console.warn('Unknown role:', simulatedUser.role);
         navigate('/dashboard');
     }
   } catch (err) {
@@ -72,7 +80,7 @@ const handleSubmit = async (e) => {
 
   const handleLogoClick = () => {
     navigate('/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({top :0, behavior:'smooth'});
   };
 
   return (
