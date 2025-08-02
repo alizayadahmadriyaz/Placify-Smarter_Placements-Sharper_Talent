@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
-import { jwtDecode } from 'jwt-decode';
+import { Brain, Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -28,47 +26,38 @@ const AuthPage = () => {
 
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const user = {
+    email,
+    role: email.includes('admin') ? 'institution' : 'student' // Simulate based on email
+  };
 
-      const { token, user } = response.data;
+  localStorage.setItem('token', 'dummy-token');
+  localStorage.setItem('user', JSON.stringify(user));
 
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+  setIsAuthenticated(true);
 
-      console.log('Token stored:', token);
+  toast.success('Login successful!');
 
-      const decoded = jwtDecode(token);
-      const role = decoded.role;
-      console.log('User role:', role);
-
-
-      toast.success('Login successful!');
-
-
-      switch (role) {
-        case 'student':
-          navigate('/dashboard');
-          break;
-        case 'institution':
-          navigate('/dashboard/institution');
-          break;
-        case 'employee':
-          navigate('/dashboard/employee');
-          break;
-        case 'company':
-          navigate('/dashboard/company');
-          break;
-        default:
-          console.warn('Unknown role:', role);
-          navigate('/dashboard');
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      const errorMessage = err.response?.data?.message || 'Login failed';
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
+  switch (user.role) {
+    case 'student':
+      navigate('/dashboard');
+      break;
+    case 'institution':
+      navigate('/dashboard/institution');
+      break;
+    case 'employee':
+      navigate('/dashboard/employee');
+      break;
+    case 'company':
+      navigate('/dashboard/company');
+      break;
+    default:
+      console.warn('Unknown role:', user.role);
+      navigate('/dashboard');
+  }
+} catch (err) {
+  
+}
   };
 
   const handleLogoClick = () => {
