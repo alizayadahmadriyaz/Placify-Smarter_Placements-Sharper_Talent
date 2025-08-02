@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation
-} from "react-router-dom";
+
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage";
 import AuthPage from "./pages/AuthPage";
@@ -45,10 +41,12 @@ import "react-toastify/dist/ReactToastify.css";
 // ✅ Wrapper to allow useLocation inside Router
 const AppWrapper = () => {
   useLenis();
+
   const location = useLocation();
 
   // Footer visible only on home page
   const shouldHideFooter = location.pathname !== "/";
+
 
   return (
     <>
@@ -57,6 +55,7 @@ const AppWrapper = () => {
         <div>
           <Routes>
             {/* Public Routes */}
+            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/register" element={<RoleSelectionPage />} />
@@ -69,10 +68,25 @@ const AppWrapper = () => {
             {/* Standalone Route */}
             <Route path="/interview" element={<InterviewInterface />} />
 
-            {/* Dashboards */}
-            <Route path="/dashboard/institution" element={<InstitutionDashboard />} />
-            <Route path="/dashboard/employee" element={<EmployeeDashboard />} />
-            <Route path="/dashboard/company" element={<CompanyDashboard />} />
+
+            {/* Other Dashboard Routes (outside student dashboard) */}
+            <Route
+              path="/dashboard/institution"
+              element={
+                <ProtectedRoute>
+                  <InstitutionDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/employee"
+              element={<EmployeeDashboard />}
+            />
+            <Route
+              path="/dashboard/company"
+              element={<CompanyDashboard />}
+            />
+
 
             {/* Results */}
             <Route
