@@ -33,13 +33,24 @@ const handleSubmit = async (e) => {
       role: email.includes('admin') ? 'institution' : 'student'
     };
 
+
     localStorage.setItem('token', token || 'dummy-token');
     localStorage.setItem('user', JSON.stringify(simulatedUser));
+
+    console.log('Token stored:', token);
+    // console.log('User data stored:', user);
+    const userRole = user.role?.toLowerCase();
+
+
 
     setIsAuthenticated(true);
     toast.success('Login successful!');
 
+
     switch (simulatedUser.role) {
+
+    switch (userRole) {
+
       case 'student':
         navigate('/dashboard');
         break;
