@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 
-import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import Footer from "./components/Footer";
 import AuthPage from "./pages/AuthPage";
