@@ -9,6 +9,7 @@ import {
   updateProfile
 } from "../controllers/authController.js";
 import verifyToken from "../middleware/authMiddleware.js";
+import { upload } from "../middleware/upload.js";
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.post("/login", loginUser);
 
 // Profile
 router.get("/profile", verifyToken(), getProfile);
-router.put("/profile", verifyToken(), updateProfile);
+router.put("/profile", verifyToken(), upload.single("profileImage"), updateProfile);
+
 
 export default router;

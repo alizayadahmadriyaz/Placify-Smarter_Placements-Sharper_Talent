@@ -1,12 +1,19 @@
 import express from "express";
 import cors from "cors";
 import feedbackRoutes from "./routes/feedback.js";
-import {PORT} from "./config/env.js" // ✅ Load PORT from centralized env file
+import {PORT} from "./config/env.js" 
 import connectToDatabase from "./config/db.js";
 import healthRoutes from "./routes/health.js";
 import authRoutes from "./routes/auth.js";
 import interviewRoutes from "./routes/interview.js";
 import institutionRoutes from "./routes/institutionRoutes.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 const app = express();
 
 app.use(
@@ -37,6 +44,7 @@ app.get("/", (req, res) => {
 app.get("/test", (req, res) => {
   res.json({ message: "Server is working!", timestamp: new Date().toISOString() });
 });
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 //404 error handler
