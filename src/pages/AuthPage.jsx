@@ -35,13 +35,14 @@ const handleSubmit = async (e) => {
     localStorage.setItem('user', JSON.stringify(user));
 
     console.log('Token stored:', token);
-    console.log('User data stored:', user);
+    // console.log('User data stored:', user);
+    const userRole = user.role?.toLowerCase();
+
 
     toast.success('Login successful!');
     setIsAuthenticated(true);
 
-    // Redirect based on role
-    switch (user.role) {
+    switch (userRole) {
       case 'student':
         navigate('/dashboard');
         break;
