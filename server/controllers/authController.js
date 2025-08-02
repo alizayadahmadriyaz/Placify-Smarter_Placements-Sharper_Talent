@@ -7,7 +7,7 @@ import Employee from "../models/Employee.js";
 import Institution from "../models/Institution.js";
 
 const generateToken = (id, role) =>
-  jwt.sign({ userId: id, role }, process.env.JWT_SECRET, { expiresIn: "7d" });
+  jwt.sign({ userId: id, role: role }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
 // ---------------- REGISTER ----------------
 export const registerStudent = async (req, res) => {
@@ -18,7 +18,7 @@ export const registerStudent = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await Student.create({ fullName, university, major, email, password: hashedPassword });
+    await Student.create({ fullName, university, major, email, password: hashedPassword, role: "student" });
 
     res.status(201).json({ message: "Student registered successfully" });
   } catch (error) {
@@ -35,7 +35,7 @@ export const registerInstitution = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await Institution.create({ institutionName, website, contactPerson, email, password: hashedPassword });
+    await Institution.create({ institutionName, website, contactPerson, email, password: hashedPassword, role: "institution" });
 
     res.status(201).json({ message: "Institution registered successfully" });
   } catch (error) {
@@ -52,7 +52,7 @@ export const registerEmployee = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await Employee.create({ fullName, currentCompany, jobTitle, email, password: hashedPassword });
+    await Employee.create({ fullName, currentCompany, jobTitle, email, password: hashedPassword, role: "employee" });
 
     res.status(201).json({ message: "Employee registered successfully" });
   } catch (error) {
@@ -69,7 +69,7 @@ export const registerCompany = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await Company.create({ companyName, industry, website, email, password: hashedPassword });
+    await Company.create({ companyName, industry, website, email, password: hashedPassword, role: 'company' }, );
 
     res.status(201).json({ message: "Company registered successfully" });
   } catch (error) {
@@ -91,13 +91,13 @@ export const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = generateToken(user._id, user.role);
+    const token = generateToken(user._id, user.role?.toLowerCase());
 
     res.json({
       token,
       user: {
         id: user._id,
-        role: user.role,
+       role: user.role?.toLowerCase(),
         email: user.email,
       },
     });
