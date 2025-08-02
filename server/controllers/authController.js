@@ -131,7 +131,8 @@ export const updateProfile = async (req, res) => {
       "address",
       "gender",
       "education",
-      "major"
+      "major",
+      "university"
     ];
 
     const updateData = {};
