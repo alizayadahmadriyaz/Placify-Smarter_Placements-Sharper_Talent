@@ -122,22 +122,40 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const allowedFields = ["name", "phone", "dob", "address", "gender", "education", "profileImage"];
-    const updateData = {};
+    const userId = req.user.userId;
 
-    for (let field of allowedFields) {
-      if (req.body[field] !== undefined) updateData[field] = req.body[field];
+    const allowedFields = [
+      "name",
+      "phone",
+      "dob",
+      "address",
+      "gender",
+      "education",
+      "major",
+      "university"
+    ];
+
+    const updateData = {};
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        updateData[field] = req.body[field];
+      }
+    });
+
+    if (req.file) {
+      updateData.profileImage = `/uploads/${req.file.filename}`;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.userId,
-      { $set: updateData },
-      { new: true, runValidators: true }
-    ).select("-password");
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
 
-    res.json(updatedUser);
+    return res.json(updatedUser);
   } catch (error) {
     console.error("Update profile error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
