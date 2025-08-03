@@ -70,10 +70,10 @@ const DashboardLayout = () => {
       "/dashboard/coding": "Coding",
       "/dashboard/interview-practice": "Interview Practice",
       "/dashboard/aptitude": "Aptitude Questions",
-      "/dashboard/interview-experience": "Interview Experience",
+      "/dashboard/interview-experience": "",
       "/dashboard/settings": "Settings",
     };
-    return titleMap[path] || "Dashboard";
+    return titleMap[path] || "";
   };
 
   const handleProfileClick = () => {
