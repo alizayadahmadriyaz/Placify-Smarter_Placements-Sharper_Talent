@@ -1,8 +1,5 @@
 
-
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
-
-
 
 import Footer from "./components/Footer";
 import AuthPage from "./pages/AuthPage";
@@ -11,11 +8,8 @@ import LandingPage from "./pages/LandingPage";
 import ProfilePage from "./pages/ProfilePage";
 import ResultsPage from "./pages/ResultsPage";
 
-
 import CompanyDashboard from "./components/CompanyDashboard";
 import EmployeeDashboard from "./components/EmployeeDashboard";
-import InstitutionDashboard from "./components/InstitutionDashboard";
-
 
 import RoleSelectionPage from "./pages/RoleSelectionPage";
 import CompanyForm from "./pages/register/CompanyForm";
@@ -34,9 +28,6 @@ import Jobs from "./pages/Student/Jobs";
 import ResumeATS from "./pages/Student/ResumeATS";
 import ResumeBuilder from "./pages/Student/ResumeBuilder";
 import Settings from "./pages/Student/Settings";
-
-import DashboardLayout from "./layouts/DashboardLayout";
-import ProtectedRoute from './components/ProtectedRoute';
 
 import InstitutionDashboardLayout from './layouts/InstitutionDashboardLayout';
 import InstitutionDashboard from './pages/Institution/InstitutionDashboard';
