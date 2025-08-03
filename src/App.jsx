@@ -11,6 +11,7 @@ import ResultsPage from "./pages/ResultsPage";
 import CompanyDashboard from "./components/CompanyDashboard";
 import EmployeeDashboard from "./components/EmployeeDashboard";
 
+
 import RoleSelectionPage from "./pages/RoleSelectionPage";
 import CompanyForm from "./pages/register/CompanyForm";
 import EmployeeForm from "./pages/register/EmployeeForm";
@@ -19,6 +20,7 @@ import StudentForm from "./pages/register/StudentForm";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
+
 import Aptitude from "./pages/Student/Aptitude";
 import Coding from "./pages/Student/Coding";
 import Dashboard from "./pages/Student/Dashboard";
@@ -28,6 +30,7 @@ import Jobs from "./pages/Student/Jobs";
 import ResumeATS from "./pages/Student/ResumeATS";
 import ResumeBuilder from "./pages/Student/ResumeBuilder";
 import Settings from "./pages/Student/Settings";
+
 
 import InstitutionDashboardLayout from './layouts/InstitutionDashboardLayout';
 import InstitutionDashboard from './pages/Institution/InstitutionDashboard';
@@ -40,8 +43,8 @@ import InstitutionSettings from './pages/Institution/Settings';
 
 import { motion } from "framer-motion";
 
-import UserJobs from "./pages/Student/UserJobs";
 
+import UserJobs from "./pages/Student/UserJobs";
 
 import ScrollToTop from "./components/ScrollToTop";
 import useLenis from "./components/useLenis";
@@ -52,12 +55,8 @@ import "react-toastify/dist/ReactToastify.css";
 // ✅ Wrapper to allow useLocation inside Router
 const AppWrapper = () => {
   useLenis();
-
   const location = useLocation();
-
-  // Footer visible only on home page
   const shouldHideFooter = location.pathname !== "/";
-
 
   return (
     <>
@@ -75,37 +74,19 @@ const AppWrapper = () => {
             <Route path="/register/employee" element={<EmployeeForm />} />
             <Route path="/register/company" element={<CompanyForm />} />
             <Route path="/feedback" element={<FeedbackPage />} />
-
-            {/* Standalone Route */}
             <Route path="/interview" element={<InterviewInterface />} />
 
-
-            {/* Institution Dashboard Routes */}
-          <Route
-            path="/dashboard/institution"
-            element={
-              <ProtectedRoute>
-                <InstitutionDashboardLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<InstitutionDashboard />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="student-performance" element={<StudentPerformance />} />
-            <Route path="department-performance" element={<DepartmentPerformance />} />
-            <Route path="reports" element={<Reports />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="settings" element={<InstitutionSettings />} />
-          </Route>
-            <Route
-              path="/dashboard/employee"
-              element={<EmployeeDashboard />}
-            />
-            <Route
-              path="/dashboard/company"
-              element={<CompanyDashboard />}
-            />
-
+            {/* Dashboards outside student route */}
+            {/* <Route
+              path="/dashboard/institution"
+              element={
+                <ProtectedRoute>
+                  <InstitutionDashboard />
+                </ProtectedRoute>
+              }
+            /> */}
+            <Route path="/dashboard/employee" element={<EmployeeDashboard />} />
+            <Route path="/dashboard/company" element={<CompanyDashboard />} />
 
             {/* Results */}
             <Route
@@ -117,13 +98,13 @@ const AppWrapper = () => {
               }
             />
 
-            {/* Student Dashboard Routes */}
+            {/* Student Dashboard */}
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
+                // <ProtectedRoute>
                   <DashboardLayout />
-                </ProtectedRoute>
+                // {/* </ProtectedRoute> */}
               }
             >
               <Route index element={<Dashboard />} />
@@ -141,7 +122,6 @@ const AppWrapper = () => {
           </Routes>
         </div>
 
-        {/* Toast Notifications */}
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -155,14 +135,13 @@ const AppWrapper = () => {
           theme="colored"
         />
 
-        {/* Conditional Footer */}
         {!shouldHideFooter && <Footer />}
       </div>
     </>
   );
 };
 
-// ✅ Actual App that wraps AppWrapper inside Router
+// ✅ Main App entry
 function App() {
   return (
     <Router>
