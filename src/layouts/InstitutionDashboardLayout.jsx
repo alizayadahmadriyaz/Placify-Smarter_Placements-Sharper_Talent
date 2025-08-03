@@ -3,7 +3,6 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import InstitutionSidebar from '../components/InstitutionSidebar';
 import { User, LogOut, ChevronDown } from 'lucide-react';
 
-// Profile Dropdown Component
 const ProfileDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -12,8 +11,9 @@ const ProfileDropdown = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     navigate('/auth');
-  };
+  }; 
 
+  
   return (
     <div className="relative">
       <button
@@ -72,7 +72,6 @@ const InstitutionDashboardLayout = () => {
         isExpanded={sidebarExpanded} 
         setIsExpanded={setSidebarExpanded}
       />
-
       <div className={`transition-all duration-300 flex-1 flex flex-col ${
         sidebarExpanded ? "ml-64" : "ml-20"
       }`}>
