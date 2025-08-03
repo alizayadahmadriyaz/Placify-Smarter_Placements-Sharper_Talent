@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Footer from "./components/Footer";
@@ -9,7 +10,7 @@ import ResultsPage from "./pages/ResultsPage";
 
 import CompanyDashboard from "./components/CompanyDashboard";
 import EmployeeDashboard from "./components/EmployeeDashboard";
-// import InstitutionDashboard from "./components/InstitutionDashboard";
+
 
 import RoleSelectionPage from "./pages/RoleSelectionPage";
 import CompanyForm from "./pages/register/CompanyForm";
@@ -29,6 +30,20 @@ import Jobs from "./pages/Student/Jobs";
 import ResumeATS from "./pages/Student/ResumeATS";
 import ResumeBuilder from "./pages/Student/ResumeBuilder";
 import Settings from "./pages/Student/Settings";
+
+
+import InstitutionDashboardLayout from './layouts/InstitutionDashboardLayout';
+import InstitutionDashboard from './pages/Institution/InstitutionDashboard';
+import Profile from './pages/Institution/Profile';
+import StudentPerformance from './pages/Institution/StudentPerformance';
+import DepartmentPerformance from './pages/Institution/DepartmentPerformance';
+import Reports from './pages/Institution/Reports';
+import Analytics from './pages/Institution/Analytics';
+import InstitutionSettings from './pages/Institution/Settings';
+
+import { motion } from "framer-motion";
+
+
 import UserJobs from "./pages/Student/UserJobs";
 
 import ScrollToTop from "./components/ScrollToTop";
