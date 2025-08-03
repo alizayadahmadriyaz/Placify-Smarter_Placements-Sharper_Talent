@@ -9,7 +9,7 @@ import ResultsPage from "./pages/ResultsPage";
 
 import CompanyDashboard from "./components/CompanyDashboard";
 import EmployeeDashboard from "./components/EmployeeDashboard";
-import InstitutionDashboard from "./components/InstitutionDashboard";
+// import InstitutionDashboard from "./components/InstitutionDashboard";
 
 import RoleSelectionPage from "./pages/RoleSelectionPage";
 import CompanyForm from "./pages/register/CompanyForm";
@@ -62,14 +62,14 @@ const AppWrapper = () => {
             <Route path="/interview" element={<InterviewInterface />} />
 
             {/* Dashboards outside student route */}
-            <Route
+            {/* <Route
               path="/dashboard/institution"
               element={
                 <ProtectedRoute>
                   <InstitutionDashboard />
                 </ProtectedRoute>
               }
-            />
+            /> */}
             <Route path="/dashboard/employee" element={<EmployeeDashboard />} />
             <Route path="/dashboard/company" element={<CompanyDashboard />} />
 
