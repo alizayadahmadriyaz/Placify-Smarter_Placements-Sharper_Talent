@@ -1,8 +1,4 @@
-
-
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
-
-
 
 import Footer from "./components/Footer";
 import AuthPage from "./pages/AuthPage";
@@ -23,6 +19,7 @@ import StudentForm from "./pages/register/StudentForm";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
+
 import Aptitude from "./pages/Student/Aptitude";
 import Coding from "./pages/Student/Coding";
 import Dashboard from "./pages/Student/Dashboard";
@@ -43,12 +40,8 @@ import "react-toastify/dist/ReactToastify.css";
 // ✅ Wrapper to allow useLocation inside Router
 const AppWrapper = () => {
   useLenis();
-
   const location = useLocation();
-
-  // Footer visible only on home page
   const shouldHideFooter = location.pathname !== "/";
-
 
   return (
     <>
@@ -66,12 +59,9 @@ const AppWrapper = () => {
             <Route path="/register/employee" element={<EmployeeForm />} />
             <Route path="/register/company" element={<CompanyForm />} />
             <Route path="/feedback" element={<FeedbackPage />} />
-
-            {/* Standalone Route */}
             <Route path="/interview" element={<InterviewInterface />} />
 
-
-            {/* Other Dashboard Routes (outside student dashboard) */}
+            {/* Dashboards outside student route */}
             <Route
               path="/dashboard/institution"
               element={
@@ -80,15 +70,8 @@ const AppWrapper = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/dashboard/employee"
-              element={<EmployeeDashboard />}
-            />
-            <Route
-              path="/dashboard/company"
-              element={<CompanyDashboard />}
-            />
-
+            <Route path="/dashboard/employee" element={<EmployeeDashboard />} />
+            <Route path="/dashboard/company" element={<CompanyDashboard />} />
 
             {/* Results */}
             <Route
@@ -100,7 +83,7 @@ const AppWrapper = () => {
               }
             />
 
-            {/* Student Dashboard Routes */}
+            {/* Student Dashboard */}
             <Route
               path="/dashboard"
               element={
@@ -124,7 +107,6 @@ const AppWrapper = () => {
           </Routes>
         </div>
 
-        {/* Toast Notifications */}
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -138,14 +120,13 @@ const AppWrapper = () => {
           theme="colored"
         />
 
-        {/* Conditional Footer */}
         {!shouldHideFooter && <Footer />}
       </div>
     </>
   );
 };
 
-// ✅ Actual App that wraps AppWrapper inside Router
+// ✅ Main App entry
 function App() {
   return (
     <Router>
