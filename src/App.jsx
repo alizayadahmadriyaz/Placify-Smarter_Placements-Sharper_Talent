@@ -87,9 +87,9 @@ const AppWrapper = () => {
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
+                // <ProtectedRoute>
                   <DashboardLayout />
-                </ProtectedRoute>
+                // {/* </ProtectedRoute> */}
               }
             >
               <Route index element={<Dashboard />} />
