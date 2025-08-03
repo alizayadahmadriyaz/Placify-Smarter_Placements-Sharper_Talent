@@ -50,12 +50,12 @@ const InterviewRight = ({ role, initialQuestion, onFinish }) => {
     if (shouldAutoScroll || force) {
       setTimeout(() => {
         if (chatEndRef.current) {
-          chatEndRef.current.scrollIntoView({ 
+          chatEndRef.current.scrollIntoView({
             behavior: "smooth",
-            block: "end"
+            block: "end",
           });
         }
-      }, 50); 
+      }, 50);
     }
   };
 
@@ -78,48 +78,103 @@ const InterviewRight = ({ role, initialQuestion, onFinish }) => {
     setShouldAutoScroll(true);
     scrollToBottom(true);
   };
+  const NEUTRAL_RESPONSES = [
+    "nothing",
+    "idk",
+    "i dont know",
+    "not sure",
+    "no idea",
+  ];
+  const SKIP_COMMANDS = ["skip", "skip this question"];
+  const CHANGE_TOPIC_COMMANDS = [
+    "change topic",
+    "different question",
+    "ask something else",
+  ];
+  const END_COMMANDS = [
+  "stop",
+  "end",
+  "quit",
+  "exit",
+  "finish",
+  "end interview",
+  "lets end interview",
+  "end this interview",
+];
 
-  const handleSend = async () => {
-    if (!userInput.trim()) return;
+const restartInterview = () =>{
+  setMessages([{ sender: "bot", text: initialQuestion }]);
+  setCurrentQuestion(1);
+  setScore(0);
+  setUserInput("");
+  setShouldAutoScroll(true);
+  setShowScrollButton(false);
+  localStorage.removeItem(STORAGE_KEY);
+  //delete localStorage intervie-session
+}
 
-    const answer = userInput.trim();
-    setUserInput("");
-    
-    setShouldAutoScroll(true);
-    
-    // Add user message
-    const updatedMessages = [...messages, { sender: "user", text: answer }];
-    setMessages(updatedMessages);
+const handleSend = async () => {
+  if (!userInput.trim()) return;
 
-    // Basic scoring logic
+  const answer = userInput.trim().toLowerCase();
+  setUserInput("");
+  setShouldAutoScroll(true);
+
+  const updatedMessages = [...messages, { sender: "user", text: answer }];
+  setMessages(updatedMessages);
+
+  if (END_COMMANDS.includes(answer)) {
+    setMessages((prev) => [
+      ...prev,
+      { sender: "bot", text: "The interview has ended. Thank you for your time!" },
+    ]);
+
+    setTimeout(() => {
+      onFinish && onFinish();
+    }, 2000);
+
+    return;
+  }
+
+  if (
+    !NEUTRAL_RESPONSES.includes(answer) &&
+    !SKIP_COMMANDS.includes(answer) &&
+    !CHANGE_TOPIC_COMMANDS.includes(answer)
+  ) {
     if (answer.split(" ").length >= 5) {
       setScore((prev) => prev + 1);
     }
+  }
 
-    // Get next question
-    setLoadingNext(true);
-    let nextQuestion;
-    try {
-      nextQuestion = await getNextQuestion(
-        role,
-        updatedMessages.filter((m) => m.sender === "user").map((m) => m.text)
-      );
-    } catch (e) {
-      console.warn("Gemini failed, using fallback", e);
-      nextQuestion =
-        fallbackQuestions[(currentQuestion - 1) % fallbackQuestions.length];
-    }
+  setLoadingNext(true);
+  let nextQuestion;
+  try {
+    nextQuestion = await getNextQuestion(
+      role,
+      updatedMessages.filter((m) => m.sender === "user").map((m) => m.text)
+    );
+  } catch (e) {
+    console.warn("Gemini failed, using fallback", e);
+    nextQuestion = getAdaptiveFallback(role, updatedMessages.map((m) => m.text));
+  }
+  setLoadingNext(false);
 
-    setLoadingNext(false);
+  // If it's the last question, show the final message from both
+  if (currentQuestion === 9) {
+    setMessages((prev) => [
+      ...prev,
+      { sender: "bot", text: "That's all from my side. Click finish to check results." },
+    ]);
+    return;
+  }
 
-    if (!nextQuestion || nextQuestion.toLowerCase().includes("end interview")) {
-      return;
-    }
+  if (!nextQuestion) return;
 
-    // Add bot response
-    setMessages((prev) => [...prev, { sender: "bot", text: nextQuestion }]);
-    setCurrentQuestion((prev) => prev + 1);
-  };
+  // Add bot response
+  setMessages((prev) => [...prev, { sender: "bot", text: nextQuestion }]);
+  setCurrentQuestion((prev) => prev + 1);
+};
+
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -137,16 +192,27 @@ const InterviewRight = ({ role, initialQuestion, onFinish }) => {
     >
       <div className="dark:bg-gray-800 bg-white rounded-2xl h-full p-8 flex flex-col relative">
         {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <div className="w-2/3 bg-gray-200 rounded-full h-2">
-            <motion.div
-              className="bg-purple-600 h-2 rounded-full"
-              animate={{ width: `${(currentQuestion / 10) * 100}%` }}
-              initial={{ width: "0%" }}
-              transition={{ duration: 0.8 }}
-            />
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+          <button
+            className="text-blue-600 hover:text-blue-700 font-medium px-4 py-2 rounded transition-colors duration-200 border border-blue-100 shadow-sm"
+            onClick={restartInterview}
+          >
+            Restart Interview
+          </button>
+          <div className="flex-1 flex flex-col items-center min-w-[180px] max-w-xs w-full">
+            <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
+              <motion.div
+                className="bg-purple-600 h-2 rounded-full"
+                animate={{ width: `${Math.min((currentQuestion / 10) * 100, 100)}%` }}
+                initial={{ width: "0%" }}
+                transition={{ duration: 0.8 }}
+              />
+            </div>
+            <span className="text-xs text-gray-500">
+              Question {currentQuestion} / 10
+            </span>
           </div>
-          <span className="font-semibold text-gray-700 dark:text-gray-300">
+          <span className="font-semibold text-gray-700 dark:text-gray-300 px-4 py-2 rounded bg-gray-100 dark:bg-gray-700 shadow-sm">
             Score: {score}
           </span>
         </div>
@@ -156,7 +222,7 @@ const InterviewRight = ({ role, initialQuestion, onFinish }) => {
           ref={chatContainerRef}
           onScroll={handleScroll}
           className="overflow-y-auto pr-2 space-y-3 mb-4 h-[400px] scroll-smooth relative"
-          style={{ scrollBehavior: 'smooth' }}
+          style={{ scrollBehavior: "smooth" }}
         >
           {messages.map((msg, index) => (
             <motion.div
@@ -200,7 +266,7 @@ const InterviewRight = ({ role, initialQuestion, onFinish }) => {
               </div>
             </motion.div>
           )}
-          
+
           {/* Invisible element to scroll to */}
           <div ref={chatEndRef} className="h-1" />
         </div>

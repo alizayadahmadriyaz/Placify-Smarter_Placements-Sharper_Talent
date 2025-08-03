@@ -30,7 +30,6 @@ const data = [
   { name: "Apr", interviews: 12, avgScore: 72 },
 ];
 
-const userName = "John Doe";
 
 export default function Dashboard() {
   const [isDarkMode, setIsDarkMode] = useState(false);
