@@ -1,21 +1,28 @@
 import express from "express";
 import {
   registerStudent,
-  registerInstitution,
   registerEmployee,
+  registerInstitution,
   registerCompany,
   loginUser,
+  getProfile,
+  updateProfile
 } from "../controllers/authController.js";
+import verifyToken from "../middleware/authMiddleware.js";
+import { upload } from "../middleware/upload.js";
 
 const router = express.Router();
 
-// Registration Routes
+// Auth
 router.post("/register/student", registerStudent);
-router.post("/register/institution", registerInstitution);
 router.post("/register/employee", registerEmployee);
+router.post("/register/institution", registerInstitution);
 router.post("/register/company", registerCompany);
-
-// Login Route
 router.post("/login", loginUser);
+
+// Profile
+router.get("/profile", verifyToken(), getProfile);
+router.put("/profile", verifyToken(), upload.single("profileImage"), updateProfile);
+
 
 export default router;

@@ -1,79 +1,91 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, Brain } from 'lucide-react';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
-import { jwtDecode } from 'jwt-decode';
+import { Brain, Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 const AuthPage = () => {
-  const navigate = useNavigate();
-  const { setIsAuthenticated } = useAuth();
+ const navigate = useNavigate();
+const { setIsAuthenticated } = useAuth();
 
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+const [isLogin, setIsLogin] = useState(true);
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [showPassword, setShowPassword] = useState(false);
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
+  try {
+    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    const { token, user } = response.data;
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-
-      const { token, user } = response.data;
-
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-
-      console.log('Token stored:', token);
-
-      const decoded = jwtDecode(token);
-      const role = decoded.role;
-      console.log('User role:', role);
+    const simulatedUser = {
+      email,
+      role: email.includes('admin') ? 'institution' : 'student'
+    };
 
 
-      toast.success('Login successful!');
+    localStorage.setItem('token', token || 'dummy-token');
+    localStorage.setItem('user', JSON.stringify(simulatedUser));
+
+    console.log('Token stored:', token);
+    // console.log('User data stored:', user);
+    const userRole = user.role?.toLowerCase();
 
 
-      switch (role) {
-        case 'student':
-          navigate('/dashboard');
-          break;
-        case 'institution':
-          navigate('/dashboard/institution');
-          break;
-        case 'employee':
-          navigate('/dashboard/employee');
-          break;
-        case 'company':
-          navigate('/dashboard/company');
-          break;
-        default:
-          console.warn('Unknown role:', role);
-          navigate('/dashboard');
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      const errorMessage = err.response?.data?.message || 'Login failed';
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
+
+    setIsAuthenticated(true);
+    toast.success('Login successful!');
+
+
+    switch (simulatedUser.role) {
+
+    // switch (userRole) {
+
+      case 'student':
+        navigate('/dashboard');
+        break;
+      case 'institution':
+        navigate('/dashboard/institution');
+        break;
+      case 'employee':
+        navigate('/dashboard/employee');
+        break;
+      case 'company':
+        navigate('/dashboard/company');
+        break;
+      default:
+        console.warn('Unknown role:', simulatedUser.role);
+        navigate('/dashboard');
     }
+  } catch (err) {
+    console.error('Login error:', err);
+    const errorMessage = err.response?.data?.message || 'Login failed';
+    toast.error(errorMessage);
+    setError(errorMessage);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  const handleLogoClick = () => {
+    navigate('/');
+    window.scrollTo({top :0, behavior:'smooth'});
   };
 
   return (
 
-    <motion.div 
+    <motion.div
 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -102,7 +114,7 @@ const AuthPage = () => {
           className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 hover:shadow-2xl transition-shadow duration-300"
         >
 
-          <motion.div 
+          <motion.div
 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -118,6 +130,7 @@ const AuthPage = () => {
                 type: 'spring',
                 stiffness: 200,
               }}
+              onClick={handleLogoClick}
               className="flex items-center justify-center space-x-2 mb-4"
             >
               <Brain className="w-8 h-8 text-purple-600 dark:text-purple-400" />
@@ -144,7 +157,7 @@ const AuthPage = () => {
           </motion.div>
 
 
-          <motion.form 
+          <motion.form
 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -194,7 +207,7 @@ const AuthPage = () => {
                   <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                 </div>
                 <motion.input
-                  whileFocus={{ scale:  1.02 }}
+                  whileFocus={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -244,7 +257,7 @@ const AuthPage = () => {
           </motion.form>
 
 
-          <motion.div 
+          <motion.div
 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

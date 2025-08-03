@@ -11,7 +11,8 @@ import { Fragment } from 'react';
 import { motion } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { User, ChevronDown } from "lucide-react";
+import { useEffect } from 'react';
 const companyData = {
   name: "TechCorp Solutions",
   logo: "TC",
@@ -32,6 +33,41 @@ const companyData = {
 const notify = (msg) => toast.success(msg);
 
 const CompanyDashboard = () => {
+    const [userData, setUserData] = useState(null); // <-- Added state for user
+      // Fetch user profile
+      useEffect(() => {
+        const fetchProfile = async () => {
+          try {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+            console.log("Fetching profile with token:", token);
+        
+            const res = await fetch("http://localhost:5000/api/auth/profile", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+    
+            console.log("Raw Response Status:", res.status);
+    
+            const data = await res.json().catch(() => null);
+            console.log("Profile Response Data:", data);
+    
+            if (res.ok) {
+              setUserData(data);
+            } else {
+              console.error(
+                "Failed to fetch profile:",
+                data?.message || "Unknown error"
+              );
+            }
+          } catch (error) {
+            console.error("Error fetching profile:", error);
+          }
+        };
+    
+        fetchProfile();
+      }, []);
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} className="min-h-screen bg-gradient-to-tr from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
       <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-md border-b dark:border-gray-700">
@@ -52,7 +88,7 @@ const CompanyDashboard = () => {
                     <Menu.Item>
                       {({ active }) => (
                         <button className={`${active ? 'bg-gray-100 dark:bg-gray-700' : ''} flex items-center px-4 py-2 text-sm w-full text-left text-gray-700 dark:text-white`}>
-                          <UserCircle className="w-4 h-4 mr-2" /> Profile
+                          <UserCircle className="w-4 h-4 mr-2" /> {userData?.companyName}
                         </button>
                       )}
                     </Menu.Item>
@@ -75,15 +111,15 @@ const CompanyDashboard = () => {
         <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-8 rounded-xl mb-8">
           <div className="flex flex-wrap items-center space-x-6">
             <div className="w-20 h-20 bg-white/20 rounded-xl flex items-center justify-center">
-              <span className="text-2xl font-bold">{companyData.logo}</span>
+              <span className="text-2xl font-bold">{userData?.companyName}</span>
             </div>
             <div>
-              <h2 className="text-3xl font-bold">{companyData.name}</h2>
+              <h2 className="text-3xl font-bold">{userData?.companyName}</h2>
               <p className="text-pink-100 mt-1">Technology Solutions Company</p>
               <div className="flex flex-wrap gap-4 mt-3 text-sm">
                 <span className="flex items-center"><MapPin className="w-4 h-4 mr-1" /> San Francisco, CA</span>
                 <span className="flex items-center"><Calendar className="w-4 h-4 mr-1" /> Founded 2018</span>
-                <span className="flex items-center"><Mail className="w-4 h-4 mr-1" /> hr@techcorp.com</span>
+                <span className="flex items-center"><Mail className="w-4 h-4 mr-1" /> {userData?.email}</span>
               </div>
             </div>
           </div>
