@@ -1,10 +1,15 @@
+// models/Company.js
+
 import mongoose from "mongoose";
 import User from "./User.js";
 
+// Use only 'name': never add 'companyName', as the base User already has 'name'
 const companySchema = new mongoose.Schema({
-  companyName: { type: String, required: true },
   industry: { type: String, required: true },
-  website: { type: String, required: true },
+  website: { type: String },
+  description: { type: String },
+  foundedYear: { type: Number },
+  employeeCount: { type: Number }
 });
 
-export default User.discriminator("company", companySchema);
+export default User.discriminator("Company", companySchema);

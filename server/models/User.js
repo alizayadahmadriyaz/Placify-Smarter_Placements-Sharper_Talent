@@ -14,8 +14,7 @@ const baseUserSchema = new mongoose.Schema(
     profileImage: String
   },
   {
-    timestamps: true,
-    discriminatorKey: "role",  
+    timestamps: true, 
   }
 );
 

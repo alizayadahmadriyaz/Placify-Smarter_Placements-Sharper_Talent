@@ -5,6 +5,13 @@ const institutionSchema = new mongoose.Schema({
   institutionName: { type: String, required: true },
   website: { type: String, required: true },
   contactPerson: { type: String, required: true },
+  phone: { type: String },
+  address: { type: String },
+  establishedYear: { type: Number },
+  description: { type: String },
+  accreditation: { type: String },
+  totalStudents: { type: Number },
+  profileImage: { type: String }
 });
 
 export default User.discriminator("Institution", institutionSchema);
