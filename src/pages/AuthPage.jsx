@@ -8,86 +8,70 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 const AuthPage = () => {
- const navigate = useNavigate();
-const { setIsAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const { setIsAuthenticated } = useAuth();
 
-const [isLogin, setIsLogin] = useState(true);
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-const [showPassword, setShowPassword] = useState(false);
-const [loading, setLoading] = useState(false);
-const [error, setError] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-  try {
-    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-    const { token, user } = response.data;
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { token, user } = response.data;
 
-    const simulatedUser = {
-      email,
-      role: email.includes('admin') ? 'institution' : 'student'
-    };
+      localStorage.setItem('token', token || 'dummy-token');
+      localStorage.setItem('user', JSON.stringify(user));
 
+      console.log('Token stored:', token);
+      console.log('User data stored:', user);
 
-    localStorage.setItem('token', token || 'dummy-token');
-    localStorage.setItem('user', JSON.stringify(simulatedUser));
+      const userRole = user.role?.toLowerCase();
+      setIsAuthenticated(true);
+      toast.success('Login successful!');
 
-    console.log('Token stored:', token);
-    // console.log('User data stored:', user);
-    const userRole = user.role?.toLowerCase();
-
-
-
-    setIsAuthenticated(true);
-    toast.success('Login successful!');
-
-
-    switch (simulatedUser.role) {
-
-    // switch (userRole) {
-
-      case 'student':
-        navigate('/dashboard');
-        break;
-      case 'institution':
-        navigate('/dashboard/institution');
-        break;
-      case 'employee':
-        navigate('/dashboard/employee');
-        break;
-      case 'company':
-        navigate('/dashboard/company');
-        break;
-      default:
-        console.warn('Unknown role:', simulatedUser.role);
-        navigate('/dashboard');
+      switch (userRole) {
+        case 'student':
+          navigate('/dashboard');
+          break;
+        case 'institution':
+          navigate('/dashboard/institution');
+          break;
+        case 'employee':
+          navigate('/dashboard/employee');
+          break;
+        case 'company':
+          navigate('/dashboard/company');
+          break;
+        default:
+          console.warn('Unknown role:', userRole);
+          navigate('/dashboard');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      const errorMessage = err.response?.data?.message || 'Login failed';
+      toast.error(errorMessage);
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error('Login error:', err);
-    const errorMessage = err.response?.data?.message || 'Login failed';
-    toast.error(errorMessage);
-    setError(errorMessage);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   const handleLogoClick = () => {
     navigate('/');
-    window.scrollTo({top :0, behavior:'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-
     <motion.div
-
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -104,19 +88,10 @@ const handleSubmit = async (e) => {
           animate={{ y: 0, opacity: 1 }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.99 }}
-          transition={{
-            duration: 0.8,
-            delay: 0.2,
-            type: 'spring',
-            stiffness: 200,
-            damping: 12,
-            mass: 0.5,
-          }}
+          transition={{ duration: 0.8, delay: 0.2, type: 'spring', stiffness: 200, damping: 12, mass: 0.5 }}
           className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-8 hover:shadow-2xl transition-shadow duration-300"
         >
-
           <motion.div
-
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -125,19 +100,12 @@ const handleSubmit = async (e) => {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.5,
-                type: 'spring',
-                stiffness: 200,
-              }}
+              transition={{ duration: 0.6, delay: 0.5, type: 'spring', stiffness: 200 }}
               onClick={handleLogoClick}
               className="flex items-center justify-center space-x-2 mb-4"
             >
               <Brain className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                Placify
-              </span>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">Placify</span>
             </motion.div>
             <motion.h2
               initial={{ y: 10, opacity: 0 }}
@@ -157,20 +125,15 @@ const handleSubmit = async (e) => {
             </motion.p>
           </motion.div>
 
-
           <motion.form
-
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.8 }}
             onSubmit={handleSubmit}
             className="space-y-6"
           >
-            <motion.div
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.9 }}
-            >
+            {/* Email */}
+            <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5, delay: 0.9 }}>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                 Email address
               </label>
@@ -186,20 +149,14 @@ const handleSubmit = async (e) => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-700 rounded-xl 
-                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                             focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent
-                             transition-all duration-200"
+                  className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all duration-200"
                   placeholder="Enter your email"
                 />
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 1.0 }}
-            >
+            {/* Password */}
+            <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5, delay: 1.0 }}>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                 Password
               </label>
@@ -215,10 +172,7 @@ const handleSubmit = async (e) => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-700 rounded-xl 
-                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                             focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent
-                             transition-all duration-200"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all duration-200"
                   placeholder="Enter your password"
                 />
                 <motion.button
@@ -242,9 +196,7 @@ const handleSubmit = async (e) => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="w-full bg-purple-600 text-white py-3 px-4 rounded-xl font-semibold
-                         hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
-                         transition-all duration-200 disabled:opacity-50"
+              className="w-full bg-purple-600 text-white py-3 px-4 rounded-xl font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50"
             >
               {loading ? (
                 <motion.div
@@ -257,9 +209,8 @@ const handleSubmit = async (e) => {
             </motion.button>
           </motion.form>
 
-
+          {/* Switch Link */}
           <motion.div
-
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 1.2 }}
