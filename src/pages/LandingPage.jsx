@@ -121,9 +121,8 @@ const LandingPage = () => {
               >
                 {/* Sign In Button */}
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`relative px-6 py-2.5 font-medium rounded-xl transition-all duration-300 will-change-transform
+                  className={`relative px-6 py-2.5 font-medium rounded-xl transition-all duration-300 hover-lift will-change-transform
                            ${
                              isScrolled
                                ? "text-gray-700 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 before:absolute before:inset-0 before:rounded-xl before:bg-gray-100 dark:before:bg-gray-800 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
@@ -139,12 +138,11 @@ const LandingPage = () => {
 
                 {/* Get Started Button */}
                 <motion.button
-                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`relative px-6 py-2.5 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group will-change-transform ${
+                  className={`relative px-6 py-2.5 font-semibold rounded-xl shadow-lg transition-all duration-300 overflow-hidden group btn-hover ${
                     isScrolled
                       ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
-                      : "bg-white text-purple-600 hover:bg-gray-50"
+                      : "bg-white text-purple-600"
                   }`}
                   onClick={() => navigate("/register")}
                 >
@@ -170,10 +168,9 @@ const LandingPage = () => {
                 initial={{ x: 50, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={`lg:hidden p-2 rounded-xl transition-all duration-300 will-change-transform ${
+                className={`lg:hidden p-2 rounded-xl transition-all duration-300 will-change-transform hover-lift ${
                   isScrolled
                     ? "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
                     : "bg-white/10 hover:bg-white/20"
@@ -239,13 +236,12 @@ const LandingPage = () => {
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 0.1 }}
-                      whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => {
                         navigate("/auth");
                         setIsMobileMenuOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 will-change-transform ${
+                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 will-change-transform hover-lift ${
                         isScrolled
                           ? "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
                           : "text-white/90 hover:bg-white/10"
@@ -259,13 +255,12 @@ const LandingPage = () => {
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 0.2 }}
-                      whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => {
                         navigate("/register");
                         setIsMobileMenuOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 will-change-transform ${
+                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center space-x-3 will-change-transform hover-lift ${
                         isScrolled
                           ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
                           : "bg-white text-purple-600"
@@ -398,7 +393,7 @@ const LandingPage = () => {
                 {/* Primary CTA Button - Optimized for performance */}
                 <button
                   onClick={() => navigate("/register")}
-                  className="group relative inline-flex items-center justify-center px-6 py-4 text-lg font-semibold text-purple-700 bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-200 overflow-hidden will-change-transform hover:scale-105 hover:-translate-y-1"
+                  className="group relative inline-flex items-center justify-center px-6 py-4 text-lg font-semibold text-purple-700 bg-white rounded-2xl shadow-xl transition-all duration-200 overflow-hidden btn-hover"
                 >
                   <span className="relative z-10 flex items-center space-x-2">
                     <Zap className="w-5 h-5" />
@@ -414,7 +409,7 @@ const LandingPage = () => {
                       .getElementById("works")
                       ?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white border-2 border-white/30 rounded-2xl hover:bg-white/10 hover:border-white/50 transition-all duration-200 backdrop-blur-sm will-change-transform hover:scale-105"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white border-2 border-white/30 rounded-2xl hover:bg-white/10 hover:border-white/50 transition-all duration-200 backdrop-blur-sm hover-lift will-change-transform"
                 >
                   <span className="flex items-center space-x-2">
                     <Target className="w-5 h-5" />
@@ -642,9 +637,9 @@ const LandingPage = () => {
                 whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl hover:shadow-xl transition-all duration-200 
+                className="bg-gray-50 dark:bg-gray-800 p-8 rounded-2xl transition-all duration-200 
                            hover:bg-white dark:hover:bg-gray-700 border border-transparent hover:border-purple-100 
-                           dark:hover:border-purple-400 transform hover:-translate-y-2 will-change-transform"
+                           dark:hover:border-purple-400 card-hover"
               >
                 <div className="text-purple-600 dark:text-purple-400 mb-4">
                   {feature.icon}
@@ -861,12 +856,11 @@ const LandingPage = () => {
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
-            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/register")}
             className="bg-purple-600 dark:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg 
-                       hover:bg-purple-700 dark:hover:bg-purple-800 transform hover:scale-105 transition-all duration-200 
-                       shadow-xl hover:shadow-2xl inline-flex items-center space-x-2 will-change-transform"
+                       hover:bg-purple-700 dark:hover:bg-purple-800 transition-all duration-200 
+                       shadow-xl hover:shadow-2xl inline-flex items-center space-x-2 btn-hover"
           >
             <span>Start Free Trial</span>
             <ArrowRight className="w-5 h-5" />
