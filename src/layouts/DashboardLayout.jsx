@@ -61,7 +61,7 @@ const DashboardLayout = () => {
   const getPageTitle = () => {
     const path = location.pathname;
     const titleMap = {
-      "/dashboard/profile": "Profile",
+      "/dashboard/profile": "Home",
       "/dashboard": "Dashboard",
       "/dashboard/resume-builder": "Resume Builder",
       "/dashboard/resume-ats": "Resume ATS Score",
