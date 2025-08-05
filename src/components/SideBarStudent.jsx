@@ -64,7 +64,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }) => {
   }, [isDarkMode]);
 
   const menuItems = [
-    { icon: User, label: "Profile", path: "/dashboard/profile" },
+    { icon: User, label: "Home", path: "/" },
     { icon: Home, label: "Dashboard", path: "/dashboard" },
     {
       icon: FileText,
