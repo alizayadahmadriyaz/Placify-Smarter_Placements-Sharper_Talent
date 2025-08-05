@@ -1,5 +1,12 @@
+import React from 'react';
+ 
+import GenerateReports from './GenerateReports';
 const Reports = () => {
-  return <div className="p-4 text-xl">Reports & Statistics Page</div>;
+  return (
+    <div className="text-xl">
+      <GenerateReports />
+    </div>
+  );
 };
 
 export default Reports;
