@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 
 import Footer from "./components/Footer";
 import AuthPage from "./pages/AuthPage";
@@ -17,6 +23,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Aptitude from "./pages/Student/Aptitude";
 import Coding from "./pages/Student/Coding";
+import CodingEditor from "./pages/Student/CodingEditor";
 import Dashboard from "./pages/Student/Dashboard";
 import InterviewExperience from "./pages/Student/InterviewExperience";
 import InterviewInterface from "./pages/Student/InterviewInterface";
@@ -25,40 +32,40 @@ import ResumeATS from "./pages/Student/ResumeATS";
 import ResumeBuilder from "./pages/Student/ResumeBuilder";
 import Settings from "./pages/Student/Settings";
 
-import InstitutionDashboardLayout from './layouts/InstitutionDashboardLayout';
-import InstitutionDashboard from './pages/Institution/InstitutionDashboard';
-import Profile from './pages/Institution/Profile';
-import StudentPerformance from './pages/Institution/StudentPerformance';
-import DepartmentPerformance from './pages/Institution/DepartmentPerformance';
-import Reports from './pages/Institution/Reports';
-import Analytics from './pages/Institution/Analytics';
-import InstitutionSettings from './pages/Institution/Settings';
+import InstitutionDashboardLayout from "./layouts/InstitutionDashboardLayout";
+import InstitutionDashboard from "./pages/Institution/InstitutionDashboard";
+import Profile from "./pages/Institution/Profile";
+import StudentPerformance from "./pages/Institution/StudentPerformance";
+import DepartmentPerformance from "./pages/Institution/DepartmentPerformance";
+import Reports from "./pages/Institution/Reports";
+import Analytics from "./pages/Institution/Analytics";
+import InstitutionSettings from "./pages/Institution/Settings";
 
 // Company Dashboard Layout and Pages
-import CompanyDashboardLayout from './layouts/CompanyDashboardLayout';
-import CompanyDashboard from './pages/company/CompanyDashboard';
-import Applicants from './pages/company/Applicants';
-import Collaboration from './pages/company/Collaboration';
-import Employees from './pages/company/Employees';
-import Insights from './pages/company/Insights';
-import Performance from './pages/company/performance';
-import PostJob from './pages/company/postJob';
-import CompanyProfile from './pages/company/profile';
-import CompanyReports from './pages/company/Reports';
+import CompanyDashboardLayout from "./layouts/CompanyDashboardLayout";
+import CompanyDashboard from "./pages/company/CompanyDashboard";
+import Applicants from "./pages/company/Applicants";
+import Collaboration from "./pages/company/Collaboration";
+import Employees from "./pages/company/Employees";
+import Insights from "./pages/company/Insights";
+import Performance from "./pages/company/performance";
+import PostJob from "./pages/company/postJob";
+import CompanyProfile from "./pages/company/profile";
+import CompanyReports from "./pages/company/Reports";
 
 // Employee Dashboard Layout and Pages
-import EmployeeDashboardLayout from './layouts/EmployeeDashboardLayout';
-import EmployeeDashboard from './pages/employee/EmployeeDashboard';
-import EmployeeProfile from './pages/employee/Profile';
-import PerformanceOverview from './pages/employee/PerformanceOverview';
-import SkillDevelopmentTracker from './pages/employee/SkillDevelopmentTracker';
-import ProjectContributions from './pages/employee/ProjectContributions';
-import CareerProgression from './pages/employee/CareerProgression';
-import CompanyFeedback from './pages/employee/CompanyFeedback';
-import LearningResources from './pages/employee/LearningResources';
-import InterviewPracticeZone from './pages/employee/InterviewPracticeZone';
-import JobSwitchInsights from './pages/employee/JobSwitchInsights';
-import EmployeeSettings from './pages/employee/Settings';
+import EmployeeDashboardLayout from "./layouts/EmployeeDashboardLayout";
+import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
+import EmployeeProfile from "./pages/employee/Profile";
+import PerformanceOverview from "./pages/employee/PerformanceOverview";
+import SkillDevelopmentTracker from "./pages/employee/SkillDevelopmentTracker";
+import ProjectContributions from "./pages/employee/ProjectContributions";
+import CareerProgression from "./pages/employee/CareerProgression";
+import CompanyFeedback from "./pages/employee/CompanyFeedback";
+import LearningResources from "./pages/employee/LearningResources";
+import InterviewPracticeZone from "./pages/employee/InterviewPracticeZone";
+import JobSwitchInsights from "./pages/employee/JobSwitchInsights";
+import EmployeeSettings from "./pages/employee/Settings";
 
 import { motion } from "framer-motion";
 
@@ -110,8 +117,14 @@ const AppWrapper = () => {
             >
               <Route index element={<InstitutionDashboard />} />
               <Route path="profile" element={<Profile />} />
-              <Route path="student-performance" element={<StudentPerformance />} />
-              <Route path="department-performance" element={<DepartmentPerformance />} />
+              <Route
+                path="student-performance"
+                element={<StudentPerformance />}
+              />
+              <Route
+                path="department-performance"
+                element={<DepartmentPerformance />}
+              />
               <Route path="reports" element={<Reports />} />
               <Route path="analytics" element={<Analytics />} />
               <Route path="settings" element={<InstitutionSettings />} />
@@ -155,7 +168,10 @@ const AppWrapper = () => {
               <Route path="career" element={<CareerProgression />} />
               <Route path="feedback" element={<CompanyFeedback />} />
               <Route path="learning" element={<LearningResources />} />
-              <Route path="interview-practice" element={<InterviewPracticeZone />} />
+              <Route
+                path="interview-practice"
+                element={<InterviewPracticeZone />}
+              />
               <Route path="job-insights" element={<JobSwitchInsights />} />
               <Route path="settings" element={<EmployeeSettings />} />
             </Route>
@@ -175,7 +191,7 @@ const AppWrapper = () => {
               path="/dashboard"
               element={
                 // <ProtectedRoute>
-                  <DashboardLayout />
+                <DashboardLayout />
                 // </ProtectedRoute>
               }
             >
@@ -186,9 +202,16 @@ const AppWrapper = () => {
               <Route path="jobs" element={<Jobs />} />
               <Route path="user-jobs" element={<UserJobs />} />
               <Route path="coding" element={<Coding />} />
-              <Route path="interview-practice" element={<InterviewInterface />} />
+              <Route path="coding/:id" element={<CodingEditor />} />
+              <Route
+                path="interview-practice"
+                element={<InterviewInterface />}
+              />
               <Route path="aptitude" element={<Aptitude />} />
-              <Route path="interview-experience" element={<InterviewExperience />} />
+              <Route
+                path="interview-experience"
+                element={<InterviewExperience />}
+              />
               <Route path="settings" element={<Settings />} />
             </Route>
           </Routes>
