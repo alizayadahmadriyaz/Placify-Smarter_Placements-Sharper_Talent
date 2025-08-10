@@ -10,6 +10,7 @@ import institutionRoutes from "./routes/institutionRoutes.js";
 import performance from "./routes/performance.js"
 import path from "path";
 import { fileURLToPath } from "url";
+import studentRoutes from "./routes/studentRoutes.js"; // Corrected import for studentRoutes
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +33,7 @@ app.use("/api/interviews", interviewRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/institution", institutionRoutes);
 app.use("/api/performance", performance);
+app.use("/api/students", studentRoutes); // New route for student progress tracker
 
 app.get("/", (req, res) => {
   res.json({ 

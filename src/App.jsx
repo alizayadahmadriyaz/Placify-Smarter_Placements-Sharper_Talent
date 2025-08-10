@@ -6,6 +6,10 @@ import {
   useLocation,
 } from "react-router-dom";
 
+// The paths below are relative to this App.jsx file, which should be in the 'src' directory.
+// If you are getting 'Could not resolve' errors, please ensure you are running the build command
+// from the root of the project directory.
+
 import Footer from "./components/Footer";
 import AuthPage from "./pages/AuthPage";
 import FeedbackPage from "./pages/FeedbackPage";
@@ -18,6 +22,8 @@ import CompanyForm from "./pages/register/CompanyForm";
 import EmployeeForm from "./pages/register/EmployeeForm";
 import InstitutionForm from "./pages/register/InstitutionForm";
 import StudentForm from "./pages/register/StudentForm";
+import StudentProgressDashboard from "./pages/Student/StudentProgressDashboard";
+import StudentProgressDetail from "./pages/Student/StudentProgressDetail"; // New import
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -213,6 +219,10 @@ const AppWrapper = () => {
                 element={<InterviewExperience />}
               />
               <Route path="settings" element={<Settings />} />
+              {/* New route for the Student Progress Dashboard */}
+              <Route path="progress" element={<StudentProgressDashboard />} />
+              {/* New route for the Student Progress Detail page */}
+              <Route path="progress/:studentId" element={<StudentProgressDetail />} />
             </Route>
           </Routes>
         </div>
