@@ -7,7 +7,7 @@ export default function FormInput({ label, type = 'text', value, onChange, requi
 
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <div className="relative">
@@ -15,7 +15,7 @@ export default function FormInput({ label, type = 'text', value, onChange, requi
           type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
           value={value}
           onChange={onChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-slate-700 dark:border-slate-600 dark:text-gray-200 dark:focus:ring-purple-500"
           required={required}
         />
         {type === 'password' && (
@@ -25,9 +25,9 @@ export default function FormInput({ label, type = 'text', value, onChange, requi
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
-              <EyeOff className="h-5 w-5 text-gray-400" />
+              <EyeOff className="h-5 w-5 text-gray-400 dark:text-gray-400" />
             ) : (
-              <Eye className="h-5 w-5 text-gray-400" />
+              <Eye className="h-5 w-5 text-gray-400 dark:text-gray-400" />
             )}
           </button>
         )}
