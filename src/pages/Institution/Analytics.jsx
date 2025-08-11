@@ -259,7 +259,6 @@ const Analytics = () => {
           dept.percentage + '%'
         ])
       ];
-      
       const csvContent = csvData.map(row => row.join(',')).join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
