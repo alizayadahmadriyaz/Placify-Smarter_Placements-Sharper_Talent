@@ -9,7 +9,8 @@ import {
 // The paths below are relative to this App.jsx file, which should be in the 'src' directory.
 // If you are getting 'Could not resolve' errors, please ensure you are running the build command
 // from the root of the project directory.
-
+//  IMPORTED the ThemeProvider
+import { ThemeProvider } from './context/ThemeContext'; 
 import Footer from "./components/Footer";
 import AuthPage from "./pages/AuthPage";
 import FeedbackPage from "./pages/FeedbackPage";
@@ -95,7 +96,8 @@ const AppWrapper = () => {
   return (
     <>
       <ScrollToTop />
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
+      {/* UPDATED the background here for consistency */}
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col justify-between">
         <div>
           <Routes>
             {/* Public Routes */}
@@ -251,9 +253,12 @@ const AppWrapper = () => {
 // ✅ Actual App that wraps AppWrapper inside Router
 function App() {
   return (
-    <Router>
-      <AppWrapper />
-    </Router>
+    // wrapped entire app with the ThemeProvider
+    <ThemeProvider> 
+      <Router>
+        <AppWrapper />
+      </Router>
+    </ThemeProvider>
   );
 }
 
