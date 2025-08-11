@@ -326,7 +326,7 @@ const Analytics = () => {
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
+            
             <p className="text-gray-600">
               Comprehensive placement analytics and insights
               {selectedYear !== 'all' && ` for ${selectedYear}`}
@@ -628,5 +628,4 @@ const Analytics = () => {
     </div>
   );
 };
-
 export default Analytics;
