@@ -6,11 +6,19 @@ import { useNavigate, Link } from 'react-router-dom';
 const RegistrationHeader = ({ title, subtitle, icon, color = "purple", tagline, userType }) => {
   const navigate = useNavigate();
 
-  const colorVariants = {
+  const lightColorVariants = {
     purple: "from-purple-600 to-indigo-600",
     blue: "from-blue-600 to-cyan-600", 
     green: "from-green-600 to-emerald-600",
     orange: "from-orange-600 to-red-600"
+  };
+
+  // FIX: Updated dark mode colors to match the Landing Page hero section for perfect consistency.
+  const darkColorVariants = {
+    purple: "dark:from-purple-800 dark:via-purple-900 dark:to-indigo-950",
+    blue: "dark:from-blue-800 dark:via-cyan-900 dark:to-cyan-950", 
+    green: "dark:from-green-800 dark:via-emerald-900 dark:to-emerald-950",
+    orange: "dark:from-orange-800 dark:via-red-900 dark:to-red-950"
   };
 
   const handleBackNavigation = () => {
@@ -27,7 +35,8 @@ const RegistrationHeader = ({ title, subtitle, icon, color = "purple", tagline, 
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`bg-gradient-to-r ${colorVariants[color]} text-white py-20 px-4 relative overflow-hidden`}
+      // Applied both light and dark mode classes
+      className={`bg-gradient-to-r ${lightColorVariants[color]} ${darkColorVariants[color]} text-white py-20 px-4 relative overflow-hidden`}
     >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
