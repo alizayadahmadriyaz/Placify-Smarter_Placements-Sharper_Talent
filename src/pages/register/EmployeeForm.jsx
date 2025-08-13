@@ -57,7 +57,8 @@ export default function EmployeeForm() {
 
   // JSX remains the same
   return (
-    <div className="min-h-screen bg-gray-50">
+    // 1. ADDED dark mode background to the main container
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       <Header />
       <div className="pt-16">
         <RegistrationHeader
@@ -70,9 +71,11 @@ export default function EmployeeForm() {
         />
       </div>
       <div className="py-12 px-4">
-        <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+        {/* 2. ADDED dark mode background to the form card */}
+        <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg dark:bg-slate-800">
           {error && (
-            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-md border border-red-200">
+            // 3. ADDED dark mode styles for the error message
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md border border-red-200 dark:bg-red-900/50 dark:text-red-300 dark:border-red-500/50">
               {error}
             </div>
           )}
@@ -111,7 +114,7 @@ export default function EmployeeForm() {
             />
             <button
               type="submit"
-              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-200 disabled:bg-green-400"
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200 disabled:bg-blue-400 dark:hover:bg-blue-500 dark:disabled:bg-blue-800"
               disabled={loading}
             >
               {loading ? 'Registering...' : 'Register as Employee'}

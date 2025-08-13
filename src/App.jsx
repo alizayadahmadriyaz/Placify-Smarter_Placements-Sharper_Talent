@@ -6,6 +6,11 @@ import {
   useLocation,
 } from "react-router-dom";
 
+// The paths below are relative to this App.jsx file, which should be in the 'src' directory.
+// If you are getting 'Could not resolve' errors, please ensure you are running the build command
+// from the root of the project directory.
+//  IMPORTED the ThemeProvider
+import { ThemeProvider } from './context/ThemeContext'; 
 import Footer from "./components/Footer";
 import AuthPage from "./pages/AuthPage";
 import FeedbackPage from "./pages/FeedbackPage";
@@ -18,6 +23,8 @@ import CompanyForm from "./pages/register/CompanyForm";
 import EmployeeForm from "./pages/register/EmployeeForm";
 import InstitutionForm from "./pages/register/InstitutionForm";
 import StudentForm from "./pages/register/StudentForm";
+import StudentProgressDashboard from "./pages/Student/StudentProgressDashboard";
+import StudentProgressDetail from "./pages/Student/StudentProgressDetail"; // New import
 
 import { LoadingProvider } from "./context/LoadingContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -90,7 +97,8 @@ const AppWrapper = () => {
   return (
     <>
       <ScrollToTop />
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
+      {/* UPDATED the background here for consistency */}
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col justify-between">
         <div>
           <Routes>
             {/* Public Routes */}
@@ -214,6 +222,10 @@ const AppWrapper = () => {
                 element={<InterviewExperience />}
               />
               <Route path="settings" element={<Settings />} />
+              {/* New route for the Student Progress Dashboard */}
+              <Route path="progress" element={<StudentProgressDashboard />} />
+              {/* New route for the Student Progress Detail page */}
+              <Route path="progress/:studentId" element={<StudentProgressDetail />} />
             </Route>
           </Routes>
         </div>
@@ -242,9 +254,12 @@ const AppWrapper = () => {
 // ✅ Actual App that wraps AppWrapper inside Router
 function App() {
   return (
-    <Router>
-      <AppWrapper />
-    </Router>
+    // wrapped entire app with the ThemeProvider
+    <ThemeProvider> 
+      <Router>
+        <AppWrapper />
+      </Router>
+    </ThemeProvider>
   );
 }
 
