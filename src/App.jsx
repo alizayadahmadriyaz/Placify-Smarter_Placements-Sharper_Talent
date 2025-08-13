@@ -19,6 +19,7 @@ import EmployeeForm from "./pages/register/EmployeeForm";
 import InstitutionForm from "./pages/register/InstitutionForm";
 import StudentForm from "./pages/register/StudentForm";
 
+import { LoadingProvider } from "./context/LoadingContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Aptitude from "./pages/Student/Aptitude";

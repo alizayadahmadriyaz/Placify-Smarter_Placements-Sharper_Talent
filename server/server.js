@@ -14,6 +14,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Set a default port if not provided in environment variables
+const port = PORT || 5000;
+
 
 const app = express();
 
@@ -60,8 +63,8 @@ app.use((err,req,res,next)=>{
   res.status(500).json({error:'Internal server errror'});
 })
 // ====== Start Server ======
-app.listen(PORT || 5000, async () => {
-  console.log(`✅ Feedback server running on port ${PORT}`);
+app.listen(port, async () => {
+  console.log(`✅ Feedback server running on port ${port}`);
   // Optional: connect to MongoDB (requires valid MONGO_URI)
   await connectToDatabase(); // 🔄 Comment this out if not using MongoDB
   console.log(`📧 Ready to send emails!`);

@@ -1,23 +1,19 @@
 import { Building2 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../context/UserContext';
 import FormInput from '../../components/FormInput';
 import RegistrationHeader from '../../components/RegistrationHeader';
 import Header from '../../components/Header';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import apiClient from '../../api/apiClient'; // 1. Import apiClient
 
 export default function CompanyForm() {
   const navigate = useNavigate();
-  const { addUser } = useUser();
-
   const [formData, setFormData] = useState({
     companyName: '',
     industry: '',
-    email: '',
+    hrEmail: '',
     password: '',
-    website: ''
+    role: 'company' // 2. Make sure role is in the state
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,52 +22,63 @@ export default function CompanyForm() {
     e.preventDefault();
     setError('');
     setLoading(true);
-
-    if (!formData.companyName || !formData.industry || !formData.email || !formData.password || !formData.website) {
+    
+    // Validation remains the same...
+    if (!formData.companyName || !formData.industry || !formData.hrEmail || !formData.password) {
       setError('All fields are required');
       setLoading(false);
       return;
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError('Please enter a valid email address');
+    if (!emailRegex.test(formData.hrEmail)) {
+      setError('Please enter a valid email address for the HR contact');
       setLoading(false);
       return;
     }
-
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
       setLoading(false);
       return;
     }
-
+    
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register/company', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      // 3. REFACTORED API CALL
+      // Update to use the correct endpoint
+      console.log('Sending company registration data:', formData);
+      const response = await apiClient.post('/auth/register/company', formData);
 
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.message || 'Registration failed');
-
-      toast.success('Company registration successful! Please login with your email and password.');
-      setTimeout(() => navigate('/auth'), 2000);
-
-    } catch (error) {
-      console.error('Registration error:', error);
-      setError(error.message || 'Registration failed. Please try again.');
+      // Registration successful
+      alert('Company registration successful! Please login.');
+      navigate('/auth');
+      
+    } catch (err) {
+      console.error('Registration error:', err);
+      
+      if (err.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error response data:', err.response.data);
+        console.error('Error response status:', err.response.status);
+        setError(err.response?.data?.message || `Server error: ${err.response.status}`);
+      } else if (err.request) {
+        // The request was made but no response was received
+        console.error('No response received:', err.request);
+        setError('No response from server. Please check your connection.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error setting up request:', err.message);
+        setError(`Error: ${err.message}`);
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  // The rest of the JSX remains exactly the same
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <ToastContainer position="top-center" />
-
+      
       <div className="pt-16">
         <RegistrationHeader
           title="Company Registration"
@@ -82,7 +89,7 @@ export default function CompanyForm() {
           userType="company"
         />
       </div>
-
+      
       <div className="py-12 px-4">
         <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
           {error && (
@@ -94,41 +101,33 @@ export default function CompanyForm() {
             <FormInput
               label="Company Name"
               value={formData.companyName}
-              onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+              onChange={(e) => setFormData({...formData, companyName: e.target.value})}
               required
             />
-
+            
             <FormInput
               label="Industry"
               value={formData.industry}
-              onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+              onChange={(e) => setFormData({...formData, industry: e.target.value})}
               required
             />
-            <FormInput
-              label="Website"
-              value={formData.website}
-              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-              required
-            />
-
+            
             <FormInput
               type="email"
               label="HR Contact Email"
-
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-
+              value={formData.hrEmail}
+              onChange={(e) => setFormData({...formData, hrEmail: e.target.value})}
               required
             />
-
+            
             <FormInput
               type="password"
               label="Password"
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
               required
             />
-
+            
             <button
               type="submit"
               className="w-full bg-orange-600 text-white py-2 px-4 rounded-md hover:bg-orange-700 transition duration-200 disabled:bg-orange-400"

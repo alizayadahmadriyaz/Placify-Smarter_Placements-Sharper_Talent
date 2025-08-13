@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../api/apiClient";
 import InterviewLeft from "../../components/InterviewLeft";
 import InterviewRight from "../../components/InterviewRight";
 
@@ -22,7 +22,7 @@ const InterviewInterface = () => {
       formData.append("answers", JSON.stringify(answers));
       formData.append("interviewId", interviewId);
 
-      await axios.post("http://localhost:5000/api/interviews/upload", formData);
+      await apiClient.post("/interviews/upload", formData);
 
       navigate(`/results/${interviewId}`);
     } catch (err) {
