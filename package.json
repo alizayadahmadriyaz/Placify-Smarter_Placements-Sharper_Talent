@@ -14,10 +14,16 @@
     "@google/generative-ai": "^0.24.1",
     "@headlessui/react": "^2.2.5",
     "@material-tailwind/react": "^2.1.10",
+    "@monaco-editor/react": "^4.7.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@studio-freight/lenis": "^1.0.42",
     "axios": "^1.11.0",
+    "chart.js": "^4.5.0",
+    "chartjs-node-canvas": "^5.0.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^12.23.9",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.525.0",
     "react": "^18.3.1",
@@ -29,7 +35,8 @@
     "react-router-dom": "^7.7.0",
     "react-syntax-highlighter": "^15.6.1",
     "react-toastify": "^11.0.5",
-    "recharts": "^3.1.0"
+    "recharts": "^3.1.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

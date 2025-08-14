@@ -1,5 +1,16 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 
+// The paths below are relative to this App.jsx file, which should be in the 'src' directory.
+// If you are getting 'Could not resolve' errors, please ensure you are running the build command
+// from the root of the project directory.
+//  IMPORTED the ThemeProvider
+import { ThemeProvider } from './context/ThemeContext'; 
 import Footer from "./components/Footer";
 import AuthPage from "./pages/AuthPage";
 import FeedbackPage from "./pages/FeedbackPage";
@@ -12,11 +23,16 @@ import CompanyForm from "./pages/register/CompanyForm";
 import EmployeeForm from "./pages/register/EmployeeForm";
 import InstitutionForm from "./pages/register/InstitutionForm";
 import StudentForm from "./pages/register/StudentForm";
+import StudentProgressDashboard from "./pages/Student/StudentProgressDashboard";
+import StudentProgressDetail from "./pages/Student/StudentProgressDetail"; // New import
+import ContactPage from "./pages/ContactPage";
 
+import { LoadingProvider } from "./context/LoadingContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Aptitude from "./pages/Student/Aptitude";
 import Coding from "./pages/Student/Coding";
+import CodingEditor from "./pages/Student/CodingEditor";
 import Dashboard from "./pages/Student/Dashboard";
 import InterviewExperience from "./pages/Student/InterviewExperience";
 import InterviewInterface from "./pages/Student/InterviewInterface";
@@ -60,6 +76,7 @@ import InterviewPracticeZone from './pages/employee/InterviewPracticeZone';
 import JobSwitchInsights from './pages/employee/JobSwitchInsights';
 import EmployeeSettings from './pages/employee/Settings';
 
+
 import { motion } from "framer-motion";
 
 import UserJobs from "./pages/Student/UserJobs";
@@ -83,7 +100,8 @@ const AppWrapper = () => {
   return (
     <>
       <ScrollToTop />
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
+      {/* UPDATED the background here for consistency */}
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col justify-between">
         <div>
           <Routes>
             {/* Public Routes */}
@@ -96,6 +114,8 @@ const AppWrapper = () => {
             <Route path="/register/employee" element={<EmployeeForm />} />
             <Route path="/register/company" element={<CompanyForm />} />
             <Route path="/feedback" element={<FeedbackPage />} />
+               <Route path="/contact" element={<ContactPage />} />
+            
 
             {/* Standalone Route */}
             <Route path="/interview" element={<InterviewInterface />} />
@@ -110,9 +130,17 @@ const AppWrapper = () => {
               }
             >
               <Route index element={<InstitutionDashboard />} />
-              <Route path="profile" element={<InstitutionProfile />} />
-              <Route path="student-performance" element={<StudentPerformance />} />
-              <Route path="department-performance" element={<DepartmentPerformance />} />
+
+              <Route path="profile" element={<Profile />} />
+              <Route
+                path="student-performance"
+                element={<StudentPerformance />}
+              />
+              <Route
+                path="department-performance"
+                element={<DepartmentPerformance />}
+              />
+
               <Route path="reports" element={<Reports />} />
               <Route path="analytics" element={<Analytics />} />
               <Route path="settings" element={<InstitutionSettings />} />
@@ -156,7 +184,10 @@ const AppWrapper = () => {
               <Route path="career" element={<CareerProgression />} />
               <Route path="feedback" element={<CompanyFeedback />} />
               <Route path="learning" element={<LearningResources />} />
-              <Route path="interview-practice" element={<InterviewPracticeZone />} />
+              <Route
+                path="interview-practice"
+                element={<InterviewPracticeZone />}
+              />
               <Route path="job-insights" element={<JobSwitchInsights />} />
               <Route path="settings" element={<EmployeeSettings />} />
             </Route>
@@ -175,9 +206,9 @@ const AppWrapper = () => {
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
-                  <DashboardLayout />
-                </ProtectedRoute>
+                // <ProtectedRoute>
+                <DashboardLayout />
+                // </ProtectedRoute>
               }
             >
               <Route index element={<Dashboard />} />
@@ -187,10 +218,21 @@ const AppWrapper = () => {
               <Route path="jobs" element={<Jobs />} />
               <Route path="user-jobs" element={<UserJobs />} />
               <Route path="coding" element={<Coding />} />
-              <Route path="interview-practice" element={<InterviewInterface />} />
+              <Route path="coding/:id" element={<CodingEditor />} />
+              <Route
+                path="interview-practice"
+                element={<InterviewInterface />}
+              />
               <Route path="aptitude" element={<Aptitude />} />
-              <Route path="interview-experience" element={<InterviewExperience />} />
+              <Route
+                path="interview-experience"
+                element={<InterviewExperience />}
+              />
               <Route path="settings" element={<Settings />} />
+              {/* New route for the Student Progress Dashboard */}
+              <Route path="progress" element={<StudentProgressDashboard />} />
+              {/* New route for the Student Progress Detail page */}
+              <Route path="progress/:studentId" element={<StudentProgressDetail />} />
             </Route>
           </Routes>
         </div>
@@ -219,9 +261,12 @@ const AppWrapper = () => {
 // ✅ Actual App that wraps AppWrapper inside Router
 function App() {
   return (
-    <Router>
-      <AppWrapper />
-    </Router>
+    // wrapped entire app with the ThemeProvider
+    <ThemeProvider> 
+      <Router>
+        <AppWrapper />
+      </Router>
+    </ThemeProvider>
   );
 }
 

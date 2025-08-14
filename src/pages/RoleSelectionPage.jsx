@@ -90,8 +90,8 @@ const RoleSelectionPage = () => {
   ];
 
   const handleLogoClick = () => {
-    navigate('/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigate("/");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -107,7 +107,7 @@ const RoleSelectionPage = () => {
         <div className="max-w-7xl w-full">
           {/* Header Section */}
           <motion.div
-            className="text-center mb-12"
+            className="text-center mb-12 mt-20"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -181,9 +181,9 @@ const RoleSelectionPage = () => {
                 key={role.title}
                 onClick={() => navigate(role.route)}
                 className={`relative group cursor-pointer ${role.bgColor} backdrop-blur-sm
-                           rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 
-                           border border-white/20 dark:border-gray-700/50 overflow-hidden
-                           transform hover:-translate-y-2`}
+                                 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300
+                                 border border-white/20 dark:border-gray-700/50 overflow-hidden
+                                 transform hover:-translate-y-2`}
                 initial={{ opacity: 0, y: 50, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{
@@ -278,27 +278,27 @@ const RoleSelectionPage = () => {
               </motion.div>
             ))}
           </motion.div>
-
-          {/* Bottom CTA */}
-          <motion.div
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 2.5 }}
-          >
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Not sure which option is right for you?
-            </p>
-            <button
-              onClick={() => navigate("/contact")}
-              className="inline-flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium transition-colors duration-300"
-            >
-              <span>Contact our team for guidance</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </motion.div>
         </div>
       </div>
+
+      {/* Final Call to Action at the very bottom */}
+      <motion.div
+        className="text-center py-16 px-4 bg-purple-50 dark:bg-purple-900/20"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 2.5 }}
+      >
+        <p className="text-xl text-gray-600 dark:text-gray-300 mb-6 font-medium">
+          Still not sure which option is right for you?
+        </p>
+        <button
+          onClick={() => navigate("/contact")}
+          className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+        >
+          <span>Contact Our Team for Guidance</span>
+          <ArrowRight className="w-5 h-5" />
+        </button>
+      </motion.div>
     </div>
   );
 };

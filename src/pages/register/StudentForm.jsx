@@ -1,24 +1,20 @@
-// src/pages/register/StudentForm.jsx
 import { GraduationCap } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../context/UserContext';
 import FormInput from '../../components/FormInput';
 import RegistrationHeader from '../../components/RegistrationHeader';
 import Header from '../../components/Header';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import apiClient from '../../api/apiClient'; // Import the new apiClient
 
 export default function StudentForm() {
   const navigate = useNavigate();
-  const { addUser } = useUser();
   const [formData, setFormData] = useState({
     fullName: '',
     university: '',
     major: '',
     email: '',
     password: '',
-    role: 'student'
+    role: 'student' // This is important for the unified backend
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,22 +24,18 @@ export default function StudentForm() {
     setError('');
     setLoading(true);
     
-    // Basic validation
+    // --- Validation (no changes needed here) ---
     if (!formData.fullName || !formData.university || !formData.major || !formData.email || !formData.password) {
       setError('All fields are required');
       setLoading(false);
       return;
     }
-    
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address');
       setLoading(false);
       return;
     }
-    
-    // Password validation (at least 6 characters)
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
       setLoading(false);
@@ -51,64 +43,42 @@ export default function StudentForm() {
     }
     
     try {
-      // Save user to local storage
-      // try {
-      //   addUser(formData);
-      //   console.log('Student Registration Data saved to local storage:', formData);
-      // } catch (localStorageError) {
-      //   setError(localStorageError.message);
-      //   setLoading(false);
-      //   return;
-      // }
+      // --- REFACTORED API CALL ---
+      console.log('Sending student registration data:', formData);
+      await apiClient.post('/auth/register/student', formData);
       
-      // // Simulate API delay
-      // await new Promise(resolve => setTimeout(resolve, 1000));
+      alert('Registration successful! Please login.');
+      navigate('/auth');
       
-
-      // Simulate successful registration
-      // toast.success('Registration successful! Please login with your email and password.', {
-      //   position: 'top-center'
-      // });
-      // setTimeout(() => navigate('/auth'), 2000); // Redirect to login after showing toast
-
+    } catch (err) {
+      console.error('Registration error:', err);
       
-      const response = await fetch('http://localhost:5000/api/auth/register/student', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
-      
-      // Registration successful
-
-      toast.success('Registration successful! Please login.', { position: 'top-center' });
-      setTimeout(() => navigate('/auth'), 3000);
-      
-
-    } catch (error) {
-      console.error('Registration error:', error);
-      if (error.message === 'Failed to fetch') {
-        setError('Server connection error. The backend server might not be running. Please try again later.');
+      if (err.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error response data:', err.response.data);
+        console.error('Error response status:', err.response.status);
+        setError(err.response?.data?.message || `Server error: ${err.response.status}`);
+      } else if (err.request) {
+        // The request was made but no response was received
+        console.error('No response received:', err.request);
+        setError('No response from server. Please check your connection.');
       } else {
-        setError(error.message || 'Registration failed. Please try again.');
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error setting up request:', err.message);
+        setError(`Error: ${err.message}`);
       }
     } finally {
       setLoading(false);
     }
   };
 
+  // --- JSX (no changes needed here) ---
   return (
-    <div className="min-h-screen bg-gray-50">
+    // 1. ADDED dark mode background to the main container
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       <Header />
-      
-      <div className="pt-16"> {/* Add padding to account for fixed header */}
+      <div className="pt-16">
         <RegistrationHeader
           title="Student Registration"
           subtitle="Join thousands of students who have landed their dream jobs with Placify's AI-powered interview coaching and placement assistance."
@@ -118,11 +88,12 @@ export default function StudentForm() {
           userType="student"
         />
       </div>
-      
       <div className="py-12 px-4">
-        <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+        {/* 2. ADDED dark mode background to the form card */}
+        <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg dark:bg-slate-800">
           {error && (
-            <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-md border border-red-200">
+            // 3. ADDED dark mode styles for the error message and FIXED error styling with red background
+            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md border border-red-200 dark:bg-red-900/50 dark:text-red-300 dark:border-red-500/50">
               {error}
             </div>
           )}
@@ -133,21 +104,18 @@ export default function StudentForm() {
               onChange={(e) => setFormData({...formData, fullName: e.target.value})}
               required
             />
-            
             <FormInput
               label="University Name"
               value={formData.university}
               onChange={(e) => setFormData({...formData, university: e.target.value})}
               required
             />
-            
             <FormInput
               label="Major/Field of Study"
               value={formData.major}
               onChange={(e) => setFormData({...formData, major: e.target.value})}
               required
             />
-            
             <FormInput
               type="email"
               label="Email"
@@ -155,7 +123,6 @@ export default function StudentForm() {
               onChange={(e) => setFormData({...formData, email: e.target.value})}
               required
             />
-            
             <FormInput
               type="password"
               label="Password"
@@ -163,7 +130,6 @@ export default function StudentForm() {
               onChange={(e) => setFormData({...formData, password: e.target.value})}
               required
             />
-            
             <button
               type="submit"
               className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-200 disabled:bg-purple-400"
@@ -174,9 +140,6 @@ export default function StudentForm() {
           </form>
         </div>
       </div>
-
-      {/* Toast container to show toast messages */}
-      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 }

@@ -63,24 +63,34 @@ function getAdaptiveFallback(role, previousAnswers) {
   return nextQ;
 }
 
-
-export async function getNextQuestion(role="Software Engineer", previousAnswers) {
+export async function getNextQuestion(
+  role = "Software Engineer",
+  previousAnswers
+) {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const prompt = `
-      You are a highly experienced technical interviewer with over 15 years of experience 
-      interviewing for ${role} roles.
+You are acting as a highly experienced technical interviewer (15+ years) for ${role} positions. 
+You have only 10 questions to fully evaluate the candidate's technical and behavioral abilities.
 
-      Candidate's previous answers: ${JSON.stringify(previousAnswers)}
+Candidate's previous answers: ${JSON.stringify(previousAnswers)}
 
-      Based on their answers, ask the next most relevant interview question.
-      Requirements:
-      - Strictly professional and job relevant.
-      - Focus on technical or behavioral assessment.
-      - Keep it short (max 20 words).
-      - Respond with only the question, no extra text.
-    `;
+**Your task:**
+1. Evaluate candidate responses. Ignore irrelevant, short, or meaningless answers like "yhgh", "idk", "nothing", or single random words.
+2. Adaptively choose the next best question that will effectively assess their skills if previous answers lacked depth.
+3. Ensure your question sequence covers:
+   - Core technical knowledge relevant to ${role}
+   - Problem-solving approach
+   - Practical experience
+   - Behavioral attributes (teamwork, challenges, deadlines)
+4. Questions must be short, clear, and professional (max 20 words).
+5. Do not repeat previously asked questions.
+6. If you already asked 10 questions, respond only with: "End Interview"
+
+**Important:** 
+Respond with only the next question text, no explanations, no greetings, no extra words.
+`;
 
     const result = await retry(() => model.generateContent(prompt), 2, 1500);
 
