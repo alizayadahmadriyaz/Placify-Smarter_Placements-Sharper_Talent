@@ -1,17 +1,14 @@
-// src/pages/register/StudentForm.jsx
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../context/UserContext';
+import { motion } from 'framer-motion'; // Animation library
 import FormInput from '../../components/FormInput';
 import RegistrationHeader from '../../components/RegistrationHeader';
 import Header from '../../components/Header';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import apiClient from '../../api/apiClient';
 
 export default function StudentForm() {
   const navigate = useNavigate();
-  const { addUser } = useUser();
   const [formData, setFormData] = useState({
     fullName: '',
     university: '',
@@ -27,77 +24,36 @@ export default function StudentForm() {
     e.preventDefault();
     setError('');
     setLoading(true);
-    
-    // Basic validation
+
+    // Validation
     if (!formData.fullName || !formData.university || !formData.major || !formData.email || !formData.password) {
       setError('All fields are required');
       setLoading(false);
       return;
     }
-    
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address');
       setLoading(false);
       return;
     }
-    
-    // Password validation (at least 6 characters)
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
       setLoading(false);
       return;
     }
-    
+
     try {
-      // Save user to local storage
-      // try {
-      //   addUser(formData);
-      //   console.log('Student Registration Data saved to local storage:', formData);
-      // } catch (localStorageError) {
-      //   setError(localStorageError.message);
-      //   setLoading(false);
-      //   return;
-      // }
-      
-      // // Simulate API delay
-      // await new Promise(resolve => setTimeout(resolve, 1000));
-      
-
-      // Simulate successful registration
-      // toast.success('Registration successful! Please login with your email and password.', {
-      //   position: 'top-center'
-      // });
-      // setTimeout(() => navigate('/auth'), 2000); // Redirect to login after showing toast
-
-      
-      const response = await fetch('http://localhost:5000/api/auth/register/student', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
-      
-      // Registration successful
-
-      toast.success('Registration successful! Please login.', { position: 'top-center' });
-      setTimeout(() => navigate('/auth'), 3000);
-      
-
-    } catch (error) {
-      console.error('Registration error:', error);
-      if (error.message === 'Failed to fetch') {
-        setError('Server connection error. The backend server might not be running. Please try again later.');
+      await apiClient.post('/auth/register/student', formData);
+      alert('Registration successful! Please login.');
+      navigate('/auth');
+    } catch (err) {
+      if (err.response) {
+        setError(err.response?.data?.message || `Server error: ${err.response.status}`);
+      } else if (err.request) {
+        setError('No response from server. Please check your connection.');
       } else {
-        setError(error.message || 'Registration failed. Please try again.');
+        setError(`Error: ${err.message}`);
       }
     } finally {
       setLoading(false);
@@ -105,81 +61,97 @@ export default function StudentForm() {
   };
 
   return (
-    // 1. ADDED dark mode background to the main container
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      {/* Top header */}
       <Header />
-      
-      <div className="pt-16"> {/* Add padding to account for fixed header */}
+
+      {/* Hero section */}
+      <div className="pt-16">
         <RegistrationHeader
           title="Student Registration"
-          subtitle="Join thousands of students who have landed their dream jobs with Placify's AI-powered interview coaching and placement assistance."
+          subtitle="Join thousands of students who have landed their dream jobs with Placify's AI-powered interview coaching."
           tagline="Takes less than 2 minutes. No resume required."
           icon={<GraduationCap className="w-10 h-10 text-white" />}
           color="purple"
           userType="student"
         />
       </div>
-      
+
+      {/* Form section */}
       <div className="py-12 px-4">
-        {/* 2. ADDED dark mode background to the form card */}
-        <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg dark:bg-slate-800">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="relative max-w-lg mx-auto p-8 rounded-2xl shadow-xl
+                     bg-white dark:bg-slate-800 border border-transparent 
+                     transition-all
+                     before:absolute before:inset-0 before:rounded-2xl before:p-[2px]
+                     before:bg-gradient-to-r before:from-indigo-600 before:via-purple-600 before:to-indigo-700
+                     before:animate-gradient-move before:-z-10"
+        >
+          {/* Error Alert */}
           {error && (
-            // 3. ADDED dark mode styles for the error message and FIXED error styling with red background
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md border border-red-200 dark:bg-red-900/50 dark:text-red-300 dark:border-red-500/50">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg border border-red-300 dark:bg-red-900/50 dark:text-red-300 dark:border-red-500/50"
+              role="alert"
+            >
               {error}
-            </div>
+            </motion.div>
           )}
-          <form onSubmit={handleSubmit} className="space-y-4">
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
             <FormInput
               label="Full Name"
               value={formData.fullName}
-              onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
               required
             />
-            
             <FormInput
               label="University Name"
               value={formData.university}
-              onChange={(e) => setFormData({...formData, university: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, university: e.target.value })}
               required
             />
-            
             <FormInput
               label="Major/Field of Study"
               value={formData.major}
-              onChange={(e) => setFormData({...formData, major: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, major: e.target.value })}
               required
             />
-            
             <FormInput
               type="email"
               label="Email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
-            
             <FormInput
               type="password"
               label="Password"
               value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
             />
-            
-            <button
-              type="submit"
-              className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-200 disabled:bg-purple-400"
-              disabled={loading}
-            >
-              {loading ? 'Registering...' : 'Register as Student'}
-            </button>
-          </form>
-        </div>
-      </div>
 
-      {/* Toast container to show toast messages */}
-      <ToastContainer position="top-center" autoClose={3000} />
+            {/* Submit Button */}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              type="submit"
+              disabled={loading}
+              className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 px-4 text-lg font-medium rounded-md shadow-lg hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-purple-400 disabled:opacity-70"
+            >
+              {loading && <Loader2 className="animate-spin w-5 h-5" />}
+              {loading ? 'Registering...' : 'Register as Student'}
+            </motion.button>
+          </form>
+        </motion.div>
+      </div>
     </div>
   );
 }

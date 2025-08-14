@@ -10,10 +10,16 @@ import institutionRoutes from "./routes/institutionRoutes.js";
 import performance from "./routes/performance.js"
 import path from "path";
 import { fileURLToPath } from "url";
+import settingsRoutes from "./routes/settingsI.js";
+
 import studentRoutes from "./routes/studentRoutes.js"; // Corrected import for studentRoutes
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Set a default port if not provided in environment variables
+const port = PORT || 5000;
 
 
 const app = express();
@@ -51,7 +57,8 @@ app.get("/test", (req, res) => {
 });
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-
+// Add settings routes
+app.use('/api/settings', settingsRoutes);
 //404 error handler
 app.use((req,res)=>{
   res.status(404).json({error:'End point Not found'});
@@ -62,8 +69,8 @@ app.use((err,req,res,next)=>{
   res.status(500).json({error:'Internal server errror'});
 })
 // ====== Start Server ======
-app.listen(PORT || 5000, async () => {
-  console.log(`✅ Feedback server running on port ${PORT}`);
+app.listen(port, async () => {
+  console.log(`✅ Feedback server running on port ${port}`);
   // Optional: connect to MongoDB (requires valid MONGO_URI)
   await connectToDatabase(); // 🔄 Comment this out if not using MongoDB
   console.log(`📧 Ready to send emails!`);

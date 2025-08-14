@@ -25,7 +25,9 @@ import InstitutionForm from "./pages/register/InstitutionForm";
 import StudentForm from "./pages/register/StudentForm";
 import StudentProgressDashboard from "./pages/Student/StudentProgressDashboard";
 import StudentProgressDetail from "./pages/Student/StudentProgressDetail"; // New import
+import ContactPage from "./pages/ContactPage";
 
+import { LoadingProvider } from "./context/LoadingContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Aptitude from "./pages/Student/Aptitude";
@@ -39,28 +41,41 @@ import ResumeATS from "./pages/Student/ResumeATS";
 import ResumeBuilder from "./pages/Student/ResumeBuilder";
 import Settings from "./pages/Student/Settings";
 
-import InstitutionDashboardLayout from "./layouts/InstitutionDashboardLayout";
-import InstitutionDashboard from "./pages/Institution/InstitutionDashboard";
-import Profile from "./pages/Institution/Profile";
-import StudentPerformance from "./pages/Institution/StudentPerformance";
-import DepartmentPerformance from "./pages/Institution/DepartmentPerformance";
-import Reports from "./pages/Institution/Reports";
-import Analytics from "./pages/Institution/Analytics";
-import InstitutionSettings from "./pages/Institution/Settings";
+import InstitutionDashboardLayout from './layouts/InstitutionDashboardLayout';
+import InstitutionDashboard from './pages/Institution/InstitutionDashboard';
+import InstitutionProfile from './pages/Institution/InstitutionProfile';
+import StudentPerformance from './pages/Institution/StudentPerformance';
+import DepartmentPerformance from './pages/Institution/DepartmentPerformance';
+import Reports from './pages/Institution/Reports';
+import Analytics from './pages/Institution/Analytics';
+import InstitutionSettings from './pages/Institution/Settings';
 
 // Company Dashboard Layout and Pages
-import CompanyDashboardLayout from "./layouts/CompanyDashboardLayout";
-import CompanyDashboard from "./pages/company/CompanyDashboard";
-import Applicants from "./pages/company/Applicants";
-import Collaboration from "./pages/company/Collaboration";
-import Employees from "./pages/company/Employees";
-import Insights from "./pages/company/Insights";
-import Performance from "./pages/company/performance";
-import PostJob from "./pages/company/postJob";
-import CompanyProfile from "./pages/company/profile";
-import CompanyReports from "./pages/company/Reports";
+import CompanyDashboardLayout from './layouts/CompanyDashboardLayout';
+import CompanyDashboard from './pages/company/CompanyDashboard';
+import Applicants from './pages/company/Applicants';
+import Collaboration from './pages/company/Collaboration';
+import Employees from './pages/company/Employees';
+import Insights from './pages/company/Insights';
+import Performance from './pages/company/performance';
+import PostJob from './pages/company/postJob';
+import CompanyProfile from './pages/company/CompanyProfile';
+import CompanyReports from './pages/company/Reports';
 
 // Employee Dashboard Layout and Pages
+import EmployeeDashboardLayout from './layouts/EmployeeDashboardLayout';
+import EmployeeDashboard from './pages/employee/EmployeeDashboard';
+import EmployeeProfile from './pages/employee/EmployeeProfile';
+import PerformanceOverview from './pages/employee/PerformanceOverview';
+import SkillDevelopmentTracker from './pages/employee/SkillDevelopmentTracker';
+import ProjectContributions from './pages/employee/ProjectContributions';
+import CareerProgression from './pages/employee/CareerProgression';
+import CompanyFeedback from './pages/employee/CompanyFeedback';
+import LearningResources from './pages/employee/LearningResources';
+import InterviewPracticeZone from './pages/employee/InterviewPracticeZone';
+import JobSwitchInsights from './pages/employee/JobSwitchInsights';
+import EmployeeSettings from './pages/employee/Settings';
+
 import EmployeeDashboardLayout from "./layouts/EmployeeDashboardLayout";
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
 import Ai_Interview from "./pages/employee/Ai_Interview";
@@ -84,6 +99,7 @@ import useLenis from "./components/useLenis";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 
 // ✅ Wrapper to allow useLocation inside Router
 const AppWrapper = () => {
@@ -111,6 +127,8 @@ const AppWrapper = () => {
             <Route path="/register/employee" element={<EmployeeForm />} />
             <Route path="/register/company" element={<CompanyForm />} />
             <Route path="/feedback" element={<FeedbackPage />} />
+               <Route path="/contact" element={<ContactPage />} />
+            
 
             {/* Standalone Route */}
             <Route path="/interview" element={<InterviewInterface />} />
@@ -125,6 +143,7 @@ const AppWrapper = () => {
               }
             >
               <Route index element={<InstitutionDashboard />} />
+
               <Route path="profile" element={<Profile />} />
               <Route
                 path="student-performance"
@@ -134,6 +153,7 @@ const AppWrapper = () => {
                 path="department-performance"
                 element={<DepartmentPerformance />}
               />
+
               <Route path="reports" element={<Reports />} />
               <Route path="analytics" element={<Analytics />} />
               <Route path="settings" element={<InstitutionSettings />} />
