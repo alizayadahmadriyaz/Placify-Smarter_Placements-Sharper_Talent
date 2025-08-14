@@ -25,6 +25,7 @@ import InstitutionForm from "./pages/register/InstitutionForm";
 import StudentForm from "./pages/register/StudentForm";
 import StudentProgressDashboard from "./pages/Student/StudentProgressDashboard";
 import StudentProgressDetail from "./pages/Student/StudentProgressDetail"; // New import
+import ContactPage from "./pages/ContactPage";
 
 import { LoadingProvider } from "./context/LoadingContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -111,6 +112,8 @@ const AppWrapper = () => {
             <Route path="/register/employee" element={<EmployeeForm />} />
             <Route path="/register/company" element={<CompanyForm />} />
             <Route path="/feedback" element={<FeedbackPage />} />
+               <Route path="/contact" element={<ContactPage />} />
+            
 
             {/* Standalone Route */}
             <Route path="/interview" element={<InterviewInterface />} />
