@@ -74,7 +74,7 @@ const InstitutionProfile = () => {
   const handleSave = async () => {
     try {
       const formData = new FormData();
-      // Only editable fields for institution
+      // Only editable fields 
       [
         "website",
         "contactPerson", 
@@ -110,7 +110,6 @@ const InstitutionProfile = () => {
       toast.error(err.response?.data?.message || "Update failed");
     }
   };
-
   const handleFocus = (fieldName) => setFocusedField(fieldName);
   const handleBlur = () => setFocusedField(null);
 

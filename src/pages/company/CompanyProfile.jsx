@@ -76,10 +76,8 @@ const CompanyProfile = () => {
   const handleSave = async () => {
     try {
       const formData = new FormData();
-      
-      // Send company name as 'companyName' but backend will map it to 'name'
       const fieldMapping = {
-        name: "companyName", // Frontend shows as "Company Name" but sends as companyName
+        name: "name", 
         website: "website",
         industry: "industry", 
         phone: "phone", 
@@ -131,7 +129,7 @@ const CompanyProfile = () => {
   const handleBlur = () => setFocusedField(null);
 
   const fields = [
-    { key: "name", label: "Company Name", editable: true }, // Backend field is 'name'
+    { key: "name", label: "Company Name", editable: false }, 
     { key: "email", label: "HR Contact Email", editable: false },
     { key: "industry", label: "Industry", editable: true },
     { key: "website", label: "Website", editable: true, type: "url" },

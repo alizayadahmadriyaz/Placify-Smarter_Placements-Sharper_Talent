@@ -9,7 +9,6 @@ const API_BASE = "http://localhost:5000";
 const EmployeeProfile = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-
   const [profile, setProfile] = useState({
     fullName: "",
     currentCompany: "",

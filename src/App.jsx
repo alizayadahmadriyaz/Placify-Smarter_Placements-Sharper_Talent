@@ -27,7 +27,7 @@ import Settings from "./pages/Student/Settings";
 
 import InstitutionDashboardLayout from './layouts/InstitutionDashboardLayout';
 import InstitutionDashboard from './pages/Institution/InstitutionDashboard';
-import Profile from './pages/Institution/Profile';
+import InstitutionProfile from './pages/Institution/InstitutionProfile';
 import StudentPerformance from './pages/Institution/StudentPerformance';
 import DepartmentPerformance from './pages/Institution/DepartmentPerformance';
 import Reports from './pages/Institution/Reports';
@@ -43,13 +43,13 @@ import Employees from './pages/company/Employees';
 import Insights from './pages/company/Insights';
 import Performance from './pages/company/performance';
 import PostJob from './pages/company/postJob';
-import CompanyProfile from './pages/company/profile';
+import CompanyProfile from './pages/company/CompanyProfile';
 import CompanyReports from './pages/company/Reports';
 
 // Employee Dashboard Layout and Pages
 import EmployeeDashboardLayout from './layouts/EmployeeDashboardLayout';
 import EmployeeDashboard from './pages/employee/EmployeeDashboard';
-import EmployeeProfile from './pages/employee/Profile';
+import EmployeeProfile from './pages/employee/EmployeeProfile';
 import PerformanceOverview from './pages/employee/PerformanceOverview';
 import SkillDevelopmentTracker from './pages/employee/SkillDevelopmentTracker';
 import ProjectContributions from './pages/employee/ProjectContributions';
@@ -69,6 +69,7 @@ import useLenis from "./components/useLenis";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 
 // ✅ Wrapper to allow useLocation inside Router
 const AppWrapper = () => {
@@ -109,7 +110,7 @@ const AppWrapper = () => {
               }
             >
               <Route index element={<InstitutionDashboard />} />
-              <Route path="profile" element={<Profile />} />
+              <Route path="profile" element={<InstitutionProfile />} />
               <Route path="student-performance" element={<StudentPerformance />} />
               <Route path="department-performance" element={<DepartmentPerformance />} />
               <Route path="reports" element={<Reports />} />

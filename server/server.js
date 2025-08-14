@@ -9,6 +9,7 @@ import interviewRoutes from "./routes/interview.js";
 import institutionRoutes from "./routes/institutionRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import settingsRoutes from "./routes/settingsI.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,7 +47,8 @@ app.get("/test", (req, res) => {
 });
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-
+// Add settings routes
+app.use('/api/settings', settingsRoutes);
 //404 error handler
 app.use((req,res)=>{
   res.status(404).json({error:'End point Not found'});
