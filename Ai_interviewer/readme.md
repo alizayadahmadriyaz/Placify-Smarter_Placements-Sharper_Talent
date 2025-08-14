@@ -73,7 +73,7 @@ echo "Groq_Api_key=your_actual_groq_api_key_here" > .env
 streamlit run checker.py --server.port 8501
 ```
 ### 6) Architecture Of The Agent
-![Image](Ai_interviewer\flow_graph.png)
+![Image](https://github-production-user-asset-6210df.s3.amazonaws.com/160425975/478161532-8f0cecba-143c-4523-8781-c028bb96a129.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20250814%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250814T185209Z&X-Amz-Expires=300&X-Amz-Signature=2e33f9a438fd9647deb9744d59454a7773cffd8662084dbd894df4e285d17405&X-Amz-SignedHeaders=host)
 
 
 
