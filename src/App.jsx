@@ -64,7 +64,6 @@ import CompanyReports from './pages/company/Reports';
 
 // Employee Dashboard Layout and Pages
 import EmployeeDashboardLayout from './layouts/EmployeeDashboardLayout';
-import EmployeeDashboard from './pages/employee/EmployeeDashboard';
 import EmployeeProfile from './pages/employee/EmployeeProfile';
 import PerformanceOverview from './pages/employee/PerformanceOverview';
 import SkillDevelopmentTracker from './pages/employee/SkillDevelopmentTracker';
@@ -76,7 +75,6 @@ import InterviewPracticeZone from './pages/employee/InterviewPracticeZone';
 import JobSwitchInsights from './pages/employee/JobSwitchInsights';
 import EmployeeSettings from './pages/employee/Settings';
 
-import EmployeeDashboardLayout from "./layouts/EmployeeDashboardLayout";
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
 import Ai_Interview from "./pages/employee/Ai_Interview";
 import EmployeeProfile from "./pages/employee/Profile";
