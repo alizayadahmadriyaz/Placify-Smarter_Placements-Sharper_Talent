@@ -26,6 +26,7 @@ import StudentForm from "./pages/register/StudentForm";
 import StudentProgressDashboard from "./pages/Student/StudentProgressDashboard";
 import StudentProgressDetail from "./pages/Student/StudentProgressDetail"; // New import
 
+import { LoadingProvider } from "./context/LoadingContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Aptitude from "./pages/Student/Aptitude";

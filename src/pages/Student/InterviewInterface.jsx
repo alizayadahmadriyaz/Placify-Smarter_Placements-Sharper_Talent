@@ -1,8 +1,15 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 import InterviewLeft from "../../components/InterviewLeft";
 import InterviewRight from "../../components/InterviewRight";
+
+import apiClient from "../../api/apiClient";
+import { motion } from "framer-motion";
+import { AlertCircle, Camera, CameraOff, Mic, MicOff, Bot, Send, CheckCircle, ArrowDownCircle } from "lucide-react";
+import { getNextQuestion } from "../../lib/geminiHelper";
+
 
 const InterviewInterface = () => {
   const navigate = useNavigate();
@@ -40,7 +47,9 @@ const InterviewInterface = () => {
       formData.append("answers", JSON.stringify(answers));
       formData.append("interviewId", interviewId);
 
+
       await axios.post("http://localhost:5000/api/interviews/upload", formData);
+
       navigate(`/results/${interviewId}`);
     } catch (err) {
       console.error("Upload failed", err);
