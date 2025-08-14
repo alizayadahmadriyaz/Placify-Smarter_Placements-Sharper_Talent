@@ -142,7 +142,7 @@ const AppWrapper = () => {
             >
               <Route index element={<InstitutionDashboard />} />
 
-              <Route path="profile" element={<Profile />} />
+              <Route path="profile" element={<ProfilePage />} />
               <Route
                 path="student-performance"
                 element={<StudentPerformance />}
