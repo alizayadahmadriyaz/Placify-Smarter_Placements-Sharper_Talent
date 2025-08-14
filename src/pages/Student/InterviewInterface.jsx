@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../api/apiClient";
 import { motion } from "framer-motion";
 import { AlertCircle, Camera, CameraOff, Mic, MicOff, Bot, Send, CheckCircle, ArrowDownCircle } from "lucide-react";
 import { getNextQuestion } from "../../lib/geminiHelper";
- // Adjust the import path as necessary
 
 const InterviewInterface = () => {
   const navigate = useNavigate();
@@ -99,7 +98,7 @@ const InterviewInterface = () => {
       formData.append("answers", JSON.stringify(answers));
       formData.append("interviewId", interviewId);
 
-      await axios.post("http://localhost:5000/api/interviews/upload", formData);
+      await apiClient.post("/interviews/upload", formData);
 
       navigate(`/results/${interviewId}`);
     } catch (err) {

@@ -7,6 +7,7 @@ import {
   TrendingUp,
   Award,
 } from 'lucide-react';
+import apiClient from '../../api/apiClient';
 import {
   BarChart,
   Bar,
@@ -43,16 +44,11 @@ export default function Dashboard() {
           if (!token) return;
           console.log("Fetching profile with token:", token);
       
-          const res = await fetch("http://localhost:5000/api/auth/profile", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          // With our new request interceptor, we don't need to explicitly set the token
+          const response = await apiClient.get("/auth/profile");
   
-          console.log("Raw Response Status:", res.status);
-  
-          const data = await res.json().catch(() => null);
-          console.log("Profile Response Data:", data);
+          console.log("Raw Response Status:", response.status);
+          console.log("Profile Response Data:", response.data);
   
           if (res.ok) {
             setUserData(data);

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import apiClient from "../api/apiClient";
 import { User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
-const API_BASE = "http://localhost:5000";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -37,14 +35,13 @@ const ProfilePage = () => {
     }
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/api/auth/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.data.dob) {
-          res.data.dob = new Date(res.data.dob).toISOString().split("T")[0];
+        // With our new request interceptor, we don't need to explicitly set the token
+        const response = await apiClient.get(`/auth/profile`);
+        if (response.data.dob) {
+          response.data.dob = new Date(response.data.dob).toISOString().split("T")[0];
         }
-        setProfile(res.data);
-        if (res.data.profileImage) {
+        setProfile(response.data);
+        if (response.data.profileImage) {
           setImagePreview(`${API_BASE}${res.data.profileImage}`);
         }
       } catch (err) {
@@ -85,9 +82,9 @@ const ProfilePage = () => {
       if (imageFile) {
         formData.append("profileImage", imageFile);
       }
-      const response = await axios.put(`${API_BASE}/api/auth/profile`, formData, {
+      // For multipart/form-data, we still need to set the Content-Type header
+      const response = await apiClient.put(`/auth/profile`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
