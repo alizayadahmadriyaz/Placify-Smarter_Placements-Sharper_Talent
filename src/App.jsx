@@ -63,6 +63,7 @@ import CompanyReports from "./pages/company/Reports";
 // Employee Dashboard Layout and Pages
 import EmployeeDashboardLayout from "./layouts/EmployeeDashboardLayout";
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
+import Ai_Interview from "./pages/employee/Ai_Interview";
 import EmployeeProfile from "./pages/employee/Profile";
 import PerformanceOverview from "./pages/employee/PerformanceOverview";
 import SkillDevelopmentTracker from "./pages/employee/SkillDevelopmentTracker";
@@ -168,6 +169,7 @@ const AppWrapper = () => {
                 </ProtectedRoute>
               }
             >
+
               <Route index element={<EmployeeDashboard />} />
               <Route path="profile" element={<EmployeeProfile />} />
               <Route path="performance" element={<PerformanceOverview />} />
@@ -175,10 +177,14 @@ const AppWrapper = () => {
               <Route path="projects" element={<ProjectContributions />} />
               <Route path="career" element={<CareerProgression />} />
               <Route path="feedback" element={<CompanyFeedback />} />
-              <Route path="learning" element={<LearningResources />} />
+              {/* <Route path="learning" element={<LearningResources />} /> */}
               <Route
                 path="interview-practice"
                 element={<InterviewPracticeZone />}
+              />
+              <Route
+                path="AI_interview"
+                element={<Ai_Interview />}
               />
               <Route path="job-insights" element={<JobSwitchInsights />} />
               <Route path="settings" element={<EmployeeSettings />} />
@@ -211,21 +217,23 @@ const AppWrapper = () => {
               <Route path="user-jobs" element={<UserJobs />} />
               <Route path="coding" element={<Coding />} />
               <Route path="coding/:id" element={<CodingEditor />} />
+              
               <Route
                 path="interview-practice"
                 element={<InterviewInterface />}
               />
               <Route path="aptitude" element={<Aptitude />} />
-              <Route
-                path="interview-experience"
-                element={<InterviewExperience />}
-              />
+              
               <Route path="settings" element={<Settings />} />
               {/* New route for the Student Progress Dashboard */}
               <Route path="progress" element={<StudentProgressDashboard />} />
               {/* New route for the Student Progress Detail page */}
               <Route path="progress/:studentId" element={<StudentProgressDetail />} />
             </Route>
+            <Route
+                path="interview-experience"
+                element={<InterviewExperience />}
+              />
           </Routes>
         </div>
 

@@ -81,6 +81,7 @@ const EmployeeDashboardLayout = () => {
     setDropdownOpen(false);
     navigate("/dashboard/employee/profile");
   };
+  
 
   const handleLogout = () => {
     setDropdownOpen(false);
@@ -160,6 +161,7 @@ const EmployeeDashboardLayout = () => {
                     <LogOut className="w-4 h-4" />
                     <span className="text-sm">Logout</span>
                   </button>
+
                 </div>
               )}
             </div>

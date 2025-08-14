@@ -68,10 +68,12 @@ const DashboardLayout = () => {
       "/dashboard/jobs": "Jobs",
       "/dashboard/user-jobs": "Jobs Based on User",
       "/dashboard/coding": "Coding",
+      "/dashboard/AI_interview": "Roast your Resume",
       "/dashboard/interview-practice": "Interview Practice",
       "/dashboard/aptitude": "Aptitude Questions",
       "/dashboard/interview-experience": "",
       "/dashboard/settings": "Settings",
+      
     };
     return titleMap[path] || "";
   };
