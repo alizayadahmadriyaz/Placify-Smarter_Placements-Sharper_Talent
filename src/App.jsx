@@ -76,8 +76,6 @@ import InterviewPracticeZone from './pages/employee/InterviewPracticeZone';
 import JobSwitchInsights from './pages/employee/JobSwitchInsights';
 import EmployeeSettings from './pages/employee/Settings';
 
-import EmployeeDashboardLayout from "./layouts/EmployeeDashboardLayout";
-import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
 import Ai_Interview from "./pages/employee/Ai_Interview";
 import EmployeeProfile from "./pages/employee/Profile";
 import PerformanceOverview from "./pages/employee/PerformanceOverview";
